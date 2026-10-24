@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#07100c"><title>ПОЛИГОН 02.1 — Диагностика дуэли</title><style>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#07100c"><title>ПОЛИГОН 02.2 — Дуэль через сервер</title><style>
 :root{color-scheme:dark;--ink:#e6fdf0;--muted:#97b0a4;--green:#64ffa8;--lime:#bcffd5;--bg:#07100c;--glass:rgba(5,20,13,.74)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button,input{font:inherit}button{cursor:pointer}button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 #game{position:fixed;inset:0;overflow:hidden;background:radial-gradient(ellipse at 52% 32%,#163426,#030806 75%)}
@@ -123,14 +123,14 @@
   <button class="toolbtn" id="zQuick" type="button">◎ ЦЕНТР</button>
   <div id="zRound" aria-live="polite"></div>
   <div id="toast" aria-live="polite"></div>
-  <div id="intro"><div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 02.1</div><h1>ПОЛИГОН.<br><span class="accent">ВЫБЕРИ РЕЖИМ.</span></h1><p>Создай дуэль с кодом комнаты или присоединись с другого смартфона. Камера распознаёт один простой чёрный квадрат. Режимы маркера и зомби сохранены.</p>
+  <div id="intro"><div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 02.2</div><h1>ПОЛИГОН.<br><span class="accent">ВЫБЕРИ РЕЖИМ.</span></h1><p>Создай дуэль с кодом комнаты или присоединись с другого смартфона. Камера распознаёт один простой чёрный квадрат. Режимы маркера и зомби сохранены.</p>
     <button id="duelOpenBtn" class="primary" type="button">⚔ ДУЭЛЬ · ДВА СМАРТФОНА</button>
     <div class="modeGrid"><button id="startBtn" class="modeCard"><span>⌖ МАРКЕР</span><small>Захват чёрного квадрата, зона корпуса, расстояние</small></button><button id="zStartBtn" class="modeCard zombieBtn"><span>☣ ЗОМБИ</span><small>Одиночная игра: волны, здоровье, стрельба</small></button></div>
     <div id="message" class="minihelp" role="status"></div><div class="rule"></div>
     <p class="tiny"><b>Для зомби маркер не нужен.</b> Противники появляются поверх изображения камеры. В этой версии реальные стены и мебель пока не распознаются. Для поворота камеры используем датчик ориентации, если браузер разрешит доступ.</p>
     <div class="links"><button id="demoBtn" class="secondary" type="button">Демо маркера</button><button id="zDemoBtn" class="secondary" type="button">Демо зомби без камеры</button></div><div class="rule"></div>
-    <div class="tiny">Дуэль: интернет на обоих телефонах · PeerJS Cloud для соединения · камера обрабатывается на телефоне. Не играй рядом с дорогами, лестницами и опасными предметами.</div></div></div>
-  <div id="duelLobby" role="dialog" aria-modal="true" aria-label="Комната дуэли"><div class="panel"><div class="eyebrow">ПОЛИГОН · ДУЭЛЬ 02.1</div><h2>Два телефона — один бой</h2><p class="tiny">Используем один обычный чёрный квадрат. Для первого теста: один игрок с квадратом — мишень, второй — стрелок. Затем поменяйтесь ролями.</p>
+    <div class="tiny">Дуэль: интернет на обоих телефонах · тестовый сервер MQTT для связи · камера обрабатывается на телефоне. Не играй рядом с дорогами, лестницами и опасными предметами.</div></div></div>
+  <div id="duelLobby" role="dialog" aria-modal="true" aria-label="Комната дуэли"><div class="panel"><div class="eyebrow">ПОЛИГОН · ДУЭЛЬ 02.2</div><h2>Два телефона — один бой</h2><p class="tiny">Используем один обычный чёрный квадрат. Для первого теста: один игрок с квадратом — мишень, второй — стрелок. Затем поменяйтесь ролями.</p>
     <div class="twocol"><button class="primary" id="duelCreate">СОЗДАТЬ КОМНАТУ</button><button class="secondary" id="duelJoin">ВОЙТИ ПО КОДУ</button></div>
     <div id="duelRoom" class="code">——————</div>
     <label class="tiny" for="duelCode">Код комнаты, 6 цифр</label>
@@ -143,7 +143,7 @@
     <button id="duelLaunch" class="primary">📷 В БОЙ · ВКЛЮЧИТЬ КАМЕРУ</button>
     <button id="duelRestart" class="secondary wide">↺ НОВЫЙ РАУНД (ХОЗЯИН)</button>
     <button id="duelBack" class="secondary wide">← НАЗАД В МЕНЮ</button>
-    <div class="rule"></div><small>Дуэль работает через прямое соединение WebRTC; нужен интернет и бесплатный PeerJS Cloud для знакомства устройств. Некоторые сети блокируют соединение. Видеопоток не передаётся. В первом прототипе результаты выстрелов рассчитывает телефон стрелка.</small>
+    <div class="rule"></div><small>Дуэль работает через публичный тестовый MQTT-сервер по защищённому WebSocket. Два телефона должны быть онлайн. События игры проходят через общий сервер; не передавай личные данные. Видеопоток не передаётся. Попадания в прототипе рассчитывает телефон стрелка.</small>
   </div></div>
   <div id="zEnding"><div class="panel" style="text-align:center"><div class="eyebrow">ПОЛИГОН · ВЫЖИВАНИЕ</div><h1 id="zEndTitle">ИГРА ОКОНЧЕНА</h1><p id="zEndText">Результат</p><button class="primary" id="zRestart">↻ ПОВТОРИТЬ</button><button class="secondary wide" id="zExit">ВЫБРАТЬ РЕЖИМ</button></div></div>
   <div id="settings" role="dialog" aria-modal="true" aria-label="Настройки"><div class="sheet"><h2>Настройки Полигона</h2><p class="markeronly">Используем только <b>один чёрный квадрат</b>. Белое поле вокруг него улучшает контраст.</p>
@@ -161,7 +161,7 @@
    <div class="rule"></div><p class="minihelp modewarn">Важно: виртуальный корпус не проверяет препятствия и не доказывает, что в кадре человек. При перекрытии маркера захват может пропасть. Один чёрный квадрат не позволяет определить ID нескольких игроков.</p>
    </div><button id="closeSettings" class="primary">СОХРАНИТЬ И ЗАКРЫТЬ</button></div></div>
 </div>
-<!-- PeerJS loaded on demand with fallback CDNs by the in-page loader -->
+<!-- MQTT 3.1.1 over native browser WebSocket; no CDN scripts -->
 <script>
 (function(){
 'use strict';
@@ -369,81 +369,38 @@ function calibrate(){if(!applySettings())return;let d=parseFloat(String($('known
  if(!(ratio>.2&&ratio<10)){toast('Проверьте размер маркера и дистанцию');return;}
  fRatio=ratio;calibrated=true;resetTracking();save();updateCal();toast('✓ Калибровка выполнена');}
 
-/* ======= 02.0 / WebRTC duel =======
- * No video streams cross the network. The shooter's target detection is used to claim a hit;
- * defender owns their own HP and confirms the resulting state to the other phone.
- * PeerJS Cloud used for signaling; in some NAT configurations a TURN relay is needed.
+/* ======= ПОЛИГОН 02.2 / публичный MQTT relay =======
+ * Browser-to-browser messages are relayed by a PUBLIC TEST MQTT broker via WSS.
+ * No WebRTC or external JS libraries are needed. No media is sent.
+ * Brokers are unauthenticated: use only for game testing, not private data.
  */
 const DUEL_SHOT_MS=310,DUEL_RELOAD_MS=1550,DUEL_DAMAGE=20;
-let duelLastUi=0;
+const DUEL_BROKERS=[
+ 'wss://mqtt.eclipseprojects.io:443/mqtt',
+ 'wss://broker.emqx.io:8084/mqtt',
+ 'wss://broker.hivemq.com:8884/mqtt'
+];
+let duelLastUi=0, duelPulseTimer=0, duelHeartbeat=null;
 function duelSetStatus(s,kind='wait'){
- const el=$('duelStatus'); el.textContent=s;
- el.classList.toggle('error',kind==='error');el.classList.toggle('good',kind==='good');
- duelPhase=kind;
+ const el=$('duelStatus');el.textContent=s;
+ el.classList.toggle('error',kind==='error');el.classList.toggle('good',kind==='good');duelPhase=kind;
 }
 function duelDiag(line){$('duelDiagnostic').textContent=line;}
 function duelDescribeError(e,stage){
- let kind=String(e?.type||e?.name||'unknown'),details=String(e?.message||'');
- let hints={'unavailable-id':'Этот код уже используется. Создай комнату заново.',
- 'peer-unavailable':'Комнаты с указанным кодом нет: хозяин должен увидеть «Комната готова».',
- 'network':'Сеть не соединяется с сервисом комнат. Проверь интернет; попробуй другую сеть.',
- 'server-error':'Публичный сервер комнат недоступен. Попробуй позже или потребуется собственный сервер.',
- 'socket-error':'Сигнальное соединение заблокировано или оборвалось.',
- 'socket-closed':'Соединение с сервером неожиданно закрыто.',
- 'webrtc':'Не удалось создать прямой канал между телефонами. Нужен TURN-сервер или другая сеть.',
- 'browser-incompatible':'Браузер не поддерживает нужные функции WebRTC.',
- 'invalid-id':'Неверный идентификатор комнаты.',
- 'ssl-unavailable':'Ошибка защищённого соединения с сервером комнат.'};
+ const kind=String(e?.type||e?.name||'network');const detail=String(e?.message||e||'');
  duelError=stage+':'+kind;
- let txt=`Ошибка [${duelError}]. ${hints[kind]||details||'Не удалось установить соединение.'}`;
- duelSetStatus(txt,'error');duelDiag(`Этап: ${stage}\nТип: ${kind}\n${details.slice(0,220)}\nPeerJS: ${!!window.Peer}; WebRTC: ${!!window.RTCPeerConnection}`);
-}
-const DUEL_CDNS=[
- 'https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js',
- 'https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js',
- 'https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js'
-];
-function duelLoadOne(src,timeoutMs=6200){return new Promise((resolve,reject)=>{
- if(window.Peer){resolve(true);return;}
- let done=false,sc=document.createElement('script');sc.async=true;sc.src=src;
- const finish=(ok,why)=>{if(done)return;done=true;clearTimeout(timer);sc.onload=sc.onerror=null;if(ok)resolve(true);else{sc.remove();reject(new Error(why));}};
- sc.onload=()=>finish(!!window.Peer,window.Peer?'':'Загрузился файл без PeerJS');
- sc.onerror=()=>finish(false,'CDN не ответил');
- const timer=setTimeout(()=>finish(!!window.Peer,'Превышено ожидание загрузки'),timeoutMs);
- document.head.appendChild(sc);
- });}
-async function duelEnsureLib(){
- if(window.Peer)return true;
- if(duelLibraryPromise)return duelLibraryPromise;
- duelLibraryPromise=(async()=>{
-   if(!window.RTCPeerConnection){duelSetStatus('Ошибка [WEBRTC]: браузер не поддерживает WebRTC. Открой Chrome или Safari.','error');return false;}
-   for(let i=0;i<DUEL_CDNS.length;i++){
-     if(window.Peer)return true;
-     duelDiag(`PeerJS не загружен. Проверяем источник ${i+1} из ${DUEL_CDNS.length}…`);
-     try{await duelLoadOne(DUEL_CDNS[i]);if(window.Peer){duelDiag(`PeerJS: загружен из источника ${i+1}. WebRTC: доступен.`);return true;}}catch(e){duelDiag(`Источник ${i+1}: ${e.message}. Пробуем резервный…`);}
-   }
-   duelSetStatus('Ошибка [LIBRARY]: браузер не смог загрузить PeerJS ни из одного источника. Проверь интернет, блокировщик рекламы и ограничения браузера.','error');
-   duelDiag('PeerJS не загружен. Ни один из трёх CDN не ответил. Сама игра может работать, но дуэль без PeerJS не создастся.');
-   return false;
- })();
- try{return await duelLibraryPromise;}finally{duelLibraryPromise=null;}
+ duelSetStatus('Ошибка ['+duelError+']. '+detail.slice(0,180),'error');
+ duelDiag('Этап: '+stage+'\nТип: '+kind+'\n'+detail.slice(0,220)+'\nWebSocket: '+!!window.WebSocket);
 }
 function duelClearTimer(){if(duelStatusTimer){clearTimeout(duelStatusTimer);duelStatusTimer=0;}}
-function duelSetTimer(ms,action){duelClearTimer();duelStatusTimer=setTimeout(action,ms);}
+function duelSetTimer(ms,cb){duelClearTimer();duelStatusTimer=setTimeout(cb,ms);}
 function duelBusy(on){$('duelCreate').disabled=on;$('duelConnect').disabled=on;$('duelCreate').textContent=on?'ПОДКЛЮЧАЕМ…':'СОЗДАТЬ КОМНАТУ';}
-function duelTestNetwork(){
- const msg=`Интернет: ${navigator.onLine?'браузер сообщает «онлайн»':'браузер сообщает «офлайн»'}\nЗащищённая страница: ${window.isSecureContext?'да':'нет'}\nWebRTC: ${!!window.RTCPeerConnection?'доступен':'нет'}\nPeerJS: ${window.Peer?'загружен':'не загружен'}\nСостояние: ${duel?.peer?.open?'комната зарегистрирована':duel?.conn?.open?'канал открыт':'комната пока не подтверждена'}`;
- duelDiag(msg);
- if(!window.Peer){duelSetStatus('Проверяем загрузку PeerJS…');duelEnsureLib().then(ok=>{if(ok){duelSetStatus('✓ PeerJS загружен. Теперь нажми «Создать комнату».','good');duelTestNetwork();}});}
- else if(duel?.peer?.open)duelSetStatus('✓ Сервер подтвердил комнату '+duel.code+'.','good');
- else duelSetStatus('WebRTC и PeerJS доступны. Нажми «Создать комнату», чтобы проверить сервер.');
-}
-function duelRandomCode(){let a=new Uint32Array(1);try{crypto.getRandomValues(a);return String(100000+a[0]%900000);}catch(e){return String(Math.floor(100000+Math.random()*900000));}}
+function duelRandomCode(idx=0){let a=new Uint32Array(1);try{crypto.getRandomValues(a);}catch(e){a[0]=Math.floor(Math.random()*900000);}return String(idx+1)+String(a[0]%100000).padStart(5,'0');}
+function duelRandomId(){let a=new Uint32Array(2);try{crypto.getRandomValues(a);}catch(e){a[0]=Math.random()*2**32;a[1]=Math.random()*2**32;}return [...a].map(x=>x.toString(16).padStart(8,'0')).join('');}
 function duelResetLocal(){if(!duel)return;duel.me=100;duel.them=100;duel.ammo=20;duel.reserve=80;duel.reloadUntil=0;duel.lastShot=0;duel.sentSeq=0;duel.receivedSeq=0;duel.lastPing=0;duel.latency=null;hits=0;misses=0;resetCounters();duelUpdateHud();}
-function duelSend(o){if(!duel?.conn?.open)return false;try{duel.conn.send(o);return true;}catch(e){duelSetStatus('Отправка не удалась: '+e.message);return false;}}
+function duelSend(o){if(!duel?.conn?.open)return false;try{duel.conn.send(o);return true;}catch(e){duelSetStatus('Отправка не удалась: '+e.message,'error');return false;}}
 function duelUpdateHud(){if(!duel)return;
- $('duelSelfLife').textContent=String(duel.me);
- $('duelOtherLife').textContent=String(duel.them);
+ $('duelSelfLife').textContent=String(duel.me);$('duelOtherLife').textContent=String(duel.them);
  $('duelSelfBar').style.width=duel.me+'%';$('duelOtherBar').style.width=duel.them+'%';
  $('duelAmmo').textContent=duel.ammo+'/'+duel.reserve;
  $('duelLink').textContent=(duel.conn?.open?'● СВЯЗЬ УСТАНОВЛЕНА · ':'○ НЕТ СВЯЗИ · ')+duel.code+(duel.latency!==null?' · '+duel.latency+' мс':'');
@@ -451,57 +408,78 @@ function duelUpdateHud(){if(!duel)return;
  $('duelResult').classList.toggle('danger',duel.me<=40);$('game').classList.toggle('hostduel',!!duel.host);
  $('shoot').disabled=gameMode==='duel'&&(!active||!duel.conn?.open||duel.me<=0||duel.them<=0);
 }
-function duelDestroy(){let old=duel;duel=null;duelClearTimer();duelBusy(false);if(!old)return;try{old.conn?.close();}catch(e){}try{old.peer?.destroy();}catch(e){}duelUpdateHudNoSession();}
+function duelDestroy(){let old=duel;duel=null;duelClearTimer();duelBusy(false);if(duelPulseTimer){clearInterval(duelPulseTimer);duelPulseTimer=0;}if(old){try{old.net?.close();}catch(e){}}duelUpdateHudNoSession();}
 function duelUpdateHudNoSession(){$('game').classList.remove('hostduel');$('duelLink').textContent='○ НЕТ СОЕДИНЕНИЯ';$('duelResult').textContent='ИГРОК ВЫШЕЛ';}
-function duelLeave(){duelSeq++;if(duel){duelSend({t:'bye'});duelDestroy();} $('duelLaunch').style.display='none';$('duelRestart').style.display='none';}
-function duelStartLobby(){if(active){toast('Сначала останови предыдущий режим');return;}$('duelLobby').classList.add('open');$('duelLaunch').style.display=duel?.conn?.open?'block':'none';duelSetStatus(duel?.conn?.open?'Соперник подключён. Можно включить камеру.':'Создай комнату или введи код для подключения к другу.',duel?.conn?.open?'good':'wait');duelDiag('PeerJS: '+(window.Peer?'загружен':'ещё не загружен')+' · Интернет: '+(navigator.onLine?'онлайн':'офлайн'));}
-function duelMakeSession(code,host){duelDestroy();duel={code,host,peer:null,conn:null,me:100,them:100,ammo:20,reserve:80,reloadUntil:0,lastShot:0,sentSeq:0,receivedSeq:0,round:1,lastPing:0,latency:null};$('duelRoom').textContent=code;$('duelCode').value=code;}
-const PEER_OPTIONS={host:'0.peerjs.com',port:443,path:'/',secure:true,debug:1,config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]}};
-async function duelStartHosting(){
- if($('duelCreate').disabled)return;
- const attempt=++duelSeq;
- duelBusy(true);duelSetStatus('Шаг 1/2: загружаем сетевую библиотеку…');
- try{
-  if(!(await duelEnsureLib())){duelBusy(false);return;}
-  if(attempt!==duelSeq)return;
-  let code=duelRandomCode();duelMakeSession(code,true);
-  duelBusy(true);duelSetStatus('Шаг 2/2: регистрируем комнату '+code+' на сервере…');
-  duelDiag('PeerJS подключён. Ожидание подтверждения регистрации от 0.peerjs.com:443');
-  let peer=new window.Peer('poligon-021-'+code,PEER_OPTIONS);duel.peer=peer;
-  duelSetTimer(15000,()=>{if(duel?.peer!==peer||peer.open)return;duelBusy(false);duelSetStatus('Ошибка [SIGNAL-TIMEOUT]: сервер комнат не подтвердил создание за 15 секунд. Код пока не работает. Проверь соединение и повтори.','error');duelDiag('Тайм-аут регистрации PeerJS. Peer open='+peer.open+'. Сервис 0.peerjs.com может быть недоступен или заблокирован.');});
-  peer.on('open',id=>{if(duel?.peer!==peer)return;duelClearTimer();duelBusy(false);duelSetStatus('✓ Комната '+code+' ГОТОВА! Теперь вводи код на втором телефоне.','good');duelDiag('Сервер подтвердил Peer ID: '+id+'\nТеперь подключай второй телефон.');});
-  peer.on('connection',c=>{if(duel?.peer!==peer){c.close();return;}if(duel.conn?.open){c.close();return;}duelAttach(c);});
-  peer.on('error',e=>{if(duel?.peer!==peer)return;duelClearTimer();duelBusy(false);duelDescribeError(e,'HOST');});
-  peer.on('disconnected',()=>{if(duel?.peer===peer){duelSetStatus('Связь с сервером комнат потеряна [SIGNAL-DISCONNECTED]. Проверь сеть и попробуй создать комнату заново.','error');duelBusy(false);}});
- }catch(e){duelBusy(false);duelDescribeError(e,'HOST-EXCEPTION');}
- finally{if(attempt===duelSeq&&(!duel||!duel.peer))duelBusy(false);}
+function duelLeave(){duelSeq++;if(duel){duelWireSend({t:'bye'});duelDestroy();}$('duelLaunch').style.display='none';$('duelRestart').style.display='none';}
+function duelStartLobby(){if(active){toast('Сначала останови предыдущий режим');return;}$('duelLobby').classList.add('open');$('duelLaunch').style.display=duel?.conn?.open?'block':'none';duelSetStatus(duel?.conn?.open?'Соперник подключён. Можно включить камеру.':'Создай комнату или введи код для подключения к другу.',duel?.conn?.open?'good':'wait');duelDiag('Дуэль 02.2 · MQTT по WSS · WebSocket: '+(!!window.WebSocket?'доступен':'нет'));}
+function duelMakeSession(code,host){duelDestroy();duel={code,host,conn:{open:false,send:obj=>duelWireSend({t:'data',data:obj})},net:null,local:duelRandomId(),remote:null,token:host?duelRandomId():null,me:100,them:100,ammo:20,reserve:80,reloadUntil:0,lastShot:0,sentSeq:0,receivedSeq:0,round:1,lastPing:0,latency:null,lastRemote:0,joinedAt:0};$('duelRoom').textContent=code;$('duelCode').value=code;}
+// Minimal MQTT 3.1.1 client, one HTML file and zero third-party scripts.
+const mqttEncoder=new TextEncoder(),mqttDecoder=new TextDecoder();
+function mqttString(s){const b=mqttEncoder.encode(String(s));return new Uint8Array([b.length>>8,b.length&255,...b]);}
+function mqttLength(len){let arr=[];do{let d=len%128;len=Math.floor(len/128);if(len)d|=128;arr.push(d);}while(len);return arr;}
+function mqttPacket(type,data){let out=new Uint8Array(1+mqttLength(data.length).length+data.length),len=mqttLength(data.length);out[0]=type;out.set(len,1);out.set(data,1+len.length);return out;}
+function mqttConnectPacket(id){let meta=new Uint8Array([...mqttString('MQTT'),4,2,0,30]);return mqttPacket(0x10,new Uint8Array([...meta,...mqttString(id)]));}
+function mqttSubPacket(topic){return mqttPacket(0x82,new Uint8Array([0,1,...mqttString(topic),0]));}
+function mqttPubPacket(topic,msg){const raw=mqttEncoder.encode(JSON.stringify(msg));return mqttPacket(0x30,new Uint8Array([...mqttString(topic),...raw]));}
+function mqttDecodePackets(buffer,callback){let a=new Uint8Array(buffer),offset=0;while(offset<a.length){let first=a[offset++],mult=1,len=0,d=0;do{if(offset>=a.length)return;d=a[offset++];len+=(d&127)*mult;mult*=128;}while((d&128)&&mult<=128*128*128*128);if(len<0||offset+len>a.length)return;callback(first,a.slice(offset,offset+len));offset+=len;}}
+function mqttConnectUrl(url,topic,clientId,onPublish,onClosed,timeoutMs=8500){return new Promise((resolve,reject)=>{
+ let done=false,subscribed=false,opened=false,timer=0,pinger=0,ws;
+ const settle=(error)=>{if(done)return;done=true;clearTimeout(timer);if(error){try{ws?.close();}catch(e){}reject(error);}else resolve(client);};
+ const client={url,open:false,close(){clearInterval(pinger);try{ws?.close();}catch(e){}},send(msg){if(ws?.readyState!==WebSocket.OPEN||!client.open)throw Error('MQTT: канал закрыт');ws.send(mqttPubPacket(topic,msg));}};
+ try{ws=new WebSocket(url,'mqtt');ws.binaryType='arraybuffer';}catch(e){reject(e);return;}
+ timer=setTimeout(()=>settle(new Error('нет ответа '+url+' за '+Math.round(timeoutMs/1000)+' сек')),timeoutMs);
+ ws.onopen=()=>{opened=true;ws.send(mqttConnectPacket(clientId));};
+ ws.onmessage=ev=>{if(!(ev.data instanceof ArrayBuffer))return;mqttDecodePackets(ev.data,(first,raw)=>{
+ const p=first>>4;
+ if(p===2){if(raw.length<2||raw[1]!==0){settle(new Error('сервер отклонил MQTT CONNECT ('+(raw[1]||'?')+')'));return;}ws.send(mqttSubPacket(topic));}
+ else if(p===9){if(raw.length<3||raw[2]>=0x80){settle(new Error('подписка на комнату отклонена'));return;}subscribed=true;client.open=true;settle();pinger=setInterval(()=>{if(ws.readyState===WebSocket.OPEN)ws.send(new Uint8Array([0xc0,0]));},12000);}
+ else if(p===3&&subscribed){try{if(raw.length<2)return;const n=raw[0]*256+raw[1];if(n>raw.length-2)return;const v=JSON.parse(mqttDecoder.decode(raw.slice(2+n)));onPublish(v);}catch(e){}}
+ });};
+ ws.onerror=()=>{if(!done)settle(new Error('WebSocket не открылся: '+url));};
+ ws.onclose=()=>{clearInterval(pinger);if(!done)settle(new Error('соединение закрыто: '+url));else if(client.open){client.open=false;onClosed();}};
+ });}
+function duelWireSend(event){if(!duel?.net?.open)return false;try{duel.net.send({...event,who:duel.local,role:duel.host?'host':'guest',session:duel.token,ts:Date.now()});return true;}catch(e){duelDiag('MQTT отправка: '+e.message);return false;}}
+function duelMarkConnected(){if(!duel||duel.conn.open)return;duel.conn.open=true;duelBusy(false);duelClearTimer();duelSetStatus('✓ Оба телефона соединены! Нажми «В БОЙ».','good');duelDiag('Тестовый MQTT relay: '+(duel.net?.url||'')+'\nПодключение подтверждено сообщением второго игрока.');$('duelLaunch').style.display='block';$('duelRestart').style.display=duel.host?'block':'none';duelSend({t:'hello',ver:2,round:duel.round,health:duel.me});duelSend({t:'state',round:duel.round,health:duel.me});duelUpdateHud();}
+function duelOnMessage(m){if(!duel||!m||m.who===duel.local||m.role===(duel.host?'host':'guest')||!['host','guest'].includes(m.role))return;
+ const now=Date.now();if(duel.host){if(duel.remote&&m.who!==duel.remote)return;if(m.t==='join'||m.t==='beat'){if(m.session!==duel.token)return;duel.remote=m.who;duel.lastRemote=now;duelWireSend({t:'welcome'});duelMarkConnected();}
+ else if(m.t==='data'&&m.session===duel.token&&m.who===duel.remote){duel.lastRemote=now;duelReceive(m.data);}}
+ else{if(m.t==='beat'&&m.role==='host'){if(duel.token&&duel.token!==m.session)return;duel.token=m.session;duel.remote=m.who;duel.lastRemote=now;duelWireSend({t:'join'});}
+ else if(m.t==='welcome'&&m.who===duel.remote&&m.session===duel.token){duel.lastRemote=now;duelMarkConnected();duelWireSend({t:'beat'});}
+ else if(m.t==='data'&&m.who===duel.remote&&m.session===duel.token){duel.lastRemote=now;duelReceive(m.data);}}
+ if(m.t==='bye'&&m.who===duel.remote&&m.session===duel.token){duel.conn.open=false;duelSetStatus('Соперник вышел из комнаты.','error');duelUpdateHud();$('duelLaunch').style.display='none';}
 }
-async function duelStartJoining(){
- if($('duelConnect').disabled)return;
- let code=$('duelCode').value.trim().replace(/\D/g,'');if(!/^\d{6}$/.test(code)){duelSetStatus('Введи шестизначный код комнаты.','error');return;}
- const attempt=++duelSeq;duelBusy(true);duelSetStatus('Шаг 1/2: готовим соединение с комнатой '+code+'…');
- try{
-  if(!(await duelEnsureLib())){duelBusy(false);return;}
-  if(attempt!==duelSeq)return;
-  duelMakeSession(code,false);duelBusy(true);
-  duelSetStatus('Шаг 2/2: соединяемся с сервером…');
-  let peer=new window.Peer(PEER_OPTIONS);duel.peer=peer;
-  duelSetTimer(15000,()=>{if(duel?.peer!==peer||peer.open)return;duelBusy(false);duelSetStatus('Ошибка [JOIN-TIMEOUT]: нет ответа сервера комнат. Попробуй другой интернет.','error');duelDiag('Сервер 0.peerjs.com не подтвердил подключение за 15 секунд.');});
-  peer.on('open',()=>{if(duel?.peer!==peer)return;duelClearTimer();duelSetStatus('Сервер доступен. Ищем хозяина комнаты '+code+'…');
-   try{duelAttach(peer.connect('poligon-021-'+code,{reliable:true,serialization:'json'}));}catch(e){duelDescribeError(e,'JOIN-CONNECT');}
-  });
-  peer.on('error',e=>{if(duel?.peer!==peer)return;duelClearTimer();duelBusy(false);duelDescribeError(e,'JOIN');});
-  peer.on('disconnected',()=>{if(duel?.peer===peer){duelBusy(false);duelSetStatus('Потеряно соединение с сервером комнат [JOIN-DISCONNECTED].','error');}});
- }catch(e){duelBusy(false);duelDescribeError(e,'JOIN-EXCEPTION');}
- finally{if(attempt===duelSeq&&(!duel||!duel.peer))duelBusy(false);}
+function duelStartPulse(session){if(duelPulseTimer)clearInterval(duelPulseTimer);duelPulseTimer=setInterval(()=>{
+ if(!duel||duel!==session||!session.net?.open)return;
+ if(session.conn.open&&Date.now()-session.lastRemote>8500){session.conn.open=false;duelSetStatus('Соединение с соперником потеряно. Пытаемся восстановить…','error');duelUpdateHud();$('duelLaunch').style.display='none';}
+ duelWireSend({t:session.host?'beat':session.token?'join':'listen'});
+ },1250);duelWireSend({t:session.host?'beat':'listen'});}
+async function duelMakeNetwork(session,brokerIndex){
+ const i=brokerIndex,topic='poligon-demo/mvp022/'+session.code+'/events';
+ const url=DUEL_BROKERS[i],clientId='pg'+duelRandomId().slice(0,16);
+ const net=await mqttConnectUrl(url,topic,clientId,duelOnMessage,()=>{if(duel!==session)return;session.conn.open=false;duelSetStatus('Соединение с сервером прервано [MQTT-DISCONNECTED]. Создай комнату заново.','error');$('duelLaunch').style.display='none';duelUpdateHud();});
+ if(duel!==session){net.close();throw Error('Попытка отменена');}
+ session.net=net;duelStartPulse(session);return net;
 }
-function duelAttach(c){if(!duel||!c)return;duel.conn=c;duelSetStatus('Сервер нашёл участников. Устанавливаем WebRTC-канал между телефонами…');
- duelSetTimer(18000,()=>{if(!duel||duel.conn!==c||c.open)return;duelBusy(false);duelSetStatus('Ошибка [WEBRTC-TIMEOUT]: телефоны не смогли создать прямой канал за 18 секунд. Попробуй одну сеть Wi-Fi или потребуется TURN-сервер.','error');duelDiag('Сигнальный сервер доступен, но WebRTC DataChannel не открылся. Попробуйте одну сеть Wi-Fi.');});
- c.on('open',()=>{if(!duel||duel.conn!==c)return;duelClearTimer();duelBusy(false);duelSetStatus('✓ Оба телефона соединены! Нажми «В БОЙ».','good');duelDiag('WebRTC DataChannel открыт. Можно запускать камеру.');$('duelLaunch').style.display='block';$('duelRestart').style.display=duel.host?'block':'none';
- duelSend({t:'hello',ver:2,round:duel.round,health:duel.me});duelSend({t:'state',round:duel.round,health:duel.me});duelUpdateHud();});
- c.on('data',obj=>duelReceive(obj));
- c.on('close',()=>{if(!duel||duel.conn!==c)return;duelClearTimer();duelBusy(false);duelSetStatus('Соперник отключился [CHANNEL-CLOSED]. Создай новую комнату.','error');$('duelLaunch').style.display='none';duelUpdateHud();toast('СОПЕРНИК ОТКЛЮЧИЛСЯ');});
- c.on('error',e=>{if(!duel||duel.conn!==c)return;duelClearTimer();duelBusy(false);duelDescribeError(e,'CHANNEL');});
+async function duelStartHosting(){if($('duelCreate').disabled)return;const request=++duelSeq;duelBusy(true);duelSetStatus('Создаём комнату на сервере тестовых игр…');
+ try{for(let i=0;i<DUEL_BROKERS.length;i++){
+  if(request!==duelSeq)return;
+  let code=duelRandomCode(i);duelMakeSession(code,true);const s=duel;duelBusy(true);
+  duelSetStatus('Проверяем сервер '+(i+1)+' из '+DUEL_BROKERS.length+'…');duelDiag('Сервер: '+DUEL_BROKERS[i]+'\nРегистрация комнаты '+code+'…');
+  try{await duelMakeNetwork(s,i);if(request!==duelSeq)return;duelSetStatus('✓ Комната '+code+' ГОТОВА! Введи код на втором телефоне.','good');duelDiag('Комната зарегистрирована на '+DUEL_BROKERS[i]+'\nОжидаем второго участника.');duelBusy(false);return;}
+  catch(e){if(request!==duelSeq)return;duelDiag('Сервер '+(i+1)+': '+e.message+'\nПробуем следующий…');s.net?.close();}
+ }duelSetStatus('Ошибка [BROKERS]: все три тестовых сервера недоступны. Проверь сеть и попробуй позднее.','error');}
+ catch(e){duelDescribeError(e,'HOST');}finally{if(request===duelSeq)duelBusy(false);}
+}
+async function duelStartJoining(){if($('duelConnect').disabled)return;const code=$('duelCode').value.trim().replace(/\D/g,'');const i=Number(code[0])-1;
+ if(!/^\d{6}$/.test(code)||i<0||i>=DUEL_BROKERS.length){duelSetStatus('Введи код из версии 02.2 (начинается с 1, 2 или 3).','error');return;}
+ const request=++duelSeq;duelMakeSession(code,false);const s=duel;duelBusy(true);duelSetStatus('Подключаемся к серверу комнаты '+code+'…');
+ try{await duelMakeNetwork(s,i);if(request!==duelSeq)return;duelBusy(false);duelSetStatus('Сервер подключён. Ожидаем ответа хозяина комнаты…');duelDiag('Тестовый MQTT '+DUEL_BROKERS[i]+'\nОжидаем сигнал от хозяина. Он должен оставить страницу открытой.');
+ duelSetTimer(16000,()=>{if(duel!==s||s.conn.open)return;duelSetStatus('Ошибка [ROOM-NOT-FOUND]: хозяин комнаты не отвечает. Проверь код и что первый телефон остаётся в игре.','error');});
+ }catch(e){if(request===duelSeq){duelBusy(false);duelDescribeError(e,'JOIN');}}
+}
+function duelTestNetwork(){
+ const info='Браузер онлайн: '+(navigator.onLine?'да':'нет')+'\nHTTPS: '+(window.isSecureContext?'да':'нет')+'\nWebSocket: '+(!!window.WebSocket)+'\nСервер: '+(duel?.net?.url||'не выбран')+'\nMQTT: '+(duel?.net?.open?'подключён':'не подключён')+'\nВторой игрок: '+(duel?.conn?.open?'найден':'ожидаем');
+ duelDiag(info);duelSetStatus(duel?.conn?.open?'✓ Канал между игроками работает.':duel?.net?.open?'✓ Сервер доступен, ожидаем второго игрока.':'Выбери «Создать комнату» или введи код, чтобы проверить сеть.',duel?.net?.open?'good':'wait');
 }
 function duelReceive(obj){if(!duel||!obj||typeof obj!=='object'||typeof obj.t!=='string')return;
  const now=performance.now();

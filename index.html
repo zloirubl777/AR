@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#07100c">
-<title>ПОЛИГОН · Камера и маркеры · MVP 01.1</title>
+<title>ПОЛИГОН · Камера и маркеры · MVP 01.2</title>
 <style>
 :root{color-scheme:dark;--ink:#e6fdf0;--muted:#97b0a4;--green:#64ffa8;--lime:#bcffd5;--bg:#07100c;--glass:rgba(5,20,13,.74)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button,input{font:inherit}button{cursor:pointer}button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
@@ -44,13 +44,13 @@
   <video id="camera" playsinline webkit-playsinline autoplay muted></video>
   <div id="demoBackdrop"></div>
   <canvas id="hudCanvas"></canvas>
-  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 01.1</span></div><div class="subtitle">AR MARKER TRACKING · ПРОТОТИП</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
+  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 01.2</span></div><div class="subtitle">AR MARKER TRACKING · ПРОТОТИП</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
   <div id="targetPill">Наведите камеру на маркер или квадрат</div>
-  <div id="debugLine" aria-live="polite">ПОИСК: КОДОВЫЕ МЕТКИ + ПРОСТОЙ КВАДРАТ</div>
+  <div id="debugLine" aria-live="polite">ПОИСК: КОДОВЫЕ МЕТКИ + КВАДРАТ · ДАЛЬНИЙ РЕЖИМ</div>
   <div id="bottom"><div class="bottomside"><div class="metric" id="distance">ДИСТАНЦИЯ <b>—</b></div><div class="submetric" id="accuracy">Оценка без калибровки</div><div class="metric">ПОПАДАНИЯ <b id="hitCount">0</b> <span style="color:#8fa99b"> / </span> ПРОМАХИ <b id="missCount">0</b></div></div><button id="shoot" disabled aria-label="Тестовый выстрел">ОГОНЬ</button><div class="actioncol"><button class="toolbtn" id="settingsBtn">⚙ НАСТРОЙКИ</button><button class="toolbtn" id="pauseBtn">■ СТОП</button></div></div>
   <div id="toast" aria-live="polite"></div>
   <div id="intro">
-    <div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 01.1</div><h1>РЕАЛЬНЫЙ МИР.<br><span class="accent">НОВАЯ ИГРА.</span></h1><p>Наведи камеру на напечатанный <b>маркер Полигона</b>. Прототип определит его ID, положение и приблизительное расстояние до него.</p><button id="startBtn" class="primary">▶ ЗАПУСТИТЬ КАМЕРУ</button><div id="message" class="minihelp" role="status"></div><div class="rule"></div><p class="tiny">Для первой проверки: распечатай кодовый маркер или чёрный квадрат <b>12 × 12 см</b>, закрепи вертикально и отойди на 1–2 метра.</p><div class="links"><a href="markers.html" target="_blank" rel="noopener">▧ Распечатать маркеры</a><button id="demoBtn" class="secondary" type="button">Посмотреть демо интерфейса</button></div><div class="rule"></div><div class="tiny">Нужен HTTPS (например, GitHub Pages) и доступ к камере. Компьютерное зрение работает на самом телефоне; видео никуда не отправляется. Двухсторонний бой будет на следующем этапе.</div></div>
+    <div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 01.2</div><h1>РЕАЛЬНЫЙ МИР.<br><span class="accent">НОВАЯ ИГРА.</span></h1><p>Наведи камеру на напечатанный <b>маркер Полигона</b>. Прототип определит его ID, положение и приблизительное расстояние до него.</p><button id="startBtn" class="primary">▶ ЗАПУСТИТЬ КАМЕРУ</button><div id="message" class="minihelp" role="status"></div><div class="rule"></div><p class="tiny">Для проверки используй ровный чёрный квадрат <b>12 × 12 см</b> на белом листе. Новый поиск приближает изображение вокруг ранее найденной цели. На 3–5 м лучше использовать метку <b>18–24 см</b>.</p><div class="links"><a href="markers.html" target="_blank" rel="noopener">▧ Распечатать маркеры</a><button id="demoBtn" class="secondary" type="button">Посмотреть демо интерфейса</button></div><div class="rule"></div><div class="tiny">Нужен HTTPS (например, GitHub Pages) и доступ к камере. Компьютерное зрение работает на самом телефоне; видео никуда не отправляется. Двухсторонний бой будет на следующем этапе.</div></div>
   </div>
   <div id="settings" role="dialog" aria-modal="true" aria-label="Настройки"><div class="sheet"><h2>Камера и дистанция</h2><p>Размер — ширина <b>чёрного квадрата</b>, без белых полей. Изменяйте, только если печатаете маркер другого размера.</p><div class="controlgroup"><label>Маркер, см<input id="markerCm" type="number" inputmode="decimal" min="3" max="70" step="0.5" value="12"></label><label>Эталонная дистанция, м<input id="knownDistance" type="number" inputmode="decimal" min="0.3" max="15" step="0.1" value="2"></label></div><div class="rule"></div><p class="minihelp">Для точности поставьте маркер <b>фронтально</b>, отмерьте указанное расстояние <b>от камеры до маркера</b>, наведите на него телефон и нажмите калибровку. Сохранённый масштаб может быть неверным после смены объектива.</p><button class="secondary wide" id="calibrateBtn">◎ КАЛИБРОВАТЬ ПО ВИДИМОМУ МАРКЕРУ</button><button class="secondary wide" id="resetCalibration">↺ СБРОСИТЬ КАЛИБРОВКУ</button><div class="rule"></div><p id="calState" class="tiny">Калибровка: нет</p><p class="minihelp"><label><input id="basicToggle" type="checkbox" checked style="width:18px;height:18px;vertical-align:middle;accent-color:#73ffb0"> Искать также простые чёрные квадраты (тест без ID)</label></p><p class="minihelp modewarn">Расстояние оценочное. При наклоне метки, плохом свете и цифровом зуме возможна существенная погрешность. Попадание в этом MVP означает попадание <b>в область маркера</b>, а не распознавание всего тела.</p><button id="closeSettings" class="primary">ГОТОВО</button></div></div>
 </div>
@@ -61,6 +61,7 @@ var $ = function(id){return document.getElementById(id);};
 var video=$('camera'), hud=$('hudCanvas'), ctx=hud.getContext('2d');
 var scanCanvas=document.createElement('canvas'), scanCtx=scanCanvas.getContext('2d',{willReadFrequently:true}) || scanCanvas.getContext('2d');
 var detector=null, stream=null, active=false, demo=false, paused=false, tracks=new Map(), current=null, lastScan=0, frames=0, frameTimer=0, fps=0, raf=0, toastTimer=null, flashUntil=0, hits=0, misses=0;
+var scanNumber=0, lastSquare=null, fovHoldMs=1250, shotFreshMs=530;
 var markerCm=12, fRatio=0.78, calibrated=false, lastCameraFacing='environment', codedCount=0, basicCount=0, lastScanInfo='ОЖИДАНИЕ КАМЕРЫ', basicAllowed=true;
 var previewTarget={id:0, corners:[], meters:2.0, lastSeen:0, edgePixels:100};
 try {var saved=JSON.parse(localStorage.getItem('poligon_mvp01_settings')||'{}'); if(saved.markerCm>0&&saved.markerCm<71)markerCm=saved.markerCm; if(saved.calibrated&&saved.fRatio>0.2&&saved.fRatio<10){fRatio=saved.fRatio; calibrated=true;}}catch(e){}
@@ -71,12 +72,12 @@ function toast(message){$('toast').textContent=message;$('toast').classList.add(
 function msg(message){$('message').textContent=message;}
 function loadScript(url){return new Promise(function(resolve,reject){var script=document.createElement('script');script.src=url;script.async=true;script.onload=resolve;script.onerror=function(){script.remove();reject(new Error('Не загружен '+url));};document.head.appendChild(script);});}
 async function loadDetector(){if(detector)return;var libs=[['https://cdn.jsdelivr.net/npm/js-aruco2@2.0.0/src/cv.js','https://unpkg.com/js-aruco2@2.0.0/src/cv.js'],['https://cdn.jsdelivr.net/npm/js-aruco2@2.0.0/src/aruco.js','https://unpkg.com/js-aruco2@2.0.0/src/aruco.js']];for(var i=0;i<libs.length;i++){var ok=false;for(var j=0;j<libs[i].length;j++){try{await loadScript(libs[i][j]);ok=true;break;}catch(e){}}if(!ok)throw new Error('Не удалось загрузить модуль распознавания. Проверьте интернет-соединение.');}if(typeof AR==='undefined'||typeof CV==='undefined')throw new Error('Модуль распознавания недоступен.');AR.DICTIONARIES.POLIGON={nBits:25,tau:5,codeList:[0x10839ce,0x10ba5ce,0x104c210,0x104ddce,0xc81afd,0xdc236c,0xb214c7,0xbafd40]};detector=new AR.Detector({dictionaryName:'POLIGON',maxHammingDistance:3});}
-async function stopCamera(){active=false;paused=false;tracks.clear();current=null;cancelAnimationFrame(raf);if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}video.pause();video.srcObject=null;$('cameraStatus').textContent='КАМЕРА ВЫКЛ.';$('pauseBtn').textContent='▶ ЗАПУСК';$('shoot').disabled=true;}
+async function stopCamera(){active=false;paused=false;tracks.clear();current=null;lastSquare=null;scanNumber=0;cancelAnimationFrame(raf);if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}video.pause();video.srcObject=null;$('cameraStatus').textContent='КАМЕРА ВЫКЛ.';$('pauseBtn').textContent='▶ ЗАПУСК';$('shoot').disabled=true;}
 async function startCamera(){msg('Загружаем распознавание…');$('startBtn').disabled=true;try{if(!window.isSecureContext){throw new Error('Для доступа к камере откройте игру по HTTPS (например, на GitHub Pages).');}await loadDetector();msg('Запрашиваем разрешение камеры…');var constraints={audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}}};try{stream=await navigator.mediaDevices.getUserMedia(constraints);}catch(e){if(e.name==='OverconstrainedError'||e.name==='NotFoundError')stream=await navigator.mediaDevices.getUserMedia({audio:false,video:true});else throw e;}video.srcObject=stream;video.muted=true;video.setAttribute('playsinline','');await video.play();if(!video.videoWidth){await new Promise(function(resolve,reject){var t=setTimeout(function(){reject(new Error('Камера не выдаёт кадры.'));},5000);video.addEventListener('loadedmetadata',function(){clearTimeout(t);resolve();},{once:true});});}
-lastCameraFacing=(stream.getVideoTracks()[0].getSettings()||{}).facingMode||'environment';demo=false;paused=false;active=true;tracks.clear();current=null;resetDisplay();$('intro').hidden=true;$('demoBackdrop').style.display='none';$('camera').style.display='block';$('cameraStatus').textContent='● LIVE · КАМЕРА';$('cameraStatus').classList.add('status-on');$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=false;lastScan=0;frameTimer=performance.now();frames=0;raf=requestAnimationFrame(loop);
+lastCameraFacing=(stream.getVideoTracks()[0].getSettings()||{}).facingMode||'environment';demo=false;paused=false;active=true;tracks.clear();current=null;lastSquare=null;scanNumber=0;resetDisplay();$('intro').hidden=true;$('demoBackdrop').style.display='none';$('camera').style.display='block';$('cameraStatus').textContent='● LIVE · КАМЕРА';$('cameraStatus').classList.add('status-on');$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=false;lastScan=0;frameTimer=performance.now();frames=0;raf=requestAnimationFrame(loop);
 }catch(e){console.error(e);var reason=e.name==='NotAllowedError'?'Доступ к камере запрещён. Разрешите его в настройках Safari или Chrome.':(e.name==='NotReadableError'?'Камера занята другим приложением.':e.message||String(e));msg(reason);await stopCamera();}finally{$('startBtn').disabled=false;}}
 function resetDisplay(){hits=0;misses=0;$('hitCount').textContent='0';$('missCount').textContent='0';}
-function beginDemo(){$('debugLine').textContent='ДЕМО: ВИРТУАЛЬНАЯ ЦЕЛЬ';demo=true;active=true;paused=false;tracks.clear();current=null;resetDisplay();$('intro').hidden=true;$('camera').style.display='none';$('demoBackdrop').style.display='block';$('cameraStatus').textContent='ДЕМО · БЕЗ КАМЕРЫ';$('cameraStatus').classList.remove('status-on');$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=false;raf=requestAnimationFrame(loop);toast('Демо: цель нарисована, камера не сканируется');}
+function beginDemo(){$('debugLine').textContent='ДЕМО: ВИРТУАЛЬНАЯ ЦЕЛЬ';demo=true;active=true;paused=false;tracks.clear();current=null;lastSquare=null;scanNumber=0;resetDisplay();$('intro').hidden=true;$('camera').style.display='none';$('demoBackdrop').style.display='block';$('cameraStatus').textContent='ДЕМО · БЕЗ КАМЕРЫ';$('cameraStatus').classList.remove('status-on');$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=false;raf=requestAnimationFrame(loop);toast('Демо: цель нарисована, камера не сканируется');}
 function resizeCanvas(){var r=hud.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);var w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(hud.width!==w||hud.height!==h){hud.width=w;hud.height=h;}ctx.setTransform(dpr,0,0,dpr,0,0);return {w:r.width,h:r.height};}
 function mapPoint(x,y,vw,vh,w,h){var scale=Math.max(w/vw,h/vh),offsetX=(w-vw*scale)*.5,offsetY=(h-vh*scale)*.5;return {x:x*scale+offsetX,y:y*scale+offsetY};}
 function distance(p,q){return Math.hypot(p.x-q.x,p.y-q.y);}
@@ -87,13 +88,13 @@ function expandedPolygon(corners,scale){var cx=0,cy=0;corners.forEach(function(p
 // Квадрат НЕ содержит ID, поэтому используется только для проверки прицела и расстояния.
 var basicCanvas=document.createElement('canvas');
 var basicCtx=basicCanvas.getContext('2d',{willReadFrequently:true}) || basicCanvas.getContext('2d');
-function findBasicSquare(imageData, W, H){
+function findBasicSquare(imageData, W, H, expected){
   var im=imageData.data, N=W*H, gray=new Uint8Array(N), i, j, k;
   var histogram=new Uint32Array(256);
   for(i=0,j=0;i<N;i++,j+=4){gray[i]=(im[j]*77+im[j+1]*150+im[j+2]*29)>>8;histogram[gray[i]]++;}
   function percentile(frac){var goal=N*frac,count=0;for(var v=0;v<256;v++){count+=histogram[v];if(count>=goal)return v;}return 128;}
   var p12=percentile(.12),p65=percentile(.65);
-  var thresh=Math.max(37,Math.min(113,Math.round((p12+p65)*.48)));
+  var thresh=Math.max(34,Math.min(157,Math.round((p12+p65)*.48)));
   var visited=new Uint8Array(N), stack=new Int32Array(N), best=null;
   function lum(x,y){return gray[y*W+x];}
   for(var index=0; index<N; index++){
@@ -111,10 +112,10 @@ function findBasicSquare(imageData, W, H){
       if(y<H-1){np=pos+W;if(!visited[np]&&gray[np]<thresh){visited[np]=1;stack[top++]=np;}}
     }
     var bw=maxx-minx+1,bh=maxy-miny+1;
-    if(bw<12||bh<12||bw>W*.65||bh>H*.70)continue;
+    if(bw<8||bh<8||bw>W*.68||bh>H*.72)continue;
     if(minx<3||miny<3||maxx>W-4||maxy>H-4)continue;
     var aspect=bw/bh,density=count/(bw*bh);
-    if(aspect<.73||aspect>1.31||density<.63)continue;
+    if(aspect<.70||aspect>1.42||density<.69)continue;
     // Проверяем светлый фон сразу за 4 гранями найденного квадрата.
     var gap=Math.max(2,Math.round(Math.min(bw,bh)*.08));
     if(minx-gap<0||maxx+gap>=W||miny-gap<0||maxy+gap>=H)continue;
@@ -125,23 +126,53 @@ function findBasicSquare(imageData, W, H){
       for(var vi=0;vi<4;vi++){out+=vals[vi];samples++;if(vals[vi]>inner+28)bright++;}
     }
     out/=samples;
-    if(out-inner<31||bright/samples<.67)continue;
+    if(out-inner<25||bright/samples<.61)continue;
     var score=Math.min(bw,bh)*Math.sqrt(density)*(Math.min(90,out-inner)/90);
+    if(expected){
+      var dx=(minx+bw*.5-expected.cx),dy=(miny+bh*.5-expected.cy);
+      var delta=Math.hypot(dx,dy),allow=Math.max(30,expected.size*2.5);
+      if(delta>allow || bw<expected.size*.36 || bw>expected.size*2.8)continue;
+      score*=1.5/(1+delta/allow);
+    }
     if(!best||score>best.score)best={x:minx,y:miny,w:bw,h:bh,score:score,threshold:thresh,contrast:out-inner};
   }
   return best;
 }
-function detectBasicCandidate(vw,vh){
+function detectBasicCandidate(vw,vh,t){
   if(!basicAllowed)return null;
-  var w=Math.min(340,Math.round(vw*340/Math.max(vw,vh))),h=Math.min(340,Math.round(vh*340/Math.max(vw,vh)));
-  w=Math.max(1,w);h=Math.max(1,h);
+  // 01.2: first inspect a high-detail region around the last confirmed square.
+  // This keeps a distant marker large in the detector's input, without
+  // processing the entire camera frame at expensive full resolution.
+  if(lastSquare && t-lastSquare.lastSeen<1900){
+    var c=lastSquare.corners, cx=(c[0].x+c[2].x)*.5,cy=(c[0].y+c[2].y)*.5;
+    var edge=Math.max(Math.abs(c[2].x-c[0].x),Math.abs(c[2].y-c[0].y));
+    var side=Math.min(Math.min(vw,vh),Math.max(edge*5,Math.min(vw,vh)*.40));
+    var x=Math.max(0,Math.min(vw-side,cx-side*.5));
+    var y=Math.max(0,Math.min(vh-side,cy-side*.5));
+    var dim=320;
+    if(basicCanvas.width!==dim||basicCanvas.height!==dim){basicCanvas.width=dim;basicCanvas.height=dim;}
+    basicCtx.drawImage(video,x,y,side,side,0,0,dim,dim);
+    var scale=dim/side;
+    var expect={cx:(cx-x)*scale,cy:(cy-y)*scale,size:Math.max(1,edge*scale)};
+    var near=findBasicSquare(basicCtx.getImageData(0,0,dim,dim),dim,dim,expect);
+    if(near){
+      var nx=x+near.x/scale, ny=y+near.y/scale, nw=near.w/scale, nh=near.h/scale;
+      return makeBasic(nx,ny,nw,nh,near.contrast,true);
+    }
+  }
+  // Initial acquisition or reacquisition: wider full-frame scan.
+  var longSide=430;
+  var w=Math.max(1,Math.round(vw*longSide/Math.max(vw,vh)));
+  var h=Math.max(1,Math.round(vh*longSide/Math.max(vw,vh)));
   if(basicCanvas.width!==w||basicCanvas.height!==h){basicCanvas.width=w;basicCanvas.height=h;}
   basicCtx.drawImage(video,0,0,w,h);
   var sq=findBasicSquare(basicCtx.getImageData(0,0,w,h),w,h);
   if(!sq)return null;
   var sx=vw/w,sy=vh/h;
-  var x=sq.x*sx,y=sq.y*sy,ww=sq.w*sx,hh=sq.h*sy;
-  return {id:0,basic:true,corners:[{x:x,y:y},{x:x+ww,y:y},{x:x+ww,y:y+hh},{x:x,y:y+hh}],edgePixels:(ww+hh)/2,contrast:sq.contrast};
+  return makeBasic(sq.x*sx,sq.y*sy,sq.w*sx,sq.h*sy,sq.contrast,false);
+}
+function makeBasic(x,y,ww,hh,contrast,roi){
+  return {id:0,basic:true,roi:roi,corners:[{x:x,y:y},{x:x+ww,y:y},{x:x+ww,y:y+hh},{x:x,y:y+hh}],edgePixels:(ww+hh)/2,contrast:contrast};
 }
 function labelTarget(tr){return tr.basic?'КВАДРАТ · ТЕСТ':'ЦЕЛЬ #'+tr.id;}
 
@@ -152,7 +183,10 @@ if(!sw||!sh)return;
 if(scanCanvas.width!==sw||scanCanvas.height!==sh){scanCanvas.width=sw;scanCanvas.height=sh;}
 scanCtx.drawImage(video,0,0,sw,sh);
 var marks=[];
-try{marks=detector.detect(scanCtx.getImageData(0,0,sw,sh));}
+scanNumber++;
+var activeCode=Array.from(tracks.values()).some(function(v){return !v.basic && t-v.lastSeen<700;});
+var activeSquare=lastSquare && t-lastSquare.lastSeen<1450;
+try{if(!activeSquare||activeCode||scanNumber%3===1)marks=detector.detect(scanCtx.getImageData(0,0,sw,sh));}
 catch(e){$('cameraStatus').textContent='ОШИБКА СКАНИРОВАНИЯ';$('debugLine').textContent='ОШИБКА: '+(e.message||String(e));console.error(e);return;}
 var foundCoded=0;
 marks.forEach(function(m){
@@ -168,7 +202,7 @@ marks.forEach(function(m){
   tracks.set(key,{id:m.id%4+1,basic:false,corners:pts,meters:meters,edgePixels:px,lastSeen:t});foundCoded++;
 });
 // Квадратный режим активен независимо от кода — но не дублирует совпадающий ArUco.
-var square=detectBasicCandidate(vw,vh);
+var square=detectBasicCandidate(vw,vh,t);
 var foundBasic=0;
 if(square){
   var cx=(square.corners[0].x+square.corners[2].x)/2,cy=(square.corners[0].y+square.corners[2].y)/2;
@@ -177,27 +211,27 @@ if(square){
     var m=(markerCm/100)*(fRatio*vw)/square.edgePixels;
     if(m>=.08&&m<=70){
       var old=tracks.get('basic');if(old)m=old.meters*.55+m*.45;
-      tracks.set('basic',{id:0,basic:true,corners:square.corners,meters:m,edgePixels:square.edgePixels,lastSeen:t});foundBasic=1;
+      tracks.set('basic',{id:0,basic:true,corners:square.corners,meters:m,edgePixels:square.edgePixels,lastSeen:t});lastSquare={corners:square.corners,lastSeen:t};foundBasic=1;
     }
   }else tracks.delete('basic');
 }
-tracks.forEach(function(v,k){if(t-v.lastSeen>460)tracks.delete(k);});
+tracks.forEach(function(v,k){if(t-v.lastSeen>fovHoldMs)tracks.delete(k);});
 codedCount=foundCoded;basicCount=foundBasic;
 frames++;if(t-frameTimer>1000){fps=Math.round(frames*1000/(t-frameTimer));frames=0;frameTimer=t;}
-$('debugLine').textContent=foundCoded?'✓ КОДОВАЯ МЕТКА: ID ОПРЕДЕЛЁН':(foundBasic?'✓ ПРОСТОЙ КВАДРАТ: ID НЕТ, ТЕСТ':'ПОИСК: КОДОВЫЕ МЕТКИ · ЧЁРНЫЙ КВАДРАТ');
+$('debugLine').textContent=foundCoded?'✓ КОДОВАЯ МЕТКА: ID ОПРЕДЕЛЁН':(foundBasic?'✓ КВАДРАТ '+(square&&square.roi?'· ДЕТАЛЬНЫЙ ПОИСК':'· ОБЩИЙ ПОИСК'):'ПОИСК: МЕЛКАЯ ЦЕЛЬ · НАВЕДИТЕ КАМЕРУ');
 }
-function getTargets(t,w,h){if(demo){var size=Math.min(w,h)*.18,cx=w*.5+Math.sin(t/1150)*w*.23,cy=h*.45+Math.cos(t/1780)*h*.12;return[{id:0,corners:[{x:cx-size/2,y:cy-size/2},{x:cx+size/2,y:cy-size/2},{x:cx+size/2,y:cy+size/2},{x:cx-size/2,y:cy+size/2}],meters:2.0,lastSeen:t,edgePixels:size}];}var vw=video.videoWidth,vh=video.videoHeight;if(!vw||!vh)return[];return Array.from(tracks.values()).map(function(tr){return {id:tr.id,basic:!!tr.basic,corners:tr.corners.map(function(pt){return mapPoint(pt.x,pt.y,vw,vh,w,h);}),meters:tr.meters,lastSeen:tr.lastSeen,edgePixels:tr.edgePixels};}).filter(function(tr){return t-tr.lastSeen<600;});}
+function getTargets(t,w,h){if(demo){var size=Math.min(w,h)*.18,cx=w*.5+Math.sin(t/1150)*w*.23,cy=h*.45+Math.cos(t/1780)*h*.12;return[{id:0,corners:[{x:cx-size/2,y:cy-size/2},{x:cx+size/2,y:cy-size/2},{x:cx+size/2,y:cy+size/2},{x:cx-size/2,y:cy+size/2}],meters:2.0,lastSeen:t,edgePixels:size}];}var vw=video.videoWidth,vh=video.videoHeight;if(!vw||!vh)return[];return Array.from(tracks.values()).map(function(tr){return {id:tr.id,basic:!!tr.basic,corners:tr.corners.map(function(pt){return mapPoint(pt.x,pt.y,vw,vh,w,h);}),meters:tr.meters,lastSeen:tr.lastSeen,edgePixels:tr.edgePixels};}).filter(function(tr){return t-tr.lastSeen<fovHoldMs;});}
 function render(t){var wh=resizeCanvas(),w=wh.w,h=wh.h;if(w<1||h<1)return;ctx.clearRect(0,0,w,h);var centre={x:w/2,y:h/2},targets=getTargets(t,w,h),locked=null,chosen=null,best=Infinity;
-for(var i=0;i<targets.length;i++){var target=targets[i],poly=expandedPolygon(target.corners,1.25),cx=0,cy=0;target.corners.forEach(function(p){cx+=p.x;cy+=p.y;});cx/=4;cy/=4;var score=Math.hypot(cx-centre.x,cy-centre.y);var isInside=polygonHit(centre,poly);if(isInside&&score<best){best=score;locked=target;}if(score<(chosen?chosen.score:Infinity))chosen={target:target,score:score};}
+for(var i=0;i<targets.length;i++){var target=targets[i],poly=expandedPolygon(target.corners,1.25),cx=0,cy=0;target.corners.forEach(function(p){cx+=p.x;cy+=p.y;});cx/=4;cy/=4;var score=Math.hypot(cx-centre.x,cy-centre.y);var isInside=polygonHit(centre,poly);if(isInside&&t-target.lastSeen<shotFreshMs&&score<best){best=score;locked=target;}if(score<(chosen?chosen.score:Infinity))chosen={target:target,score:score};}
 current=locked||(chosen?chosen.target:null);$('rate').textContent='СКАН: '+(demo?'ДЕМО':fps+' FPS')+' · ЦЕЛИ: '+targets.length;
-if(locked){$('targetPill').textContent='✓ ЗАХВАТ · '+labelTarget(locked)+' · '+formatMeters(locked.meters);$('targetPill').classList.add('lock');}else if(current){$('targetPill').textContent=labelTarget(current)+' · '+formatMeters(current.meters)+' · НАВЕДИТЕ ПРИЦЕЛ';$('targetPill').classList.remove('lock');}else{$('targetPill').textContent=demo?'Демо-цель движется на экране':'Наведите камеру на маркер или квадрат';$('targetPill').classList.remove('lock');}$('distance').innerHTML='ДИСТАНЦИЯ <b>'+(current?formatMeters(current.meters):'—')+'</b>';
-var a=ctx;targets.forEach(function(tr){var fresh=1-Math.max(0,Math.min(1,(t-tr.lastSeen)/650)),isLocked=!!(locked&&tr.id===locked.id),pts=expandedPolygon(tr.corners,1.13);a.strokeStyle=isLocked?'rgba(115,255,164,'+fresh+')':'rgba(115,218,166,'+(.75*fresh)+')';a.lineWidth=isLocked?3:2;a.setLineDash(isLocked?[]:[9,5]);a.beginPath();a.moveTo(pts[0].x,pts[0].y);for(var i=1;i<pts.length;i++)a.lineTo(pts[i].x,pts[i].y);a.closePath();a.stroke();a.setLineDash([]);var lx=Math.min(Math.max(pts[0].x,6),w-130),ly=Math.max(22,Math.min.apply(null,pts.map(function(p){return p.y;}))-11);a.fillStyle='rgba(2,20,10,.88)';a.fillRect(lx,ly-19,126,21);a.fillStyle=isLocked?'#a0ffbf':'#d4ffdf';a.font='bold 12px -apple-system, sans-serif';a.fillText((tr.basic?'□ ТЕСТ':'#'+tr.id)+'  '+formatMeters(tr.meters),lx+6,ly-5);});
-// Centre reticle. A shot is counted only when its centre falls within an enlarged marker polygon.
+if(locked){$('targetPill').textContent='✓ ЗАХВАТ · '+labelTarget(locked)+' · '+formatMeters(locked.meters);$('targetPill').classList.add('lock');}else if(current){$('targetPill').textContent=(t-current.lastSeen>=shotFreshMs?'⌛ ЦЕЛЬ ПОТЕРЯНА · ПОВТОРНЫЙ ПОИСК':labelTarget(current)+' · '+formatMeters(current.meters)+' · НАВЕДИТЕ ПРИЦЕЛ');$('targetPill').classList.remove('lock');}else{$('targetPill').textContent=demo?'Демо-цель движется на экране':'Наведите камеру на маркер или квадрат';$('targetPill').classList.remove('lock');}$('distance').innerHTML='ДИСТАНЦИЯ <b>'+(current?formatMeters(current.meters):'—')+'</b>';
+var a=ctx;targets.forEach(function(tr){var fresh=1-Math.max(0,Math.min(1,(t-tr.lastSeen)/fovHoldMs)),isLocked=!!(locked&&tr.id===locked.id),pts=expandedPolygon(tr.corners,1.13);a.strokeStyle=isLocked?'rgba(115,255,164,'+fresh+')':'rgba(115,218,166,'+(.75*fresh)+')';a.lineWidth=isLocked?3:2;a.setLineDash(isLocked?[]:[9,5]);a.beginPath();a.moveTo(pts[0].x,pts[0].y);for(var i=1;i<pts.length;i++)a.lineTo(pts[i].x,pts[i].y);a.closePath();a.stroke();a.setLineDash([]);var lx=Math.min(Math.max(pts[0].x,6),w-130),ly=Math.max(22,Math.min.apply(null,pts.map(function(p){return p.y;}))-11);a.fillStyle='rgba(2,20,10,.88)';a.fillRect(lx,ly-19,126,21);a.fillStyle=isLocked?'#a0ffbf':'#d4ffdf';a.font='bold 12px -apple-system, sans-serif';a.fillText((tr.basic?'□ ТЕСТ':'#'+tr.id)+'  '+formatMeters(tr.meters),lx+6,ly-5);});
+// The reticle only confirms targets seen in recent real camera frames; no blind-fire on predicted stale boxes.
 var color=locked?'#a4ffbf':'rgba(225,255,239,.85)';a.strokeStyle=color;a.lineWidth=2;a.beginPath();a.arc(centre.x,centre.y,16,0,Math.PI*2);a.stroke();a.beginPath();a.moveTo(centre.x-33,centre.y);a.lineTo(centre.x-21,centre.y);a.moveTo(centre.x+21,centre.y);a.lineTo(centre.x+33,centre.y);a.moveTo(centre.x,centre.y-33);a.lineTo(centre.x,centre.y-21);a.moveTo(centre.x,centre.y+21);a.lineTo(centre.x,centre.y+33);a.stroke();a.fillStyle=color;a.beginPath();a.arc(centre.x,centre.y,2,0,2*Math.PI);a.fill();if(t<flashUntil){a.fillStyle='rgba(184,255,197,'+((flashUntil-t)/135*.18)+')';a.fillRect(0,0,w,h);}}
 function formatMeters(v){return v>=10?v.toFixed(1)+' м':v.toFixed(2)+' м';}
 function loop(t){if(!active||paused)return;if(!demo&&t-lastScan>130){lastScan=t;scan(t);}render(t);raf=requestAnimationFrame(loop);}
-function doShoot(){if(!active||paused)return;var t=performance.now(),r=hud.getBoundingClientRect(),centre={x:r.width/2,y:r.height/2};var targets=getTargets(t,r.width,r.height);var target=targets.filter(function(tr){return polygonHit(centre,expandedPolygon(tr.corners,1.25));}).sort(function(a,b){return a.meters-b.meters;})[0];flashUntil=t+135;
-if(target){hits++;$('hitCount').textContent=String(hits);toast('✓ ПОПАДАНИЕ: '+labelTarget(target)+' · '+formatMeters(target.meters));if(navigator.vibrate)navigator.vibrate(65);}else{misses++;$('missCount').textContent=String(misses);toast(targets.length?'× ПРОМАХ — ЦЕЛЬ ВНЕ ПРИЦЕЛА':'× ЦЕЛЬ НЕ НАЙДЕНА — ПРОВЕРЬТЕ МАРКЕР');} }
+function doShoot(){if(!active||paused)return;var t=performance.now(),r=hud.getBoundingClientRect(),centre={x:r.width/2,y:r.height/2};var targets=getTargets(t,r.width,r.height);var target=targets.filter(function(tr){return t-tr.lastSeen<shotFreshMs&&polygonHit(centre,expandedPolygon(tr.corners,1.25));}).sort(function(a,b){return a.meters-b.meters;})[0];flashUntil=t+135;
+if(target){hits++;$('hitCount').textContent=String(hits);toast('✓ ПОПАДАНИЕ: '+labelTarget(target)+' · '+formatMeters(target.meters));if(navigator.vibrate)navigator.vibrate(65);}else{misses++;$('missCount').textContent=String(misses);toast(targets.some(function(tr){return t-tr.lastSeen>=shotFreshMs;})?'× ЦЕЛЬ НЕ ПОДТВЕРЖДЕНА — ПРИЦЕЛЬТЕСЬ ЗАНОВО':(targets.length?'× ПРОМАХ — ЦЕЛЬ ВНЕ ПРИЦЕЛА':'× ЦЕЛЬ НЕ НАЙДЕНА — ПРОВЕРЬТЕ МАРКЕР'));} }
 function setSettings(open){$('settings').classList.toggle('open',open);}function applySize(){var v=parseFloat($('markerCm').value.replace(',','.'));if(!(v>=3&&v<=70)){toast('Размер маркера: от 3 до 70 см');return false;}markerCm=v;saveSettings();return true;}
 function calibrate(){if(!applySize())return;var dist=parseFloat($('knownDistance').value.replace(',','.'));if(!(dist>=.3&&dist<=15)){toast('Введите дистанцию от 0,3 до 15 м');return;}if(demo){toast('Калибровка требует реальной камеры');return;}var t=performance.now(),valid=Array.from(tracks.values()).filter(function(tr){return t-tr.lastSeen<500;}).sort(function(a,b){return b.edgePixels-a.edgePixels;});if(!valid.length){toast('Сначала наведите камеру на маркер');return;}if(!video.videoWidth){toast('Камера ещё не готова');return;}
 // Calibration: f_px = side_px * known_distance_m / real_side_m.

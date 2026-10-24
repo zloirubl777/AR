@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#07100c"><title>ПОЛИГОН 01.5 — Дуэль / Зомби</title><style>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#07100c"><title>ПОЛИГОН 02.0 — Сетевая дуэль</title><style>
 :root{color-scheme:dark;--ink:#e6fdf0;--muted:#97b0a4;--green:#64ffa8;--lime:#bcffd5;--bg:#07100c;--glass:rgba(5,20,13,.74)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button,input{font:inherit}button{cursor:pointer}button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 #game{position:fixed;inset:0;overflow:hidden;background:radial-gradient(ellipse at 52% 32%,#163426,#030806 75%)}
@@ -37,6 +37,34 @@
 #settings .fieldrow{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:13px;color:#d0efdc}#settings input[type=checkbox]{accent-color:#73ffb0;width:20px;height:20px;flex:none}#settings select{width:100%;background:#06120a;color:#fff;border:1px solid #43614b;border-radius:11px;min-height:44px;padding:10px;font-size:15px}
 @media(max-width:520px){#zoneLegend{top:calc(env(safe-area-inset-top) + 156px);font-size:10px}#bottom{padding-bottom:calc(env(safe-area-inset-bottom) + 14px)}}
 
+/* 02.0 — двухтелефонный бой. Работает на GitHub Pages. */
+#game.duel #markerMeters {display:none}
+#game.duel #duelHud {display:block}
+#duelHud {display:none;min-width:0;flex:1;max-width:40%;font-size:11px;line-height:1.4;text-shadow:0 1px 4px #000}
+#duelHud strong{color:#adffd0;font-size:17px;font-variant-numeric:tabular-nums}
+#duelHud .life{height:6px;border-radius:7px;background:#54312e;overflow:hidden;margin:4px 0 7px}
+#duelHud .life i{height:100%;display:block;background:#66ff9e;width:100%;transition:width .18s}
+#duelTop{display:none;position:absolute;top:calc(env(safe-area-inset-top) + 64px);left:9px;right:9px;z-index:3;gap:8px;align-items:flex-start;justify-content:space-between;pointer-events:none}
+#game.duel #duelTop{display:flex}
+#duelRoundAction{display:none;position:absolute;z-index:4;right:12px;bottom:calc(env(safe-area-inset-bottom) + 135px);pointer-events:auto;font-size:11px;min-height:37px}
+#game.duel.hostduel #duelRoundAction{display:block}
+#duelTop>span{font-size:10px;border:1px solid #73ed9a77;background:#092318cc;padding:6px 9px;border-radius:9px;line-height:1.4;max-width:48%;overflow-wrap:anywhere}
+#duelTop .danger{border-color:#ff676c8a;color:#ffc2b9}
+#duelLobby{display:none;position:absolute;inset:0;z-index:30;align-items:center;justify-content:center;padding:16px;background:rgba(1,9,5,.96);overflow-y:auto}
+#duelLobby.open{display:flex}
+#duelLobby .panel{max-width:480px;padding:21px;max-height:95dvh;overflow-y:auto}
+#duelLobby h2{font-size:27px}
+#duelLobby .code{font-size:40px;font-weight:850;letter-spacing:.13em;line-height:1.2;color:#83ffc1;margin:10px 0;font-variant-numeric:tabular-nums}
+#duelLobby input{background:#06150c;color:white;border:1px solid #518660;border-radius:12px;min-height:50px;width:100%;font-weight:800;letter-spacing:.18em;text-align:center;font-size:24px;outline:none}
+#duelLobby .netstatus{min-height:41px;line-height:1.4;font-size:12px;color:#b9e4c8;margin:12px 0}
+#duelLobby .twocol{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#duelLobby .twocol button{margin:0}
+#duelLobby #duelLaunch{display:none}
+#duelLobby #duelRestart{display:none}
+#duelLobby .copybtn{margin:4px 0 8px}
+#duelLobby small{line-height:1.45;color:#93bca0;display:block}
+#duelLobby .secondary{min-height:43px}
+@media(max-width:370px){#duelHud{font-size:10px;max-width:31%}#duelHud strong{font-size:15px}#duelTop>span{font-size:9px}#game.duel #shoot{width:72px;height:72px;flex-basis:72px}}
 /* 01.5: standalone zombie arena */
 #game.zombie #targetPill,#game.zombie #debugLine,#game.zombie #zoneLegend,#game.zombie #markerMeters{display:none!important}
 #zHud{display:none;min-width:0;flex:1;max-width:40%;font-size:12px;line-height:1.45;text-shadow:0 2px 4px #000;align-self:flex-end}
@@ -49,7 +77,7 @@
 #zHealthFill{width:100%;height:100%;background:linear-gradient(90deg,#52ee8b,#b6ffd2);transition:width .16s}
 #zHealthText,#zAmmoText{font-size:16px;color:#c4ffdc;font-weight:850;font-variant-numeric:tabular-nums}
 #zAmmoText{font-size:21px}
-#zReload{display:none!important}#game.zombie #zReload{display:block!important}
+#zReload{display:none!important}#game.zombie #zReload,#game.duel #zReload{display:block!important}
 #zEnding{display:none;position:absolute;inset:0;z-index:20;align-items:center;justify-content:center;padding:18px;background:rgba(0,7,5,.88)}#zEnding.show{display:flex}
 #zRound{position:absolute;pointer-events:none;z-index:4;top:34%;left:12px;right:12px;text-align:center;opacity:0;transform:translateY(14px);transition:opacity .28s,transform .28s;font-weight:900;font-size:clamp(22px,7vw,45px);color:#cdffe0;text-shadow:0 2px 25px #030b05,0 0 19px #55ffa977;letter-spacing:.08em}#zRound.show{opacity:1;transform:translateY(0)}
 #game.zombie #shoot{background:linear-gradient(135deg,#afffc8,#2cf17f)}
@@ -73,26 +101,43 @@
 <div id="game">
   <video id="camera" playsinline webkit-playsinline autoplay muted></video>
   <div id="demoBackdrop"></div><canvas id="hudCanvas"></canvas>
-  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 01.5</span></div><div class="subtitle" id="gameSubtitle">МАРКЕР · ЗОМБИ · AR-КАМЕРА</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
+  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 02.0</span></div><div class="subtitle" id="gameSubtitle">СЕТЕВАЯ ДУЭЛЬ · AR-КАМЕРА</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
   <div id="targetPill">Наведите камеру на чёрный квадрат</div>
   <div id="debugLine" aria-live="polite">ПОИСК ЧЁРНОГО КВАДРАТА</div>
   <div id="zoneLegend">◻ Режим: корпус (расчётная зона)</div>
   <div id="bottom">
    <div class="bottomside" id="markerMeters"><div class="metric" id="distance">ДИСТАНЦИЯ <b>—</b></div><div class="submetric" id="accuracy">Оценка без калибровки</div><div class="metric">ПОПАДАНИЯ <b id="hitCount">0</b> <span style="color:#8fa99b"> / </span> ПРОМАХИ <b id="missCount">0</b></div></div>
+   <div id="duelHud"><div>ВАШЕ ЗДОРОВЬЕ <strong id="duelSelfLife">100</strong> HP</div><div class="life"><i id="duelSelfBar"></i></div><div>СОПЕРНИК <strong id="duelOtherLife">—</strong> HP</div><div class="life"><i id="duelOtherBar"></i></div><div>ПАТРОНЫ <strong id="duelAmmo">20/80</strong></div></div>
    <div id="zHud"><div>ЗДОРОВЬЕ <span id="zHealthText">100 / 100</span></div><div id="zHealthBar"><div id="zHealthFill"></div></div><div>ПАТРОНЫ <strong id="zAmmoText">24 / 144</strong></div><div id="zGuide">Поворачивай телефон и целься в зомби</div></div>
    <button id="shoot" disabled aria-label="Выстрел">ОГОНЬ</button>
    <div class="actioncol"><button class="toolbtn" id="zReload">↻ ПЕРЕЗАРЯДКА</button><button class="toolbtn" id="settingsBtn">⚙ НАСТРОЙКИ</button><button class="toolbtn" id="pauseBtn">■ СТОП</button></div>
   </div>
+  <div id="duelTop"><span id="duelLink">⚪ НЕТ СОЕДИНЕНИЯ</span><span id="duelResult">ЖДЁМ СОПЕРНИКА</span></div>
+  <button id="duelRoundAction" class="toolbtn" type="button">↺ НОВЫЙ РАУНД</button>
   <div id="zTop"><div class="tag" id="zWave">ВОЛНА 1 / 5</div><div class="tag orange" id="zScore">ЗОМБИ: 0 · УБИТО: 0</div></div>
   <button class="toolbtn" id="zQuick" type="button">◎ ЦЕНТР</button>
   <div id="zRound" aria-live="polite"></div>
   <div id="toast" aria-live="polite"></div>
-  <div id="intro"><div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 01.5</div><h1>ПОЛИГОН.<br><span class="accent">ВЫБЕРИ РЕЖИМ.</span></h1><p>Два режима с одной камерой смартфона. Первый сохраняет работающий захват чёрного квадрата. Второй запускает одиночную AR-арену против зомби.</p>
+  <div id="intro"><div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 02.0</div><h1>ПОЛИГОН.<br><span class="accent">ВЫБЕРИ РЕЖИМ.</span></h1><p>Создай дуэль с кодом комнаты или присоединись с другого смартфона. Камера распознаёт один простой чёрный квадрат. Режимы маркера и зомби сохранены.</p>
+    <button id="duelOpenBtn" class="primary" type="button">⚔ ДУЭЛЬ · ДВА СМАРТФОНА</button>
     <div class="modeGrid"><button id="startBtn" class="modeCard"><span>⌖ МАРКЕР</span><small>Захват чёрного квадрата, зона корпуса, расстояние</small></button><button id="zStartBtn" class="modeCard zombieBtn"><span>☣ ЗОМБИ</span><small>Одиночная игра: волны, здоровье, стрельба</small></button></div>
     <div id="message" class="minihelp" role="status"></div><div class="rule"></div>
     <p class="tiny"><b>Для зомби маркер не нужен.</b> Противники появляются поверх изображения камеры. В этой версии реальные стены и мебель пока не распознаются. Для поворота камеры используем датчик ориентации, если браузер разрешит доступ.</p>
     <div class="links"><button id="demoBtn" class="secondary" type="button">Демо маркера</button><button id="zDemoBtn" class="secondary" type="button">Демо зомби без камеры</button></div><div class="rule"></div>
-    <div class="tiny">GitHub Pages · HTTPS · без сервера и сторонних библиотек. Играй в безопасном свободном месте, не передвигайся, глядя только в экран.</div></div></div>
+    <div class="tiny">Дуэль: интернет на обоих телефонах · PeerJS Cloud для соединения · камера обрабатывается на телефоне. Не играй рядом с дорогами, лестницами и опасными предметами.</div></div></div>
+  <div id="duelLobby" role="dialog" aria-modal="true" aria-label="Комната дуэли"><div class="panel"><div class="eyebrow">ПОЛИГОН · ДУЭЛЬ 02.0</div><h2>Два телефона — один бой</h2><p class="tiny">Используем один обычный чёрный квадрат. Для первого теста: один игрок с квадратом — мишень, второй — стрелок. Затем поменяйтесь ролями.</p>
+    <div class="twocol"><button class="primary" id="duelCreate">СОЗДАТЬ КОМНАТУ</button><button class="secondary" id="duelJoin">ВОЙТИ ПО КОДУ</button></div>
+    <div id="duelRoom" class="code">——————</div>
+    <label class="tiny" for="duelCode">Код комнаты, 6 цифр</label>
+    <input id="duelCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="000000" autocomplete="one-time-code">
+    <button id="duelConnect" class="secondary wide">ПОДКЛЮЧИТЬСЯ ПО КОДУ</button>
+    <button id="duelCopy" class="secondary wide copybtn">▣ КОПИРОВАТЬ КОД</button>
+    <div class="netstatus" id="duelStatus" aria-live="polite">Выбери «Создать комнату» на первом телефоне. На втором введи полученный код.</div>
+    <button id="duelLaunch" class="primary">📷 В БОЙ · ВКЛЮЧИТЬ КАМЕРУ</button>
+    <button id="duelRestart" class="secondary wide">↺ НОВЫЙ РАУНД (ХОЗЯИН)</button>
+    <button id="duelBack" class="secondary wide">← НАЗАД В МЕНЮ</button>
+    <div class="rule"></div><small>Дуэль работает через прямое соединение WebRTC; нужен интернет и бесплатный PeerJS Cloud для знакомства устройств. Некоторые сети блокируют соединение. Видеопоток не передаётся. В первом прототипе результаты выстрелов рассчитывает телефон стрелка.</small>
+  </div></div>
   <div id="zEnding"><div class="panel" style="text-align:center"><div class="eyebrow">ПОЛИГОН · ВЫЖИВАНИЕ</div><h1 id="zEndTitle">ИГРА ОКОНЧЕНА</h1><p id="zEndText">Результат</p><button class="primary" id="zRestart">↻ ПОВТОРИТЬ</button><button class="secondary wide" id="zExit">ВЫБРАТЬ РЕЖИМ</button></div></div>
   <div id="settings" role="dialog" aria-modal="true" aria-label="Настройки"><div class="sheet"><h2>Настройки Полигона</h2><p class="markeronly">Используем только <b>один чёрный квадрат</b>. Белое поле вокруг него улучшает контраст.</p>
    <div class="zonly"><p>Зомби создаются поверх камеры. Это виртуальная сцена — реальные стены, пол и двери ещё не распознаются.</p><label class="fieldrow"><input type="checkbox" id="zGyroToggle" checked><span>Использовать датчик ориентации для поворота вокруг игрока</span></label><label class="fieldrow"><input type="checkbox" id="zSoundToggle" checked><span>Звук выстрелов и попаданий</span></label><label style="display:block;font-size:12px;font-weight:750;color:#b1d7bc">Сложность<select id="zDifficulty"><option value="easy">Лёгкая — медленные зомби</option><option value="normal" selected>Нормальная</option><option value="hard">Сложная — больше и быстрее</option></select></label><div class="rule"></div></div>
@@ -109,6 +154,7 @@
    <div class="rule"></div><p class="minihelp modewarn">Важно: виртуальный корпус не проверяет препятствия и не доказывает, что в кадре человек. При перекрытии маркера захват может пропасть. Один чёрный квадрат не позволяет определить ID нескольких игроков.</p>
    </div><button id="closeSettings" class="primary">СОХРАНИТЬ И ЗАКРЫТЬ</button></div></div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js"></script>
 <script>
 (function(){
 'use strict';
@@ -120,7 +166,8 @@ let target=null,lastSquare=null,lastDetectionType='ОБЩИЙ ПОИСК',lastDe
 let hits=0,misses=0,locked=false, fRatio=0.78,calibrated=false,markerCm=12,bodyMode=true,bodyWidth=3,bodyHeight=4.2,stabilize=true,hold=true,debug=true,farSearch=true;
 let lastWideSearch=0,lastDetectionPx=0;
 let gameMode='marker';
-const HOLD_MS=900, HIT_FRESH_MS=320, MAX_DIST_M=55, MIN_DIST_M=0.10,SCAN_INTERVAL_MS=85;
+let duel=null, duelStatusTimer=0;
+const HOLD_MS=900, HIT_FRESH_MS=340, MAX_DIST_M=55, MIN_DIST_M=0.10,SCAN_INTERVAL_MS=75;
 try {let s=JSON.parse(localStorage.getItem('poligon_mvp01_settings')||'{}');if(s.markerCm>0&&s.markerCm<=70)markerCm=s.markerCm;if(s.calibrated&&s.fRatio>.2&&s.fRatio<10){fRatio=s.fRatio;calibrated=true;}}catch(e){}
 try {let s=JSON.parse(localStorage.getItem('poligon_013_settings')||'{}');if(typeof s.bodyMode==='boolean')bodyMode=s.bodyMode;if(s.bodyWidth>=1.5&&s.bodyWidth<=6)bodyWidth=s.bodyWidth;if(s.bodyHeight>=2&&s.bodyHeight<=8)bodyHeight=s.bodyHeight;if(typeof s.stabilize==='boolean')stabilize=s.stabilize;if(typeof s.hold==='boolean')hold=s.hold;if(typeof s.debug==='boolean')debug=s.debug;}catch(e){}
 try {let s=JSON.parse(localStorage.getItem('poligon_014_settings')||'{}');if(typeof s.farSearch==='boolean')farSearch=s.farSearch;}catch(e){}
@@ -133,10 +180,10 @@ function msg(text){$('message').textContent=text;}
 function resetCounters(){hits=0;misses=0;$('hitCount').textContent='0';$('missCount').textContent='0';}
 function resetTracking(){target=null;lastSquare=null;missStreak=0;locked=false;lastWideSearch=0;lastDetectionPx=0;lastScan=0;scanCount=0;fps=0;fpsTimer=performance.now();}
 async function stopCamera(){active=false;paused=false;cancelAnimationFrame(raf);if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}try{video.pause();}catch(e){}video.srcObject=null;resetTracking();$('cameraStatus').textContent='КАМЕРА ВЫКЛ.';$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=true;}
-async function startCamera(wanted='marker'){gameMode=wanted;applyMode();if(wanted==='zombie')zRequestMotion();msg('Запрашиваем камеру…');$('startBtn').disabled=true;$('zStartBtn').disabled=true;try{if(!window.isSecureContext)throw new Error('Откройте страницу по HTTPS (GitHub Pages).');if(!navigator.mediaDevices?.getUserMedia)throw new Error('В этом браузере нет доступа к камере.');let constraints={audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}}};try{stream=await navigator.mediaDevices.getUserMedia(constraints);}catch(e){if(e.name==='NotFoundError'||e.name==='OverconstrainedError')stream=await navigator.mediaDevices.getUserMedia({audio:false,video:true});else throw e;}video.srcObject=stream;video.setAttribute('playsinline','');video.muted=true;await video.play();if(!video.videoWidth)await new Promise((resolve,reject)=>{let timer=setTimeout(()=>reject(new Error('Камера не выдаёт кадры')),5500);video.addEventListener('loadedmetadata',()=>{clearTimeout(timer);resolve();},{once:true});});
- demo=false;active=true;paused=false;resetTracking();resetCounters();if(gameMode==='zombie')zReset();$('intro').hidden=true;$('demoBackdrop').style.display='none';video.style.display='block';$('cameraStatus').textContent='● LIVE · КАМЕРА';$('cameraStatus').classList.add('status-on');$('shoot').disabled=false;raf=requestAnimationFrame(loop);
+async function startCamera(wanted='marker'){if(wanted==='duel'&&(!duel||!duel.conn||!duel.conn.open)){toast('Нет соединения с соперником');return;}gameMode=wanted;applyMode();if(wanted==='zombie')zRequestMotion();msg('Запрашиваем камеру…');$('startBtn').disabled=true;$('zStartBtn').disabled=true;try{if(!window.isSecureContext)throw new Error('Откройте страницу по HTTPS (GitHub Pages).');if(!navigator.mediaDevices?.getUserMedia)throw new Error('В этом браузере нет доступа к камере.');let constraints={audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}}};try{stream=await navigator.mediaDevices.getUserMedia(constraints);}catch(e){if(e.name==='NotFoundError'||e.name==='OverconstrainedError')stream=await navigator.mediaDevices.getUserMedia({audio:false,video:true});else throw e;}video.srcObject=stream;video.setAttribute('playsinline','');video.muted=true;await video.play();if(!video.videoWidth)await new Promise((resolve,reject)=>{let timer=setTimeout(()=>reject(new Error('Камера не выдаёт кадры')),5500);video.addEventListener('loadedmetadata',()=>{clearTimeout(timer);resolve();},{once:true});});
+ demo=false;active=true;paused=false;resetTracking();resetCounters();if(gameMode==='zombie')zReset();if(gameMode==='duel')duelUpdateHud();$('intro').hidden=true;$('demoBackdrop').style.display='none';video.style.display='block';$('cameraStatus').textContent='● LIVE · КАМЕРА';$('cameraStatus').classList.add('status-on');$('shoot').disabled=false;raf=requestAnimationFrame(loop);
  }catch(e){console.error(e);msg(e.name==='NotAllowedError'?'Разрешите доступ к камере в браузере.':e.message||String(e));await stopCamera();}finally{$('startBtn').disabled=false;$('zStartBtn').disabled=false;}}
-function beginDemo(wanted='marker'){gameMode=wanted;applyMode();demo=true;active=true;paused=false;resetTracking();resetCounters();if(gameMode==='zombie')zReset();$('intro').hidden=true;$('demoBackdrop').style.display='block';video.style.display='none';$('cameraStatus').textContent='ДЕМО · БЕЗ КАМЕРЫ';$('cameraStatus').classList.remove('status-on');$('shoot').disabled=false;raf=requestAnimationFrame(loop);toast(gameMode==='zombie'?'Демо: стреляйте по зомби':'Демо цели: наведите прицел на движущуюся рамку');}
+function beginDemo(wanted='marker'){gameMode=wanted;applyMode();demo=true;active=true;paused=false;resetTracking();resetCounters();if(gameMode==='zombie')zReset();if(gameMode==='duel')duelUpdateHud();$('intro').hidden=true;$('demoBackdrop').style.display='block';video.style.display='none';$('cameraStatus').textContent='ДЕМО · БЕЗ КАМЕРЫ';$('cameraStatus').classList.remove('status-on');$('shoot').disabled=false;raf=requestAnimationFrame(loop);toast(gameMode==='zombie'?'Демо: стреляйте по зомби':'Демо цели: наведите прицел на движущуюся рамку');}
 function resizeCanvas(){let r=hud.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);let w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(hud.width!==w||hud.height!==h){hud.width=w;hud.height=h;}ctx.setTransform(dpr,0,0,dpr,0,0);return{w:r.width,h:r.height};}
 function mapPoint(x,y,vw,vh,w,h){let scale=Math.max(w/vw,h/vh);return{x:x*scale+(w-vw*scale)*.5,y:y*scale+(h-vh*scale)*.5};}
 function insideRect(p,r){return p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h;}
@@ -201,12 +248,12 @@ function detectBasicCandidate(vw,vh,now){
   let recent=lastSquare && now-lastSquare.time<(farSearch?4500:1400);
   if(recent){
     let ls=lastSquare, gap=now-ls.time,dt=Math.min(.18,Math.max(0,gap/1000));
-    let cx=ls.cx+ls.vx*dt,cy=ls.cy+ls.vy*dt;
+    let cx=ls.cx+ls.vx*Math.min(.36,Math.max(0,gap/1000)),cy=ls.cy+ls.vy*Math.min(.36,Math.max(0,gap/1000));
     let expand=farSearch?1+Math.min(1,gap/2500):1;
     let minSide=Math.min(vw,vh)*(farSearch?.24:.32);
-    let side=Math.min(Math.min(vw,vh),Math.max(Math.max(ls.w,ls.h)*6,minSide)*expand);
+    let side=Math.min(Math.min(vw,vh),Math.max(Math.max(ls.w,ls.h)*6,minSide,Math.hypot(ls.vx||0,ls.vy||0)*Math.min(.30,gap/1000)*2.5)*expand);
     let x=bound(cx-side*.5,0,Math.max(0,vw-side)),y=bound(cy-side*.5,0,Math.max(0,vh-side));
-    let dim=farSearch?336:256;
+    let dim=(gameMode==='duel'?280:(farSearch?336:256));
     if(basicCanvas.width!==dim||basicCanvas.height!==dim){basicCanvas.width=dim;basicCanvas.height=dim;}
     basicCtx.drawImage(video,x,y,side,side,0,0,dim,dim);
     let scale=dim/side;
@@ -219,9 +266,9 @@ function detectBasicCandidate(vw,vh,now){
     }
   }
   // 2. Wide search at increased resolution. Throttle during ROI tracking to keep video responsive.
-  if(recent&&farSearch&&now-lastWideSearch<240)return null;
+  if(recent&&farSearch&&now-lastWideSearch<(gameMode==='duel'?175:240))return null;
   lastWideSearch=now;
-  let long=farSearch?520:390,w=Math.max(1,Math.round(vw*long/Math.max(vw,vh))),h=Math.max(1,Math.round(vh*long/Math.max(vw,vh)));
+  let long=gameMode==='duel'?(recent?390:480):(farSearch?520:390),w=Math.max(1,Math.round(vw*long/Math.max(vw,vh))),h=Math.max(1,Math.round(vh*long/Math.max(vw,vh)));
   if(basicCanvas.width!==w||basicCanvas.height!==h){basicCanvas.width=w;basicCanvas.height=h;}
   basicCtx.drawImage(video,0,0,w,h);
   let global=findBasicSquare(basicCtx.getImageData(0,0,w,h),w,h,null,farSearch?7:8);
@@ -241,7 +288,7 @@ function scan(t){if(video.readyState<2||!video.videoWidth||!video.videoHeight)re
         let dist=Math.hypot(cx-target.cx,cy-target.cy),jump=Math.max(s.w,target.w)*3.2+vw*.09;
         if(t-target.lastSeen<500&&dist>jump){s=null;}
         else{
-          let speed=dist/dt,alpha=stabilize?bound(.36+speed/Math.max(1,vw)*.35,.36,.84):1;
+          let speed=dist/dt,alpha=stabilize?(gameMode==='duel'?bound(.62+speed/Math.max(1,vw)*.48,.62,.96):bound(.36+speed/Math.max(1,vw)*.35,.36,.84)):1;
           let vx=bound((cx-target.cx)/dt,-vw*2,vw*2),vy=bound((cy-target.cy)/dt,-vh*2,vh*2);
           // Smooth boxes for comfortable tracking, but do not predict hits from lost observations.
           let fx=target.cx+(cx-target.cx)*alpha,fy=target.cy+(cy-target.cy)*alpha;
@@ -267,7 +314,7 @@ function getTarget(t,w,h){if(demo){let size=Math.min(w,h)*.082;let cx=w*.5+Math.
  if(age>(hold?HOLD_MS:HIT_FRESH_MS))return null;
  let vw=video.videoWidth,vh=video.videoHeight;
  // Show a light, bounded visual movement prediction for up to 100 ms while fresh.
- let predict=stabilize&&age<=HIT_FRESH_MS?Math.min(.09,age/1000)*.42:0;
+ let predict=stabilize&&age<=HIT_FRESH_MS?Math.min(gameMode==='duel'?.16:.09,age/1000)*(gameMode==='duel'?.62:.42):0;
  let pt=mapPoint(target.cx+target.vx*predict,target.cy+target.vy*predict,vw,vh,w,h);
  let scale=Math.max(w/vw,h/vh);
  return{cx:pt.x,cy:pt.y,w:target.w*scale,h:target.h*scale,meters:target.meters,lastSeen:target.lastSeen,kind:target.kind,age};
@@ -298,13 +345,13 @@ function render(t){let {w,h}=resizeCanvas();ctx.clearRect(0,0,w,h);let centre={x
  let color=locked?'#88ffb3':'rgba(225,255,239,.90)';ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(centre.x,centre.y,16,0,2*Math.PI);ctx.stroke();ctx.beginPath();ctx.moveTo(centre.x-33,centre.y);ctx.lineTo(centre.x-21,centre.y);ctx.moveTo(centre.x+21,centre.y);ctx.lineTo(centre.x+33,centre.y);ctx.moveTo(centre.x,centre.y-33);ctx.lineTo(centre.x,centre.y-21);ctx.moveTo(centre.x,centre.y+21);ctx.lineTo(centre.x,centre.y+33);ctx.stroke();ctx.fillStyle=color;ctx.beginPath();ctx.arc(centre.x,centre.y,2,0,Math.PI*2);ctx.fill();
  if(t<flashUntil){ctx.fillStyle='rgba(151,255,169,'+((flashUntil-t)/150*.18)+')';ctx.fillRect(0,0,w,h);}
 }
-function doShoot(){if(gameMode==='zombie'){zShoot();return;}if(!active||paused)return;let t=performance.now(),r=hud.getBoundingClientRect(),tr=getTarget(t,r.width,r.height),centre={x:r.width*.5,y:r.height*.5};
+function doShoot(){if(gameMode==='zombie'){zShoot();return;}if(gameMode==='duel'){duelShoot();return;}if(!active||paused)return;let t=performance.now(),r=hud.getBoundingClientRect(),tr=getTarget(t,r.width,r.height),centre={x:r.width*.5,y:r.height*.5};
  let confirmed=tr&&(demo||t-tr.lastSeen<=HIT_FRESH_MS);flashUntil=t+150;
  if(confirmed&&insideRect(centre,hitBox(tr))){hits++;$('hitCount').textContent=String(hits);toast('✓ ПОПАДАНИЕ · '+(bodyMode?'КОРПУС (ТЕСТ)':'КВАДРАТ')+' · '+formatMeters(tr.meters));try{navigator.vibrate?.(55);}catch(e){}}
  else{misses++;$('missCount').textContent=String(misses);toast(tr&&!confirmed?'× ЦЕЛЬ ВРЕМЕННО ПОТЕРЯНА — ВЫСТРЕЛ НЕ ЗАСЧИТАН':(tr?'× ПРОМАХ':'× НЕТ ЦЕЛИ'));
  }}
 function loop(t){if(!active||paused)return;if(gameMode==='zombie'){zUpdate(t);zRender(t);raf=requestAnimationFrame(loop);return;}if(!demo&&t-lastScan>SCAN_INTERVAL_MS){lastScan=t;try{scan(t);}catch(e){console.error(e);$('debugLine').textContent='ОШИБКА ПОИСКА: '+(e.message||e);}}
- render(t);raf=requestAnimationFrame(loop);}
+ render(t);if(gameMode==='duel')duelFrame(t);raf=requestAnimationFrame(loop);}
 function applySettings(){let size=parseFloat(String($('markerCm').value).replace(',','.'));let bw=parseFloat(String($('bodyWidth').value).replace(',','.'));let bh=parseFloat(String($('bodyHeight').value).replace(',','.'));
  if(!(size>=3&&size<=70)){toast('Размер квадрата: от 3 до 70 см');return false;}
  if(!(bw>=1.5&&bw<=6&&bh>=2&&bh<=8)){toast('Проверьте ширину и высоту зоны');return false;}
@@ -315,12 +362,114 @@ function calibrate(){if(!applySettings())return;let d=parseFloat(String($('known
  if(!(ratio>.2&&ratio<10)){toast('Проверьте размер маркера и дистанцию');return;}
  fRatio=ratio;calibrated=true;resetTracking();save();updateCal();toast('✓ Калибровка выполнена');}
 
+/* ======= 02.0 / WebRTC duel =======
+ * No video streams cross the network. The shooter's target detection is used to claim a hit;
+ * defender owns their own HP and confirms the resulting state to the other phone.
+ * PeerJS Cloud used for signaling; in some NAT configurations a TURN relay is needed.
+ */
+const DUEL_SHOT_MS=310,DUEL_RELOAD_MS=1550,DUEL_DAMAGE=20;
+let duelLastUi=0;
+function duelSetStatus(s){$('duelStatus').textContent=s;}
+function duelRandomCode(){let a=new Uint32Array(1);try{crypto.getRandomValues(a);return String(100000+a[0]%900000);}catch(e){return String(Math.floor(100000+Math.random()*900000));}}
+function duelResetLocal(){if(!duel)return;duel.me=100;duel.them=100;duel.ammo=20;duel.reserve=80;duel.reloadUntil=0;duel.lastShot=0;duel.sentSeq=0;duel.receivedSeq=0;duel.lastPing=0;duel.latency=null;hits=0;misses=0;resetCounters();duelUpdateHud();}
+function duelSend(o){if(!duel?.conn?.open)return false;try{duel.conn.send(o);return true;}catch(e){duelSetStatus('Отправка не удалась: '+e.message);return false;}}
+function duelUpdateHud(){if(!duel)return;
+ $('duelSelfLife').textContent=String(duel.me);
+ $('duelOtherLife').textContent=String(duel.them);
+ $('duelSelfBar').style.width=duel.me+'%';$('duelOtherBar').style.width=duel.them+'%';
+ $('duelAmmo').textContent=duel.ammo+'/'+duel.reserve;
+ $('duelLink').textContent=(duel.conn?.open?'● СВЯЗЬ УСТАНОВЛЕНА · ':'○ НЕТ СВЯЗИ · ')+duel.code+(duel.latency!==null?' · '+duel.latency+' мс':'');
+ $('duelResult').textContent=duel.me<=0?'ПОРАЖЕНИЕ':duel.them<=0?'ПОБЕДА':duel.conn?.open?'В БОЮ · '+duel.me+':'+duel.them:'ЖДЁМ СВЯЗЬ';
+ $('duelResult').classList.toggle('danger',duel.me<=40);$('game').classList.toggle('hostduel',!!duel.host);
+ $('shoot').disabled=gameMode==='duel'&&(!active||!duel.conn?.open||duel.me<=0||duel.them<=0);
+}
+function duelPeerLib(){if(!window.Peer){duelSetStatus('Библиотека PeerJS не загрузилась. Проверь интернет и перезагрузи страницу.');return false;}return true;}
+function duelDestroy(){let old=duel;duel=null;if(!old)return;try{old.conn?.close();}catch(e){}try{old.peer?.destroy();}catch(e){}duelUpdateHudNoSession();}
+function duelUpdateHudNoSession(){$('game').classList.remove('hostduel');$('duelLink').textContent='○ НЕТ СОЕДИНЕНИЯ';$('duelResult').textContent='ИГРОК ВЫШЕЛ';}
+function duelLeave(){if(duel){duelSend({t:'bye'});duelDestroy();} $('duelLaunch').style.display='none';$('duelRestart').style.display='none';}
+function duelStartLobby(){if(active){toast('Сначала останови предыдущий режим');return;}$('duelLobby').classList.add('open');$('duelLaunch').style.display=duel?.conn?.open?'block':'none';duelSetStatus(duel?.conn?.open?'Соперник подключён. Можно включить камеру.':'Создай комнату или введи код для подключения к другу.');}
+function duelStartHosting(){if(!duelPeerLib())return;duelDestroy();let code=duelRandomCode();duel={code,host:true,peer:null,conn:null,me:100,them:100,ammo:20,reserve:80,reloadUntil:0,lastShot:0,sentSeq:0,receivedSeq:0,round:1,lastPing:0,latency:null};
+ $('duelRoom').textContent=code;$('duelCode').value=code;duelSetStatus('Создаём комнату '+code+'…');
+ let peer=new Peer('poligon-020-'+code,{debug:1});duel.peer=peer;
+ peer.on('open',()=>{if(duel?.peer!==peer)return;duelSetStatus('Комната '+code+' готова. Открой эту игру на втором телефоне, введи код и нажми «Подключиться».');});
+ peer.on('connection',c=>{if(duel?.peer!==peer){c.close();return;}if(duel.conn?.open){c.close();return;}duelAttach(c);});
+ peer.on('error',e=>{if(duel?.peer!==peer)return;duelSetStatus(e.type==='unavailable-id'?'Такой код уже занят. Создай новую комнату.':'Ошибка связи: '+(e.type||e.message||e));});
+ peer.on('disconnected',()=>{if(duel?.peer===peer)duelSetStatus('Связь с сервисом комнат потеряна. Проверяем соединение…');});
+}
+function duelStartJoining(){if(!duelPeerLib())return;let code=$('duelCode').value.trim().replace(/\D/g,'');if(!/^\d{6}$/.test(code)){duelSetStatus('Введи шестизначный код комнаты.');return;}
+ duelDestroy();duel={code,host:false,peer:null,conn:null,me:100,them:100,ammo:20,reserve:80,reloadUntil:0,lastShot:0,sentSeq:0,receivedSeq:0,round:1,lastPing:0,latency:null};$('duelRoom').textContent=code;
+ duelSetStatus('Соединяемся с комнатой '+code+'…');let peer=new Peer({debug:1});duel.peer=peer;
+ peer.on('open',()=>{if(duel?.peer!==peer)return;duelAttach(peer.connect('poligon-020-'+code,{reliable:true,serialization:'json'}));});
+ peer.on('error',e=>{if(duel?.peer!==peer)return;duelSetStatus('Ошибка соединения: '+(e.type||e.message||e)+'. Проверь код и попробуй снова.');});
+}
+function duelAttach(c){if(!duel)return;duel.conn=c;duelSetStatus('Устанавливаем прямое WebRTC-соединение…');
+ c.on('open',()=>{if(!duel||duel.conn!==c)return;duelSetStatus('✓ Оба телефона соединены! Нажми «В БОЙ».');$('duelLaunch').style.display='block';$('duelRestart').style.display=duel.host?'block':'none';
+ duelSend({t:'hello',ver:2,round:duel.round,health:duel.me});duelSend({t:'state',round:duel.round,health:duel.me});duelUpdateHud();});
+ c.on('data',obj=>duelReceive(obj));
+ c.on('close',()=>{if(!duel||duel.conn!==c)return;duelSetStatus('Соперник отключился. Вернитесь в меню и создайте новую комнату.');$('duelLaunch').style.display='none';duelUpdateHud();toast('СОПЕРНИК ОТКЛЮЧИЛСЯ');});
+ c.on('error',e=>{if(!duel||duel.conn!==c)return;duelSetStatus('Ошибка канала: '+(e.message||e));});
+}
+function duelReceive(obj){if(!duel||!obj||typeof obj!=='object'||typeof obj.t!=='string')return;
+ const now=performance.now();
+ if(obj.t==='hello'){if(Number.isFinite(obj.health))duel.them=bound(Math.round(obj.health),0,100);if(!duel.host&&Number.isInteger(obj.round))duel.round=obj.round;duelSend({t:'state',round:duel.round,health:duel.me});}
+ else if(obj.t==='state'){if(obj.round!==duel.round)return;if(Number.isFinite(obj.health))duel.them=bound(Math.round(obj.health),0,100);if(duel.them<=0)toast('🏆 ПОБЕДА! СОПЕРНИК ВЫБЫЛ');}
+ else if(obj.t==='shot'){
+   if(obj.round!==duel.round||!Number.isInteger(obj.seq)||obj.seq<=duel.receivedSeq||obj.seq>100000000)return;
+   duel.receivedSeq=obj.seq;
+   if(duel.me<=0||duel.them<=0)return;
+   let damage=bound(Math.round(Number(obj.damage)||0),0,DUEL_DAMAGE);
+   if(damage<=0)return;
+   duel.me=Math.max(0,duel.me-damage);
+   toast('⚠ ПОПАДАНИЕ ПО ВАМ · −'+damage+' HP');flashUntil=now+260;
+   try{navigator.vibrate?.([110,55,110]);}catch(e){}
+   duelSend({t:'state',round:duel.round,health:duel.me});
+   if(duel.me<=0)toast('ПОРАЖЕНИЕ · РАУНД ОКОНЧЕН');
+ }
+ else if(obj.t==='reset'){
+   if(duel.host||!Number.isInteger(obj.round)||obj.round<=duel.round)return;
+   duel.round=obj.round;duelResetLocal();duelSend({t:'state',round:duel.round,health:duel.me});toast('НОВЫЙ РАУНД');
+ }
+ else if(obj.t==='ping'){duelSend({t:'pong',n:obj.n});}
+ else if(obj.t==='pong'){if(typeof obj.n==='number'){duel.latency=Math.round(bound(now-obj.n,0,30000));}}
+ else if(obj.t==='bye'){duelSetStatus('Соперник завершил дуэль.');toast('СОПЕРНИК ВЫШЕЛ');}
+ duelUpdateHud();
+}
+function duelNewRound(){if(!duel?.host||!duel.conn?.open)return;duel.round++;duelResetLocal();duelSend({t:'reset',round:duel.round});duelSend({t:'state',round:duel.round,health:duel.me});toast('НОВЫЙ РАУНД · 100 HP');}
+function duelShoot(){if(!active||paused||!duel?.conn?.open||duel.me<=0||duel.them<=0){toast('НЕТ АКТИВНОЙ ДУЭЛИ');return;}
+ const now=performance.now();if(now-duel.lastShot<DUEL_SHOT_MS)return;
+ if(now<duel.reloadUntil){toast('↻ ПЕРЕЗАРЯДКА');return;}
+ if(duel.ammo<=0){duelReload();return;}
+ duel.lastShot=now;duel.ammo--;flashUntil=now+150;
+ const r=hud.getBoundingClientRect(),tr=getTarget(now,r.width,r.height),confirmed=tr&&(demo||now-tr.lastSeen<=HIT_FRESH_MS),aim={x:r.width*.5,y:r.height*.5};
+ if(confirmed&&insideRect(aim,hitBox(tr))){hits++;$('hitCount').textContent=String(hits);
+    duel.sentSeq++;duelSend({t:'shot',round:duel.round,seq:duel.sentSeq,damage:DUEL_DAMAGE,meters:Math.round(tr.meters*10)/10});
+    toast('✓ ПОПАДАНИЕ · −'+DUEL_DAMAGE+' HP');try{navigator.vibrate?.(38);}catch(e){}
+ } else {misses++;$('missCount').textContent=String(misses);toast(confirmed?'× ПРОМАХ':'× НЕТ ПОДТВЕРЖДЁННОЙ ЦЕЛИ');}
+ duelUpdateHud();
+}
+function duelReload(){if(!duel||!active)return;if(duel.reloadUntil>performance.now()){toast('↻ ПЕРЕЗАРЯДКА');return;}if(duel.ammo>=20){toast('МАГАЗИН ПОЛНЫЙ');return;}if(duel.reserve<=0){toast('ПАТРОНЫ КОНЧИЛИСЬ');return;}
+ duel.reloadUntil=performance.now()+DUEL_RELOAD_MS;toast('↻ ПЕРЕЗАРЯДКА 1,5 с');}
+function duelFrame(t){if(!duel)return;
+ if(duel.reloadUntil&&t>=duel.reloadUntil){let num=Math.min(20-duel.ammo,duel.reserve);duel.ammo+=num;duel.reserve-=num;duel.reloadUntil=0;toast('✓ ПЕРЕЗАРЯЖЕНО');duelUpdateHud();}
+ if(t-duel.lastPing>2400&&duel.conn?.open){duel.lastPing=t;duelSend({t:'ping',n:t});}
+ if(t-duelLastUi>400){duelLastUi=t;duelUpdateHud();}
+}
+$('duelOpenBtn').addEventListener('click',duelStartLobby);
+$('duelCreate').addEventListener('click',duelStartHosting);
+$('duelJoin').addEventListener('click',()=>{$('duelCode').focus();duelSetStatus('На втором телефоне введи шестизначный код первого игрока.');});
+$('duelConnect').addEventListener('click',duelStartJoining);
+$('duelCopy').addEventListener('click',async()=>{if(!duel?.code)return;try{await navigator.clipboard.writeText(duel.code);duelSetStatus('Код '+duel.code+' скопирован — отправь его второму игроку.');}catch(e){$('duelCode').focus();$('duelCode').select();duelSetStatus('Скопируй выделенные шесть цифр.');}});
+$('duelLaunch').addEventListener('click',async()=>{$('duelLobby').classList.remove('open');await startCamera('duel');if(!active){$('duelLobby').classList.add('open');duelSetStatus('Не удалось включить камеру. Проверь разрешения.');}});
+$('duelRestart').addEventListener('click',duelNewRound);$('duelRoundAction').addEventListener('click',duelNewRound);
+$('duelBack').addEventListener('click',()=>{duelLeave();$('duelLobby').classList.remove('open');});
+/* ======= end duel ======= */
+
 /* ----------- ZOMBIE SURVIVAL (standalone, fully offline) ----------- */
 let zSettings={gyro:true,sound:true,difficulty:'normal'};
 try{let s=JSON.parse(localStorage.getItem('poligon_015_zombie')||'{}');if(typeof s.gyro==='boolean')zSettings.gyro=s.gyro;if(typeof s.sound==='boolean')zSettings.sound=s.sound;if(['easy','normal','hard'].includes(s.difficulty))zSettings.difficulty=s.difficulty;}catch(e){}
 let zScene=null,zFrame=0,zMotionRaw=null,zMotionReceived=false,zGyroAllowed=true,zAudio=null,zLastShot=0,zHitFlash=0,zShotFlash=0,zRoundUntil=0,zCountdown=0,zMotionOn=false,zEndShown=false;
 function zApplySettings(){zSettings={gyro:$('zGyroToggle').checked,sound:$('zSoundToggle').checked,difficulty:$('zDifficulty').value};if(zSettings.gyro&&!zGyroAllowed)zRequestMotion();try{localStorage.setItem('poligon_015_zombie',JSON.stringify(zSettings));}catch(e){} if(zScene)zScene.baseYaw=zMotionRaw;toast('Настройки зомби сохранены');}
-function applyMode(){let z=gameMode==='zombie';$('game').classList.toggle('zombie',z);$('gameSubtitle').textContent=z?'ВЫЖИВАНИЕ · РЕАЛЬНАЯ КАМЕРА':'ЗАХВАТ · ОДИН ЧЁРНЫЙ КВАДРАТ';$('zGyroToggle').checked=zSettings.gyro;$('zSoundToggle').checked=zSettings.sound;$('zDifficulty').value=zSettings.difficulty;}
+function applyMode(){let z=gameMode==='zombie',d=gameMode==='duel';$('game').classList.toggle('zombie',z);$('game').classList.toggle('duel',d);$('gameSubtitle').textContent=d?'⚔ СЕТЕВАЯ ДУЭЛЬ · ОДНА МЕТКА':z?'ВЫЖИВАНИЕ · РЕАЛЬНАЯ КАМЕРА':'ЗАХВАТ · ОДИН ЧЁРНЫЙ КВАДРАТ';$('zGyroToggle').checked=zSettings.gyro;$('zSoundToggle').checked=zSettings.sound;$('zDifficulty').value=zSettings.difficulty;}
 function zRequestMotion(){if(typeof DeviceOrientationEvent==='undefined'){zGyroAllowed=false;return;}
   if(typeof DeviceOrientationEvent.requestPermission==='function'){
    try{DeviceOrientationEvent.requestPermission().then(r=>{zGyroAllowed=r==='granted';}).catch(()=>{zGyroAllowed=false;});}catch(e){zGyroAllowed=false;}
@@ -417,7 +566,7 @@ $('game').addEventListener('pointerdown',e=>{if(gameMode!=='zombie'||!active||!z
 $('game').addEventListener('pointermove',e=>{if(!zDrag||zDrag.id!==e.pointerId||!zScene)return;let dx=e.clientX-zDrag.x;zDrag.x=e.clientX;zScene.manualYaw=(zScene.manualYaw||0)-dx*.15;});
 for(const ev of ['pointerup','pointercancel'])$('game').addEventListener(ev,e=>{if(zDrag&&e.pointerId===zDrag.id)zDrag=null;});
 
-$('zReload').addEventListener('click',zReload);
+$('zReload').addEventListener('click',()=>{if(gameMode==='duel')duelReload();else zReload();});
 $('zQuick').addEventListener('click',()=>{if(zScene){zScene.baseYaw=zMotionRaw;zScene.manualYaw=0;toast(zMotionReceived?'◎ НАПРАВЛЕНИЕ ПЕРЕУСТАНОВЛЕНО':'◎ ОБЗОР ПО ЦЕНТРУ');}});
 $('zRestart').addEventListener('click',()=>{zReset();});
 $('zExit').addEventListener('click',async()=>{await stopCamera();$('zEnding').classList.remove('show');$('intro').hidden=false;});
@@ -427,9 +576,9 @@ $('settingsBtn').addEventListener('click',()=>{$('settings').classList.add('open
 $('closeSettings').addEventListener('click',()=>{if(gameMode==='zombie'){zApplySettings();$('settings').classList.remove('open');}else if(applySettings()){$('settings').classList.remove('open');}});
 $('calibrateBtn').addEventListener('click',calibrate);
 $('resetCalibration').addEventListener('click',()=>{fRatio=.78;calibrated=false;resetTracking();save();updateCal();toast('Калибровка сброшена');});
-$('pauseBtn').addEventListener('click',async()=>{demo=false;await stopCamera();$('zEnding').classList.remove('show');$('intro').hidden=false;msg('');});
+$('pauseBtn').addEventListener('click',async()=>{if(gameMode==='duel')duelLeave();demo=false;await stopCamera();$('zEnding').classList.remove('show');$('intro').hidden=false;msg('');});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&active&&!demo){paused=true;cancelAnimationFrame(raf);}else if(!document.hidden&&active&&paused){paused=false;lastScan=0;raf=requestAnimationFrame(loop);}});
-window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(tr=>tr.stop());});
+window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(tr=>tr.stop());if(duel)duelLeave();});
 setFields();
 })();
 </script></body></html>

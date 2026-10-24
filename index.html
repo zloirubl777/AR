@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#07100c"><title>ПОЛИГОН 01.3 — Живая цель</title><style>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#07100c"><title>ПОЛИГОН 01.5 — Дуэль / Зомби</title><style>
 :root{color-scheme:dark;--ink:#e6fdf0;--muted:#97b0a4;--green:#64ffa8;--lime:#bcffd5;--bg:#07100c;--glass:rgba(5,20,13,.74)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button,input{font:inherit}button{cursor:pointer}button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 #game{position:fixed;inset:0;overflow:hidden;background:radial-gradient(ellipse at 52% 32%,#163426,#030806 75%)}
@@ -36,26 +36,67 @@
 #hudCanvas{z-index:1}#top,#targetPill,#debugLine,#zoneLegend,#bottom,#toast{z-index:2}
 #settings .fieldrow{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:13px;color:#d0efdc}#settings input[type=checkbox]{accent-color:#73ffb0;width:20px;height:20px;flex:none}#settings select{width:100%;background:#06120a;color:#fff;border:1px solid #43614b;border-radius:11px;min-height:44px;padding:10px;font-size:15px}
 @media(max-width:520px){#zoneLegend{top:calc(env(safe-area-inset-top) + 156px);font-size:10px}#bottom{padding-bottom:calc(env(safe-area-inset-bottom) + 14px)}}
+
+/* 01.5: standalone zombie arena */
+#game.zombie #targetPill,#game.zombie #debugLine,#game.zombie #zoneLegend,#game.zombie #markerMeters{display:none!important}
+#zHud{display:none;min-width:0;flex:1;max-width:40%;font-size:12px;line-height:1.45;text-shadow:0 2px 4px #000;align-self:flex-end}
+#game.zombie #zHud{display:block}
+#zTop{display:none;position:absolute;z-index:3;top:calc(env(safe-area-inset-top) + 78px);left:12px;right:12px;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
+#game.zombie #zTop{display:flex}
+#zTop .tag{background:rgba(2,16,9,.75);padding:7px 10px;border-radius:9px;border:1px solid #8afeaa55;font-size:11px;font-weight:800;letter-spacing:.06em;text-shadow:0 2px 3px #000}
+#zTop .tag.orange{color:#ffb5a0;border-color:#fe7a6755}
+#zHealthBar{height:7px;border-radius:8px;background:#481f27;overflow:hidden;margin:5px 0 6px;border:1px solid #a1ffaa33}
+#zHealthFill{width:100%;height:100%;background:linear-gradient(90deg,#52ee8b,#b6ffd2);transition:width .16s}
+#zHealthText,#zAmmoText{font-size:16px;color:#c4ffdc;font-weight:850;font-variant-numeric:tabular-nums}
+#zAmmoText{font-size:21px}
+#zReload{display:none!important}#game.zombie #zReload{display:block!important}
+#zEnding{display:none;position:absolute;inset:0;z-index:20;align-items:center;justify-content:center;padding:18px;background:rgba(0,7,5,.88)}#zEnding.show{display:flex}
+#zRound{position:absolute;pointer-events:none;z-index:4;top:34%;left:12px;right:12px;text-align:center;opacity:0;transform:translateY(14px);transition:opacity .28s,transform .28s;font-weight:900;font-size:clamp(22px,7vw,45px);color:#cdffe0;text-shadow:0 2px 25px #030b05,0 0 19px #55ffa977;letter-spacing:.08em}#zRound.show{opacity:1;transform:translateY(0)}
+#game.zombie #shoot{background:linear-gradient(135deg,#afffc8,#2cf17f)}
+#game.zombie #zGuide{display:block}#zGuide{display:none;color:#d7eadd;font-size:10px;line-height:1.3;max-width:210px}
+#game.zombie{touch-action:none}#game.zombie #bottom{align-items:flex-end}
+#game.zombie #settingsBtn{font-size:11px}
+#zQuick{display:none;position:absolute;z-index:3;top:calc(env(safe-area-inset-top) + 133px);right:12px;pointer-events:auto;padding:7px 10px;border-radius:9px;font-size:11px;min-height:33px}
+#game.zombie #zQuick{display:block}
+#zModeBadge{font-size:11px;color:#a9ffc6;margin-top:7px}
+#game.zombie #rate{display:none}
+#settings .zonly{display:none}#game.zombie #settings .zonly{display:block}
+#game.zombie #settings .markeronly{display:none}
+#intro .modeGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+#intro .modeCard{border:1px solid #426d52;border-radius:14px;padding:13px 12px;background:#10251a;min-height:82px;text-align:left;color:#ecfff2;font-size:14px;font-weight:850;display:flex;flex-direction:column;gap:6px;justify-content:center}
+#intro .modeCard small{font-size:11px;font-weight:400;color:#a6c3ae;line-height:1.3}
+#intro .modeCard.zombieBtn{background:linear-gradient(135deg,#283020,#17251c);border-color:#84ac67}
+#intro .panel{max-height:94dvh;overflow-y:auto}
+@media(max-width:430px){#zTop{top:calc(env(safe-area-inset-top) + 75px)}#zHud{max-width:33%}#zReload{min-height:36px}#zHealthText{font-size:14px}#zAmmoText{font-size:18px}#bottom{gap:5px!important}#game.zombie .actioncol{min-width:93px}#game.zombie #shoot{width:73px;height:73px;flex-basis:73px}}
+@media(max-height:520px) and (orientation:landscape){#zTop{top:50px}#zQuick{top:98px}#game.zombie #zHud{max-width:35%}#game.zombie #shoot{width:65px;height:65px;flex-basis:65px}}
 </style></head><body>
 <div id="game">
   <video id="camera" playsinline webkit-playsinline autoplay muted></video>
   <div id="demoBackdrop"></div><canvas id="hudCanvas"></canvas>
-  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 01.3</span></div><div class="subtitle">ЖИВАЯ ЦЕЛЬ · ОДИН ЧЁРНЫЙ КВАДРАТ</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
+  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 01.5</span></div><div class="subtitle" id="gameSubtitle">МАРКЕР · ЗОМБИ · AR-КАМЕРА</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
   <div id="targetPill">Наведите камеру на чёрный квадрат</div>
   <div id="debugLine" aria-live="polite">ПОИСК ЧЁРНОГО КВАДРАТА</div>
   <div id="zoneLegend">◻ Режим: корпус (расчётная зона)</div>
   <div id="bottom">
-   <div class="bottomside"><div class="metric" id="distance">ДИСТАНЦИЯ <b>—</b></div><div class="submetric" id="accuracy">Оценка без калибровки</div><div class="metric">ПОПАДАНИЯ <b id="hitCount">0</b> <span style="color:#8fa99b"> / </span> ПРОМАХИ <b id="missCount">0</b></div></div>
-   <button id="shoot" disabled aria-label="Тестовый выстрел">ОГОНЬ</button>
-   <div class="actioncol"><button class="toolbtn" id="settingsBtn">⚙ НАСТРОЙКИ</button><button class="toolbtn" id="pauseBtn">■ СТОП</button></div>
+   <div class="bottomside" id="markerMeters"><div class="metric" id="distance">ДИСТАНЦИЯ <b>—</b></div><div class="submetric" id="accuracy">Оценка без калибровки</div><div class="metric">ПОПАДАНИЯ <b id="hitCount">0</b> <span style="color:#8fa99b"> / </span> ПРОМАХИ <b id="missCount">0</b></div></div>
+   <div id="zHud"><div>ЗДОРОВЬЕ <span id="zHealthText">100 / 100</span></div><div id="zHealthBar"><div id="zHealthFill"></div></div><div>ПАТРОНЫ <strong id="zAmmoText">24 / 144</strong></div><div id="zGuide">Поворачивай телефон и целься в зомби</div></div>
+   <button id="shoot" disabled aria-label="Выстрел">ОГОНЬ</button>
+   <div class="actioncol"><button class="toolbtn" id="zReload">↻ ПЕРЕЗАРЯДКА</button><button class="toolbtn" id="settingsBtn">⚙ НАСТРОЙКИ</button><button class="toolbtn" id="pauseBtn">■ СТОП</button></div>
   </div>
+  <div id="zTop"><div class="tag" id="zWave">ВОЛНА 1 / 5</div><div class="tag orange" id="zScore">ЗОМБИ: 0 · УБИТО: 0</div></div>
+  <button class="toolbtn" id="zQuick" type="button">◎ ЦЕНТР</button>
+  <div id="zRound" aria-live="polite"></div>
   <div id="toast" aria-live="polite"></div>
-  <div id="intro"><div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 01.3</div><h1>ПОЛИГОН.<br><span class="accent">ЖИВАЯ ЦЕЛЬ.</span></h1><p>Нужен всего <b>один обычный чёрный квадрат</b> на светлом фоне. Камера обнаруживает его, отслеживает движение и показывает <b>примерную</b> дистанцию.</p>
-   <button id="startBtn" class="primary">▶ ЗАПУСТИТЬ КАМЕРУ</button><div id="message" class="minihelp" role="status"></div><div class="rule"></div>
-   <p class="tiny">Закрепи существующий чёрный квадрат по центру груди. В настройках выбери: попадать только в квадрат или в <b>расчётную область корпуса</b> вокруг него. Ничего печатать не нужно.</p>
-   <button id="demoBtn" class="secondary" type="button">▣ Демо без камеры</button><div class="rule"></div>
-   <div class="tiny">Работает по HTTPS (например, GitHub Pages). Никаких серверов и внешних библиотек: видео обрабатывается локально. Это тест прицела, а не сетевой бой.</div></div></div>
-  <div id="settings" role="dialog" aria-modal="true" aria-label="Настройки"><div class="sheet"><h2>Настройки Полигона</h2><p>Используем только <b>один чёрный квадрат</b>. Белое поле вокруг него улучшает контраст.</p>
+  <div id="intro"><div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 01.5</div><h1>ПОЛИГОН.<br><span class="accent">ВЫБЕРИ РЕЖИМ.</span></h1><p>Два режима с одной камерой смартфона. Первый сохраняет работающий захват чёрного квадрата. Второй запускает одиночную AR-арену против зомби.</p>
+    <div class="modeGrid"><button id="startBtn" class="modeCard"><span>⌖ МАРКЕР</span><small>Захват чёрного квадрата, зона корпуса, расстояние</small></button><button id="zStartBtn" class="modeCard zombieBtn"><span>☣ ЗОМБИ</span><small>Одиночная игра: волны, здоровье, стрельба</small></button></div>
+    <div id="message" class="minihelp" role="status"></div><div class="rule"></div>
+    <p class="tiny"><b>Для зомби маркер не нужен.</b> Противники появляются поверх изображения камеры. В этой версии реальные стены и мебель пока не распознаются. Для поворота камеры используем датчик ориентации, если браузер разрешит доступ.</p>
+    <div class="links"><button id="demoBtn" class="secondary" type="button">Демо маркера</button><button id="zDemoBtn" class="secondary" type="button">Демо зомби без камеры</button></div><div class="rule"></div>
+    <div class="tiny">GitHub Pages · HTTPS · без сервера и сторонних библиотек. Играй в безопасном свободном месте, не передвигайся, глядя только в экран.</div></div></div>
+  <div id="zEnding"><div class="panel" style="text-align:center"><div class="eyebrow">ПОЛИГОН · ВЫЖИВАНИЕ</div><h1 id="zEndTitle">ИГРА ОКОНЧЕНА</h1><p id="zEndText">Результат</p><button class="primary" id="zRestart">↻ ПОВТОРИТЬ</button><button class="secondary wide" id="zExit">ВЫБРАТЬ РЕЖИМ</button></div></div>
+  <div id="settings" role="dialog" aria-modal="true" aria-label="Настройки"><div class="sheet"><h2>Настройки Полигона</h2><p class="markeronly">Используем только <b>один чёрный квадрат</b>. Белое поле вокруг него улучшает контраст.</p>
+   <div class="zonly"><p>Зомби создаются поверх камеры. Это виртуальная сцена — реальные стены, пол и двери ещё не распознаются.</p><label class="fieldrow"><input type="checkbox" id="zGyroToggle" checked><span>Использовать датчик ориентации для поворота вокруг игрока</span></label><label class="fieldrow"><input type="checkbox" id="zSoundToggle" checked><span>Звук выстрелов и попаданий</span></label><label style="display:block;font-size:12px;font-weight:750;color:#b1d7bc">Сложность<select id="zDifficulty"><option value="easy">Лёгкая — медленные зомби</option><option value="normal" selected>Нормальная</option><option value="hard">Сложная — больше и быстрее</option></select></label><div class="rule"></div></div>
+   <div class="markeronly">
    <div class="controlgroup"><label>Ширина квадрата, см<input id="markerCm" type="number" inputmode="decimal" min="3" max="70" step="0.5" value="12"></label><label>Эталонное расстояние, м<input id="knownDistance" type="number" inputmode="decimal" min="0.3" max="15" step="0.1" value="2"></label></div>
    <p class="minihelp" style="margin-top:10px">Калибровка: держи квадрат фронтально на измеренном расстоянии от объектива камеры. Дистанция приблизительная и зависит от угла/освещения.</p>
    <button id="calibrateBtn" class="secondary wide">◎ КАЛИБРОВАТЬ ПО КВАДРАТУ</button><button id="resetCalibration" class="secondary wide">↺ СБРОСИТЬ КАЛИБРОВКУ</button><p id="calState" class="tiny" style="margin-top:8px">Калибровка: нет</p><div class="rule"></div>
@@ -63,9 +104,10 @@
    <div class="controlgroup"><label>Ширина корпуса × квадрат<input id="bodyWidth" type="number" inputmode="decimal" min="1.5" max="6" step="0.2" value="3"></label><label>Высота корпуса × квадрат<input id="bodyHeight" type="number" inputmode="decimal" min="2" max="8" step="0.2" value="4.2"></label></div>
    <label class="fieldrow"><input type="checkbox" id="stabilizeToggle" checked><span>Сглаживать движение рамки</span></label>
    <label class="fieldrow"><input type="checkbox" id="holdToggle" checked><span>Показывать потерянную цель до 0,9 с<br><span class="tiny">При этом стрелять по ней нельзя</span></span></label>
-   <label class="fieldrow"><input type="checkbox" id="debugToggle" checked><span>Показывать диагностику распознавания</span></label>
+   <label class="fieldrow"><input type="checkbox" id="farToggle" checked><span><b>Дальний поиск (экспериментальный)</b><br><span class="tiny">Более точный поиск маленьких целей. Может снижать FPS на слабых телефонах.</span></span></label>
+   <label class="fieldrow"><input type="checkbox" id="debugToggle" checked><span>Показывать диагностику распознавания и размер квадрата в пикселях</span></label>
    <div class="rule"></div><p class="minihelp modewarn">Важно: виртуальный корпус не проверяет препятствия и не доказывает, что в кадре человек. При перекрытии маркера захват может пропасть. Один чёрный квадрат не позволяет определить ID нескольких игроков.</p>
-   <button id="closeSettings" class="primary">СОХРАНИТЬ И ЗАКРЫТЬ</button></div></div>
+   </div><button id="closeSettings" class="primary">СОХРАНИТЬ И ЗАКРЫТЬ</button></div></div>
 </div>
 <script>
 (function(){
@@ -75,30 +117,33 @@ const video=$('camera'),hud=$('hudCanvas'),ctx=hud.getContext('2d');
 const basicCanvas=document.createElement('canvas'),basicCtx=basicCanvas.getContext('2d',{willReadFrequently:true})||basicCanvas.getContext('2d');
 let stream=null,active=false,demo=false,paused=false,raf=0,lastScan=0,scanCount=0,fps=0,fpsTimer=0,flashUntil=0,toastTimer=null;
 let target=null,lastSquare=null,lastDetectionType='ОБЩИЙ ПОИСК',lastDetectionCost=0,missStreak=0;
-let hits=0,misses=0,locked=false, fRatio=0.78,calibrated=false,markerCm=12,bodyMode=true,bodyWidth=3,bodyHeight=4.2,stabilize=true,hold=true,debug=true;
+let hits=0,misses=0,locked=false, fRatio=0.78,calibrated=false,markerCm=12,bodyMode=true,bodyWidth=3,bodyHeight=4.2,stabilize=true,hold=true,debug=true,farSearch=true;
+let lastWideSearch=0,lastDetectionPx=0;
+let gameMode='marker';
 const HOLD_MS=900, HIT_FRESH_MS=320, MAX_DIST_M=55, MIN_DIST_M=0.10,SCAN_INTERVAL_MS=85;
 try {let s=JSON.parse(localStorage.getItem('poligon_mvp01_settings')||'{}');if(s.markerCm>0&&s.markerCm<=70)markerCm=s.markerCm;if(s.calibrated&&s.fRatio>.2&&s.fRatio<10){fRatio=s.fRatio;calibrated=true;}}catch(e){}
 try {let s=JSON.parse(localStorage.getItem('poligon_013_settings')||'{}');if(typeof s.bodyMode==='boolean')bodyMode=s.bodyMode;if(s.bodyWidth>=1.5&&s.bodyWidth<=6)bodyWidth=s.bodyWidth;if(s.bodyHeight>=2&&s.bodyHeight<=8)bodyHeight=s.bodyHeight;if(typeof s.stabilize==='boolean')stabilize=s.stabilize;if(typeof s.hold==='boolean')hold=s.hold;if(typeof s.debug==='boolean')debug=s.debug;}catch(e){}
-function save(){try{localStorage.setItem('poligon_mvp01_settings',JSON.stringify({markerCm,fRatio,calibrated}));localStorage.setItem('poligon_013_settings',JSON.stringify({bodyMode,bodyWidth,bodyHeight,stabilize,hold,debug}));}catch(e){}}
-function setFields(){$('markerCm').value=String(markerCm);$('bodyToggle').checked=bodyMode;$('bodyWidth').value=String(bodyWidth);$('bodyHeight').value=String(bodyHeight);$('stabilizeToggle').checked=stabilize;$('holdToggle').checked=hold;$('debugToggle').checked=debug;updateCal();updateZoneLegend();}
+try {let s=JSON.parse(localStorage.getItem('poligon_014_settings')||'{}');if(typeof s.farSearch==='boolean')farSearch=s.farSearch;}catch(e){}
+function save(){try{localStorage.setItem('poligon_mvp01_settings',JSON.stringify({markerCm,fRatio,calibrated}));localStorage.setItem('poligon_013_settings',JSON.stringify({bodyMode,bodyWidth,bodyHeight,stabilize,hold,debug}));localStorage.setItem('poligon_014_settings',JSON.stringify({farSearch}));}catch(e){}}
+function setFields(){$('markerCm').value=String(markerCm);$('bodyToggle').checked=bodyMode;$('bodyWidth').value=String(bodyWidth);$('bodyHeight').value=String(bodyHeight);$('stabilizeToggle').checked=stabilize;$('holdToggle').checked=hold;$('debugToggle').checked=debug;$('farToggle').checked=farSearch;updateCal();updateZoneLegend();}
 function updateCal(){$('calState').textContent=calibrated?'Калибровка сохранена для прежней камеры и объектива':'Калибровка не выполнена';$('accuracy').textContent=calibrated?'После калибровки · оценка':'Оценка без калибровки';}
 function updateZoneLegend(){$('zoneLegend').textContent=bodyMode?'▣ Режим: виртуальный корпус':'□ Режим: только чёрный квадрат';}
 function toast(text){$('toast').textContent=text;$('toast').classList.add('toast-show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('toast-show'),1600);}
 function msg(text){$('message').textContent=text;}
 function resetCounters(){hits=0;misses=0;$('hitCount').textContent='0';$('missCount').textContent='0';}
-function resetTracking(){target=null;lastSquare=null;missStreak=0;locked=false;lastScan=0;scanCount=0;fps=0;fpsTimer=performance.now();}
+function resetTracking(){target=null;lastSquare=null;missStreak=0;locked=false;lastWideSearch=0;lastDetectionPx=0;lastScan=0;scanCount=0;fps=0;fpsTimer=performance.now();}
 async function stopCamera(){active=false;paused=false;cancelAnimationFrame(raf);if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}try{video.pause();}catch(e){}video.srcObject=null;resetTracking();$('cameraStatus').textContent='КАМЕРА ВЫКЛ.';$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=true;}
-async function startCamera(){msg('Запрашиваем камеру…');$('startBtn').disabled=true;try{if(!window.isSecureContext)throw new Error('Откройте страницу по HTTPS (GitHub Pages).');if(!navigator.mediaDevices?.getUserMedia)throw new Error('В этом браузере нет доступа к камере.');let constraints={audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}}};try{stream=await navigator.mediaDevices.getUserMedia(constraints);}catch(e){if(e.name==='NotFoundError'||e.name==='OverconstrainedError')stream=await navigator.mediaDevices.getUserMedia({audio:false,video:true});else throw e;}video.srcObject=stream;video.setAttribute('playsinline','');video.muted=true;await video.play();if(!video.videoWidth)await new Promise((resolve,reject)=>{let timer=setTimeout(()=>reject(new Error('Камера не выдаёт кадры')),5500);video.addEventListener('loadedmetadata',()=>{clearTimeout(timer);resolve();},{once:true});});
- demo=false;active=true;paused=false;resetTracking();resetCounters();$('intro').hidden=true;$('demoBackdrop').style.display='none';video.style.display='block';$('cameraStatus').textContent='● LIVE · КАМЕРА';$('cameraStatus').classList.add('status-on');$('shoot').disabled=false;raf=requestAnimationFrame(loop);
- }catch(e){console.error(e);msg(e.name==='NotAllowedError'?'Разрешите доступ к камере в браузере.':e.message||String(e));await stopCamera();}finally{$('startBtn').disabled=false;}}
-function beginDemo(){demo=true;active=true;paused=false;resetTracking();resetCounters();$('intro').hidden=true;$('demoBackdrop').style.display='block';video.style.display='none';$('cameraStatus').textContent='ДЕМО · БЕЗ КАМЕРЫ';$('cameraStatus').classList.remove('status-on');$('shoot').disabled=false;raf=requestAnimationFrame(loop);toast('Демо цели: наведите прицел на движущуюся рамку');}
+async function startCamera(wanted='marker'){gameMode=wanted;applyMode();if(wanted==='zombie')zRequestMotion();msg('Запрашиваем камеру…');$('startBtn').disabled=true;$('zStartBtn').disabled=true;try{if(!window.isSecureContext)throw new Error('Откройте страницу по HTTPS (GitHub Pages).');if(!navigator.mediaDevices?.getUserMedia)throw new Error('В этом браузере нет доступа к камере.');let constraints={audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}}};try{stream=await navigator.mediaDevices.getUserMedia(constraints);}catch(e){if(e.name==='NotFoundError'||e.name==='OverconstrainedError')stream=await navigator.mediaDevices.getUserMedia({audio:false,video:true});else throw e;}video.srcObject=stream;video.setAttribute('playsinline','');video.muted=true;await video.play();if(!video.videoWidth)await new Promise((resolve,reject)=>{let timer=setTimeout(()=>reject(new Error('Камера не выдаёт кадры')),5500);video.addEventListener('loadedmetadata',()=>{clearTimeout(timer);resolve();},{once:true});});
+ demo=false;active=true;paused=false;resetTracking();resetCounters();if(gameMode==='zombie')zReset();$('intro').hidden=true;$('demoBackdrop').style.display='none';video.style.display='block';$('cameraStatus').textContent='● LIVE · КАМЕРА';$('cameraStatus').classList.add('status-on');$('shoot').disabled=false;raf=requestAnimationFrame(loop);
+ }catch(e){console.error(e);msg(e.name==='NotAllowedError'?'Разрешите доступ к камере в браузере.':e.message||String(e));await stopCamera();}finally{$('startBtn').disabled=false;$('zStartBtn').disabled=false;}}
+function beginDemo(wanted='marker'){gameMode=wanted;applyMode();demo=true;active=true;paused=false;resetTracking();resetCounters();if(gameMode==='zombie')zReset();$('intro').hidden=true;$('demoBackdrop').style.display='block';video.style.display='none';$('cameraStatus').textContent='ДЕМО · БЕЗ КАМЕРЫ';$('cameraStatus').classList.remove('status-on');$('shoot').disabled=false;raf=requestAnimationFrame(loop);toast(gameMode==='zombie'?'Демо: стреляйте по зомби':'Демо цели: наведите прицел на движущуюся рамку');}
 function resizeCanvas(){let r=hud.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);let w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(hud.width!==w||hud.height!==h){hud.width=w;hud.height=h;}ctx.setTransform(dpr,0,0,dpr,0,0);return{w:r.width,h:r.height};}
 function mapPoint(x,y,vw,vh,w,h){let scale=Math.max(w/vw,h/vh);return{x:x*scale+(w-vw*scale)*.5,y:y*scale+(h-vh*scale)*.5};}
 function insideRect(p,r){return p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h;}
 function formatMeters(v){return v>=10?v.toFixed(1)+' м':v.toFixed(2)+' м';}
 function bound(v,min,max){return Math.max(min,Math.min(max,v));}
 // Reuse exact 01.2 field-tested square detector, no extra library.
-function findBasicSquare(imageData, W, H, expected){
+function findBasicSquare(imageData, W, H, expected, minSize=8){
   var im=imageData.data, N=W*H, gray=new Uint8Array(N), i, j, k;
   var histogram=new Uint32Array(256);
   for(i=0,j=0;i<N;i++,j+=4){gray[i]=(im[j]*77+im[j+1]*150+im[j+2]*29)>>8;histogram[gray[i]]++;}
@@ -122,7 +167,7 @@ function findBasicSquare(imageData, W, H, expected){
       if(y<H-1){np=pos+W;if(!visited[np]&&gray[np]<thresh){visited[np]=1;stack[top++]=np;}}
     }
     var bw=maxx-minx+1,bh=maxy-miny+1;
-    if(bw<8||bh<8||bw>W*.68||bh>H*.72)continue;
+    if(bw<minSize||bh<minSize||bw>W*.68||bh>H*.72)continue;
     if(minx<3||miny<3||maxx>W-4||maxy>H-4)continue;
     var aspect=bw/bh,density=count/(bw*bh);
     if(aspect<.70||aspect>1.42||density<.69)continue;
@@ -136,7 +181,7 @@ function findBasicSquare(imageData, W, H, expected){
       for(var vi=0;vi<4;vi++){out+=vals[vi];samples++;if(vals[vi]>inner+28)bright++;}
     }
     out/=samples;
-    if(out-inner<25||bright/samples<.61)continue;
+    if(out-inner<(minSize<8?33:25)||bright/samples<(minSize<8?.74:.61))continue;
     var score=Math.min(bw,bh)*Math.sqrt(density)*(Math.min(90,out-inner)/90);
     if(expected){
       var dx=(minx+bw*.5-expected.cx),dy=(miny+bh*.5-expected.cy);
@@ -151,23 +196,37 @@ function findBasicSquare(imageData, W, H, expected){
 
 function makeSquare(x,y,w,h,kind){return{x,y,w,h,kind};}
 function detectBasicCandidate(vw,vh,now){
-  // Track nearby first, at better scale. Expected position includes recent movement.
-  if(lastSquare && now-lastSquare.time<1400){
-    let ls=lastSquare, dt=Math.min(.16,Math.max(0,(now-ls.time)/1000));
+  // 1. Search the vicinity of the last observed square at a higher effective resolution.
+  // A stale ROI is only a *search hint*: it is NOT a confirmed target and cannot earn hits.
+  let recent=lastSquare && now-lastSquare.time<(farSearch?4500:1400);
+  if(recent){
+    let ls=lastSquare, gap=now-ls.time,dt=Math.min(.18,Math.max(0,gap/1000));
     let cx=ls.cx+ls.vx*dt,cy=ls.cy+ls.vy*dt;
-    let side=Math.min(Math.min(vw,vh),Math.max(Math.max(ls.w,ls.h)*6,Math.min(vw,vh)*.32));
+    let expand=farSearch?1+Math.min(1,gap/2500):1;
+    let minSide=Math.min(vw,vh)*(farSearch?.24:.32);
+    let side=Math.min(Math.min(vw,vh),Math.max(Math.max(ls.w,ls.h)*6,minSide)*expand);
     let x=bound(cx-side*.5,0,Math.max(0,vw-side)),y=bound(cy-side*.5,0,Math.max(0,vh-side));
-    let dim=256; if(basicCanvas.width!==dim||basicCanvas.height!==dim){basicCanvas.width=dim;basicCanvas.height=dim;}
+    let dim=farSearch?336:256;
+    if(basicCanvas.width!==dim||basicCanvas.height!==dim){basicCanvas.width=dim;basicCanvas.height=dim;}
     basicCtx.drawImage(video,x,y,side,side,0,0,dim,dim);
     let scale=dim/side;
-    let candidate=findBasicSquare(basicCtx.getImageData(0,0,dim,dim),dim,dim,{cx:(cx-x)*scale,cy:(cy-y)*scale,size:Math.max(1,ls.w*scale)});
-    if(candidate)return makeSquare(x+candidate.x/scale,y+candidate.y/scale,candidate.w/scale,candidate.h/scale,'ДЕТАЛЬНЫЙ ПОИСК');
+    // Reduce minimum feature size only when searching close to a previously observed square.
+    let candidate=findBasicSquare(basicCtx.getImageData(0,0,dim,dim),dim,dim,
+      {cx:(cx-x)*scale,cy:(cy-y)*scale,size:Math.max(1,ls.w*scale)},farSearch?6:8);
+    if(candidate){
+      lastDetectionPx=Math.min(candidate.w,candidate.h);
+      return makeSquare(x+candidate.x/scale,y+candidate.y/scale,candidate.w/scale,candidate.h/scale,'ДЕТАЛЬНЫЙ ПОИСК');
+    }
   }
-  // Even during tracking, fall back to wide search if the target moves out of the ROI.
-  let long=390,w=Math.max(1,Math.round(vw*long/Math.max(vw,vh))),h=Math.max(1,Math.round(vh*long/Math.max(vw,vh)));
+  // 2. Wide search at increased resolution. Throttle during ROI tracking to keep video responsive.
+  if(recent&&farSearch&&now-lastWideSearch<240)return null;
+  lastWideSearch=now;
+  let long=farSearch?520:390,w=Math.max(1,Math.round(vw*long/Math.max(vw,vh))),h=Math.max(1,Math.round(vh*long/Math.max(vw,vh)));
   if(basicCanvas.width!==w||basicCanvas.height!==h){basicCanvas.width=w;basicCanvas.height=h;}
-  basicCtx.drawImage(video,0,0,w,h);let global=findBasicSquare(basicCtx.getImageData(0,0,w,h),w,h);
+  basicCtx.drawImage(video,0,0,w,h);
+  let global=findBasicSquare(basicCtx.getImageData(0,0,w,h),w,h,null,farSearch?7:8);
   if(!global)return null;
+  lastDetectionPx=Math.min(global.w,global.h);
   return makeSquare(global.x*vw/w,global.y*vh/h,global.w*vw/w,global.h*vh/h,'ОБЩИЙ ПОИСК');
 }
 function scan(t){if(video.readyState<2||!video.videoWidth||!video.videoHeight)return;
@@ -196,10 +255,10 @@ function scan(t){if(video.readyState<2||!video.videoWidth||!video.videoHeight)re
       if(s){lastSquare={cx,cy,w:s.w,h:s.h,vx:target.vx||0,vy:target.vy||0,time:t};lastDetectionType=s.kind;missStreak=0;}
     }
   }
-  if(!s){missStreak++;if(target&&t-target.lastSeen>HOLD_MS){target=null;lastSquare=null;}}
+  if(!s){missStreak++;if(target&&t-target.lastSeen>HOLD_MS){target=null;}if(lastSquare&&t-lastSquare.time>(farSearch?4500:1400)){lastSquare=null;}}
   scanCount++;if(t-fpsTimer>1000){fps=Math.round(scanCount*1000/(t-fpsTimer));fpsTimer=t;scanCount=0;}
   let fresh=target&&t-target.lastSeen<=HIT_FRESH_MS;
-  $('debugLine').textContent=fresh?'✓ '+lastDetectionType+' · '+lastDetectionCost+' МС':(target?'ПОТЕРЯ СИГНАЛА · ПОИСК…':'ПОИСК: ЧЁРНЫЙ КВАДРАТ');
+  $('debugLine').textContent=fresh?'✓ '+lastDetectionType+' · МЕТКА '+Math.round(Math.min(target.w,target.h))+' PX · '+lastDetectionCost+' МС':(target?'ПОТЕРЯ СИГНАЛА · ПОИСК…':(lastSquare?'ПОВТОРНЫЙ ПОИСК РЯДОМ…':'ПОИСК: ЧЁРНЫЙ КВАДРАТ'+(farSearch?' · ДАЛЬНИЙ':''))); 
 }
 function getTarget(t,w,h){if(demo){let size=Math.min(w,h)*.082;let cx=w*.5+Math.sin(t/850)*w*.21,cy=h*.45+Math.cos(t/1250)*h*.14;
  return{cx,cy,w:size,h:size,meters:2.4,lastSeen:t,kind:'ДЕМО',vx:0,vy:0};}
@@ -239,28 +298,136 @@ function render(t){let {w,h}=resizeCanvas();ctx.clearRect(0,0,w,h);let centre={x
  let color=locked?'#88ffb3':'rgba(225,255,239,.90)';ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(centre.x,centre.y,16,0,2*Math.PI);ctx.stroke();ctx.beginPath();ctx.moveTo(centre.x-33,centre.y);ctx.lineTo(centre.x-21,centre.y);ctx.moveTo(centre.x+21,centre.y);ctx.lineTo(centre.x+33,centre.y);ctx.moveTo(centre.x,centre.y-33);ctx.lineTo(centre.x,centre.y-21);ctx.moveTo(centre.x,centre.y+21);ctx.lineTo(centre.x,centre.y+33);ctx.stroke();ctx.fillStyle=color;ctx.beginPath();ctx.arc(centre.x,centre.y,2,0,Math.PI*2);ctx.fill();
  if(t<flashUntil){ctx.fillStyle='rgba(151,255,169,'+((flashUntil-t)/150*.18)+')';ctx.fillRect(0,0,w,h);}
 }
-function doShoot(){if(!active||paused)return;let t=performance.now(),r=hud.getBoundingClientRect(),tr=getTarget(t,r.width,r.height),centre={x:r.width*.5,y:r.height*.5};
+function doShoot(){if(gameMode==='zombie'){zShoot();return;}if(!active||paused)return;let t=performance.now(),r=hud.getBoundingClientRect(),tr=getTarget(t,r.width,r.height),centre={x:r.width*.5,y:r.height*.5};
  let confirmed=tr&&(demo||t-tr.lastSeen<=HIT_FRESH_MS);flashUntil=t+150;
  if(confirmed&&insideRect(centre,hitBox(tr))){hits++;$('hitCount').textContent=String(hits);toast('✓ ПОПАДАНИЕ · '+(bodyMode?'КОРПУС (ТЕСТ)':'КВАДРАТ')+' · '+formatMeters(tr.meters));try{navigator.vibrate?.(55);}catch(e){}}
  else{misses++;$('missCount').textContent=String(misses);toast(tr&&!confirmed?'× ЦЕЛЬ ВРЕМЕННО ПОТЕРЯНА — ВЫСТРЕЛ НЕ ЗАСЧИТАН':(tr?'× ПРОМАХ':'× НЕТ ЦЕЛИ'));
  }}
-function loop(t){if(!active||paused)return;if(!demo&&t-lastScan>SCAN_INTERVAL_MS){lastScan=t;try{scan(t);}catch(e){console.error(e);$('debugLine').textContent='ОШИБКА ПОИСКА: '+(e.message||e);}}
+function loop(t){if(!active||paused)return;if(gameMode==='zombie'){zUpdate(t);zRender(t);raf=requestAnimationFrame(loop);return;}if(!demo&&t-lastScan>SCAN_INTERVAL_MS){lastScan=t;try{scan(t);}catch(e){console.error(e);$('debugLine').textContent='ОШИБКА ПОИСКА: '+(e.message||e);}}
  render(t);raf=requestAnimationFrame(loop);}
 function applySettings(){let size=parseFloat(String($('markerCm').value).replace(',','.'));let bw=parseFloat(String($('bodyWidth').value).replace(',','.'));let bh=parseFloat(String($('bodyHeight').value).replace(',','.'));
  if(!(size>=3&&size<=70)){toast('Размер квадрата: от 3 до 70 см');return false;}
  if(!(bw>=1.5&&bw<=6&&bh>=2&&bh<=8)){toast('Проверьте ширину и высоту зоны');return false;}
- markerCm=size;bodyWidth=bw;bodyHeight=bh;bodyMode=$('bodyToggle').checked;stabilize=$('stabilizeToggle').checked;hold=$('holdToggle').checked;debug=$('debugToggle').checked;updateZoneLegend();save();return true;}
+ markerCm=size;bodyWidth=bw;bodyHeight=bh;bodyMode=$('bodyToggle').checked;stabilize=$('stabilizeToggle').checked;hold=$('holdToggle').checked;debug=$('debugToggle').checked;farSearch=$('farToggle').checked;resetTracking();updateZoneLegend();save();return true;}
 function calibrate(){if(!applySettings())return;let d=parseFloat(String($('knownDistance').value).replace(',','.'));if(!(d>=.3&&d<=15)){toast('Расстояние для калибровки: 0,3–15 м');return;}
  if(demo||!target||performance.now()-target.lastSeen>HIT_FRESH_MS||!video.videoWidth){toast('Нужно сначала захватить квадрат живой камерой');return;}
  let ratio=(target.w+target.h)*.5*d/(markerCm/100)/video.videoWidth;
  if(!(ratio>.2&&ratio<10)){toast('Проверьте размер маркера и дистанцию');return;}
  fRatio=ratio;calibrated=true;resetTracking();save();updateCal();toast('✓ Калибровка выполнена');}
-$('startBtn').addEventListener('click',startCamera);$('demoBtn').addEventListener('click',beginDemo);$('shoot').addEventListener('click',doShoot);
+
+/* ----------- ZOMBIE SURVIVAL (standalone, fully offline) ----------- */
+let zSettings={gyro:true,sound:true,difficulty:'normal'};
+try{let s=JSON.parse(localStorage.getItem('poligon_015_zombie')||'{}');if(typeof s.gyro==='boolean')zSettings.gyro=s.gyro;if(typeof s.sound==='boolean')zSettings.sound=s.sound;if(['easy','normal','hard'].includes(s.difficulty))zSettings.difficulty=s.difficulty;}catch(e){}
+let zScene=null,zFrame=0,zMotionRaw=null,zMotionReceived=false,zGyroAllowed=true,zAudio=null,zLastShot=0,zHitFlash=0,zShotFlash=0,zRoundUntil=0,zCountdown=0,zMotionOn=false,zEndShown=false;
+function zApplySettings(){zSettings={gyro:$('zGyroToggle').checked,sound:$('zSoundToggle').checked,difficulty:$('zDifficulty').value};if(zSettings.gyro&&!zGyroAllowed)zRequestMotion();try{localStorage.setItem('poligon_015_zombie',JSON.stringify(zSettings));}catch(e){} if(zScene)zScene.baseYaw=zMotionRaw;toast('Настройки зомби сохранены');}
+function applyMode(){let z=gameMode==='zombie';$('game').classList.toggle('zombie',z);$('gameSubtitle').textContent=z?'ВЫЖИВАНИЕ · РЕАЛЬНАЯ КАМЕРА':'ЗАХВАТ · ОДИН ЧЁРНЫЙ КВАДРАТ';$('zGyroToggle').checked=zSettings.gyro;$('zSoundToggle').checked=zSettings.sound;$('zDifficulty').value=zSettings.difficulty;}
+function zRequestMotion(){if(typeof DeviceOrientationEvent==='undefined'){zGyroAllowed=false;return;}
+  if(typeof DeviceOrientationEvent.requestPermission==='function'){
+   try{DeviceOrientationEvent.requestPermission().then(r=>{zGyroAllowed=r==='granted';}).catch(()=>{zGyroAllowed=false;});}catch(e){zGyroAllowed=false;}
+  }else{zGyroAllowed=true;}
+}
+// Orientation information may be unavailable on some browsers. In that case enemies remain in screen-space.
+window.addEventListener('deviceorientation',e=>{if(e.alpha===null||!Number.isFinite(e.alpha))return;zMotionRaw=Number.isFinite(e.webkitCompassHeading)?360-e.webkitCompassHeading:e.alpha;zMotionReceived=true;},{passive:true});
+function zDiff(a,b){return ((a-b+540)%360)-180;}
+function zCfg(){return zSettings.difficulty==='easy'?{speed:.78,max:3,life:100}:zSettings.difficulty==='hard'?{speed:1.5,max:5,life:100}:{speed:1.08,max:4,life:100};}
+function zReset(){zScene={state:'run',manualYaw:0,health:100,clip:24,reserve:144,kills:0,misses:0,wave:1,maxWave:5,waveGoal:0,spawned:0,alive:[],nextSpawn:0,waiting:false,lastTime:0,id:0,baseYaw:zMotionRaw,nextWave:0,score:0,reloading:false,reloadAt:0};zLastShot=0;zFrame=0;zHitFlash=0;zShotFlash=0;zEndShown=false;$('zEnding').classList.remove('show');zStartWave(performance.now(),true);zHudUpdate();}
+function zStartWave(now,first=false){let z=zScene;z.waiting=false;z.waveGoal=3+z.wave*2;z.spawned=0;z.alive=[];z.nextSpawn=now+(first?150:450);z.lastTime=now;zShowRound('ВОЛНА '+z.wave,1100);}
+function zShowRound(s,delay=1400){$('zRound').textContent=s;$('zRound').classList.add('show');zRoundUntil=performance.now()+delay;}
+function zSpawn(now){let z=zScene;if(!z||z.spawned>=z.waveGoal)return;let bearing=(Math.random()*2-1)*24;
+ // Keep spawns near current direction. Motion makes them stable against a turn.
+ let gaze=zLookYaw();let enemy={id:++z.id,bearing:gaze+bearing,dist:6.2+Math.random()*3.8,speed:(.40+Math.random()*.18)*zCfg().speed*(1+.10*(z.wave-1)),hp:100,maxHp:100,phase:Math.random()*7,hitAt:0,variant:Math.floor(Math.random()*3)};
+ z.alive.push(enemy);z.spawned++;z.nextSpawn=now+(zSettings.difficulty==='hard'?1050:1400);}
+function zLookYaw(){if(zScene&&zSettings.gyro&&zGyroAllowed&&zMotionReceived&&zMotionRaw!==null){if(zScene.baseYaw===null)zScene.baseYaw=zMotionRaw;return zDiff(zMotionRaw,zScene.baseYaw)+(zScene.manualYaw||0);}return (zScene?.manualYaw||0);}
+function zHudUpdate(){let z=zScene;if(!z)return;$('zHealthText').textContent=String(Math.max(0,Math.ceil(z.health)));$('zHealthFill').style.width=Math.max(0,z.health)+'%';$('zAmmoText').textContent=(z.reloading?'…':z.clip)+' / '+z.reserve;$('zWave').textContent='ВОЛНА '+z.wave+' / '+z.maxWave;$('zScore').textContent='УБИТО: '+z.kills+' · '+z.waveGoal+' ЦЕЛЕЙ';$('zGuide').textContent=zMotionReceived&&zSettings.gyro&&zGyroAllowed?'Поворачивай телефон или води пальцем':'Води пальцем по экрану, чтобы повернуться';$('zReload').textContent=z.reloading?'⌛ ЗАРЯДКА':'↻ ПЕРЕЗАРЯДКА';}
+function zUpdate(t){let z=zScene;if(!z)return;
+  if(zRoundUntil&&performance.now()>=zRoundUntil){zRoundUntil=0;$('zRound').classList.remove('show');}
+  if(z.state!=='run')return;if($('settings').classList.contains('open')){z.lastTime=t;return;}
+  let dt=z.lastTime?Math.min(.07,Math.max(0,(t-z.lastTime)/1000)):0;z.lastTime=t;
+  if(z.reloading&&t>=z.reloadAt){let amount=Math.min(24-z.clip,z.reserve);z.clip+=amount;z.reserve-=amount;z.reloading=false;toast('✓ ПЕРЕЗАРЯЖЕНО');}
+  for(let i=z.alive.length-1;i>=0;i--){let e=z.alive[i];e.dist-=e.speed*dt;if(e.dist<=1.05){z.alive.splice(i,1);z.health=Math.max(0,z.health-(zSettings.difficulty==='hard'?27:21));zHitFlash=t+520;toast('☣ ЗОМБИ АТАКОВАЛ · −'+(zSettings.difficulty==='hard'?27:21)+' HP');zTone(94,.24,'sawtooth',.14);try{navigator.vibrate?.([90,55,130]);}catch(_){}}
+  }
+  if(z.health<=0){zEnd(false);return;}
+  if(z.waiting){if(t>=z.nextWave){z.wave++;zStartWave(t);} }
+  else if(z.spawned<z.waveGoal&&z.alive.length<zCfg().max&&t>=z.nextSpawn){zSpawn(t);}
+  else if(z.spawned>=z.waveGoal&&z.alive.length===0){if(z.wave>=z.maxWave){zEnd(true);return;}z.waiting=true;z.nextWave=t+2900;zShowRound('ВОЛНА ЗАЧИЩЕНА',1900);}
+  zHudUpdate();}
+function zProject(e,w,h,t){let gaze=zLookYaw(),a=zDiff(e.bearing,gaze);let fov=(w<h?52:66);let tan=Math.tan(fov*Math.PI/360),v=Math.tan(a*Math.PI/180)/tan;
+ let x=w*.5+v*w*.5;let scale=Math.min(h*.87/240,w*2.15/(240*e.dist));let height=240*scale,feet=Math.min(h*.88,h*.53+height*.72);let bob=Math.sin(t/300+e.phase)*Math.min(3.8,scale*4);feet+=bob;
+ return{x,feet,s:scale,w:100*scale,h:height,visible:Math.abs(v)<1.7&&feet-height<h+100&&feet>0};}
+function zDrawEnemy(e,p,t){if(!p.visible)return;let s=p.s;ctx.save();ctx.translate(p.x,p.feet);ctx.scale(s,s);
+ let r=Math.sin(t/230+e.phase)*10,arm=Math.sin(t/240+e.phase)*17;
+ // Elliptical ground shadow (visual only, not environmental depth/occlusion).
+ ctx.fillStyle='rgba(0,0,0,.24)';ctx.beginPath();ctx.ellipse(0,0,43,9,0,0,Math.PI*2);ctx.fill();
+ // Legs, alternating gait.
+ ctx.fillStyle=e.variant===2?'#343d35':'#353b32';ctx.strokeStyle='#161f1a';ctx.lineWidth=3;
+ ctx.beginPath();ctx.moveTo(-29,-91);ctx.lineTo(-5,-91);ctx.lineTo(-5+r*.32,-12);ctx.lineTo(-14+r*.55,0);ctx.lineTo(-32+r*.35,-1);ctx.lineTo(-30,-32);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.beginPath();ctx.moveTo(5,-91);ctx.lineTo(30,-90);ctx.lineTo(28+r*.2,-40);ctx.lineTo(34-r*.65,-3);ctx.lineTo(10-r*.3,0);ctx.lineTo(4,-33);ctx.closePath();ctx.fill();ctx.stroke();
+ // Boots.
+ ctx.fillStyle='#1b221c';ctx.fillRect(-30+r*.32,-10,23,12);ctx.fillRect(11-r*.3,-10,24,12);
+ // Arms behind torso and ripped sleeves.
+ ctx.fillStyle=e.variant===1?'#4e655b':'#53684e';ctx.strokeStyle='#27392d';ctx.lineWidth=4;
+ ctx.beginPath();ctx.moveTo(-38,-164);ctx.quadraticCurveTo(-65,-160,-56-arm*.35,-112);ctx.lineTo(-72-arm*.6,-69);ctx.lineTo(-55-arm*.6,-62);ctx.lineTo(-31,-121);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.beginPath();ctx.moveTo(38,-164);ctx.quadraticCurveTo(65,-156,53+arm*.35,-114);ctx.lineTo(66+arm*.6,-78);ctx.lineTo(49+arm*.6,-70);ctx.lineTo(31,-118);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle='#9ea996';ctx.beginPath();ctx.ellipse(-64-arm*.6,-65,11,16,-.25,0,Math.PI*2);ctx.ellipse(58+arm*.6,-72,11,16,.30,0,Math.PI*2);ctx.fill();
+ // Body jacket with irregular damaged patches.
+ const jacket=ctx.createLinearGradient(-41,-155,42,-76);jacket.addColorStop(0,e.variant===0?'#697c60':'#626d62');jacket.addColorStop(1,e.variant===2?'#30382d':'#354339');
+ ctx.fillStyle=jacket;ctx.strokeStyle='#26382e';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-35,-170);ctx.lineTo(0,-161);ctx.lineTo(35,-172);ctx.quadraticCurveTo(53,-128,39,-82);ctx.lineTo(-37,-82);ctx.quadraticCurveTo(-49,-121,-35,-170);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle='#202f29';ctx.beginPath();ctx.moveTo(-6,-163);ctx.lineTo(8,-162);ctx.lineTo(5,-89);ctx.lineTo(-7,-89);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#572b2b';ctx.beginPath();ctx.ellipse(-22,-109,9,20,.5,0,Math.PI*2);ctx.ellipse(20,-145,10,8,.7,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#a29e83';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-36,-114);ctx.lineTo(-26,-96);ctx.lineTo(-17,-112);ctx.moveTo(29,-102);ctx.lineTo(38,-90);ctx.stroke();
+ // Neck and zombie head with shading, ears, asymmetric mouth.
+ ctx.fillStyle='#849583';ctx.fillRect(-12,-188,23,25);
+ let skin=ctx.createLinearGradient(-20,-220,27,-165);skin.addColorStop(0,e.variant===2?'#acb29b':'#acbea4');skin.addColorStop(.58,'#8c9e8a');skin.addColorStop(1,'#526d61');
+ ctx.fillStyle=skin;ctx.strokeStyle='#415449';ctx.lineWidth=2;
+ ctx.beginPath();ctx.ellipse(0,-204,24,30,-.08,0,Math.PI*2);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#364638';ctx.beginPath();ctx.moveTo(-23,-219);ctx.quadraticCurveTo(-21,-239,0,-235);ctx.quadraticCurveTo(27,-232,21,-218);ctx.lineTo(9,-226);ctx.lineTo(-4,-220);ctx.lineTo(-19,-222);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#452323';ctx.beginPath();ctx.ellipse(-9,-205,8,6,0,0,Math.PI*2);ctx.ellipse(10,-206,8,6,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#ff6659';ctx.beginPath();ctx.arc(-8,-205,2.6,0,Math.PI*2);ctx.arc(10,-206,2.6,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#4c2b2c';ctx.beginPath();ctx.ellipse(2,-183,12,8,.12,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#d1c9aa';for(let i=-6;i<=6;i+=6)ctx.fillRect(i,-189,3.5,4);
+ ctx.strokeStyle='#772b32';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(11,-187);ctx.lineTo(14,-174);ctx.lineTo(10,-170);ctx.stroke();
+ if(t-e.hitAt<150){ctx.fillStyle='rgba(255,80,64,.48)';ctx.beginPath();ctx.ellipse(0,-131,44,75,0,0,Math.PI*2);ctx.fill();}
+ // Enemy's health when damaged.
+ if(e.hp<100){ctx.fillStyle='#1d211d';ctx.fillRect(-34,-259,68,7);ctx.fillStyle='#ff8c73';ctx.fillRect(-33,-258,66*Math.max(0,e.hp)/100,5);}
+ ctx.restore();}
+function zDrawCrosshair(t,w,h){let green='#b6ffd3';ctx.strokeStyle=green;ctx.lineWidth=2;ctx.beginPath();ctx.arc(w/2,h/2,15,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(w/2-30,h/2);ctx.lineTo(w/2-21,h/2);ctx.moveTo(w/2+21,h/2);ctx.lineTo(w/2+30,h/2);ctx.moveTo(w/2,h/2-30);ctx.lineTo(w/2,h/2-21);ctx.moveTo(w/2,h/2+21);ctx.lineTo(w/2,h/2+30);ctx.stroke();ctx.fillStyle=green;ctx.beginPath();ctx.arc(w/2,h/2,2,0,Math.PI*2);ctx.fill();}
+function zRender(t){if(!zScene)return;let {w,h}=resizeCanvas();ctx.clearRect(0,0,w,h);let arr=zScene.alive.map(e=>({e,p:zProject(e,w,h,t)})).sort((a,b)=>b.e.dist-a.e.dist);
+ for(let item of arr)zDrawEnemy(item.e,item.p,t);
+ // Simple edge pointers for zombies outside the phone field of view.
+ for(let {e,p} of arr){if(p.visible&&p.x>-40&&p.x<w+40)continue;let right=p.x>w*.5;ctx.fillStyle='rgba(255,176,127,.8)';ctx.font='bold 13px Arial';ctx.textAlign=right?'right':'left';ctx.fillText(right?'◀ ПОВЕРНИСЬ':'ПОВЕРНИСЬ ▶',right?w-9:9,h*.39);ctx.textAlign='left';}
+ zDrawCrosshair(t,w,h);
+ if(zShotFlash>t){ctx.fillStyle='rgba(194,255,190,'+(Math.max(0,(zShotFlash-t)/130)*.10)+')';ctx.fillRect(0,0,w,h);ctx.fillStyle='#fff1c2';ctx.beginPath();ctx.arc(w*.5,h*.5,4+Math.random()*5,0,Math.PI*2);ctx.fill();}
+ if(zHitFlash>t){ctx.fillStyle='rgba(179,22,19,'+(Math.min(.35,(zHitFlash-t)/500*.35))+')';ctx.fillRect(0,0,w,h);}
+ if(zScene.state!=='run'){ctx.fillStyle='rgba(0,0,0,.2)';ctx.fillRect(0,0,w,h);}
+}
+function zTone(freq,duration=.09,type='square',volume=.06){if(!zSettings.sound)return;try{let Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;if(!zAudio)zAudio=new Ctx();if(zAudio.state==='suspended')zAudio.resume();let o=zAudio.createOscillator(),v=zAudio.createGain();o.type=type;o.frequency.setValueAtTime(freq,zAudio.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(60,freq*.27),zAudio.currentTime+duration);v.gain.setValueAtTime(volume,zAudio.currentTime);v.gain.exponentialRampToValueAtTime(.001,zAudio.currentTime+duration);o.connect(v);v.connect(zAudio.destination);o.start();o.stop(zAudio.currentTime+duration);}catch(e){}}
+function zReload(){let z=zScene;if(!z||z.state!=='run'||z.reloading)return;if(z.clip>=24){toast('Магазин полный');return;}if(z.reserve<=0){toast('Нет запасных патронов');return;}z.reloading=true;z.reloadAt=performance.now()+1450;zTone(270,.13,'triangle',.04);zHudUpdate();toast('↻ ПЕРЕЗАРЯДКА…');}
+function zShoot(){let z=zScene;if(!active||paused||!z||z.state!=='run')return;let t=performance.now();if(t-zLastShot<180)return;if(z.reloading){toast('Идёт перезарядка');return;}if(z.clip<=0){zReload();return;}zLastShot=t;z.clip--;zShotFlash=t+130;zTone(160,.11,'sawtooth',.09);try{navigator.vibrate?.(25);}catch(e){};
+ let r=hud.getBoundingClientRect(),w=r.width,h=r.height,aim={x:w/2,y:h/2};let candidate=null;
+ for(let e of z.alive){let p=zProject(e,w,h,t);if(!p.visible||p.x<-100||p.x>w+100)continue;let s=p.s;let head=Math.abs(aim.x-p.x)<27*s+5&&Math.abs(aim.y-(p.feet-204*s))<30*s+6;
+  let body=Math.abs(aim.x-p.x)<43*s+6&&aim.y>=p.feet-177*s-5&&aim.y<=p.feet-11*s+5;
+  if((head||body)&&(!candidate||e.dist<candidate.e.dist))candidate={e,head};}
+ if(!candidate){z.misses++;toast('× ПРОМАХ');}
+ else{let {e,head}=candidate;e.hp-=head?105:40;e.hitAt=t;zTone(head?520:310,.07,'triangle',.045);if(e.hp<=0){z.alive.splice(z.alive.indexOf(e),1);z.kills++;z.score+=head?150:100;toast(head?'☠ В ГОЛОВУ · УНИЧТОЖЕН':'✓ ЗОМБИ УНИЧТОЖЕН');}else toast(head?'✓ ПОПАДАНИЕ В ГОЛОВУ':'✓ ПОПАДАНИЕ В КОРПУС');}
+ zHudUpdate();}
+function zEnd(win){let z=zScene;if(!z||z.state!=='run')return;z.state='end';zEndShown=true;$('zEndTitle').textContent=win?'ПОБЕДА!':'ТЫ ПОГИБ';$('zEndText').textContent='Уничтожено зомби: '+z.kills+' · Волна: '+z.wave+' / '+z.maxWave+' · Промахов: '+z.misses;$('zEnding').classList.add('show');zTone(win?780:110,.42,win?'sine':'sawtooth',.09);}
+
+let zDrag=null;
+$('game').addEventListener('pointerdown',e=>{if(gameMode!=='zombie'||!active||!zScene||zScene.state!=='run')return;if(e.target.closest('button, #settings, #intro, #zEnding'))return;zDrag={id:e.pointerId,x:e.clientX};});
+$('game').addEventListener('pointermove',e=>{if(!zDrag||zDrag.id!==e.pointerId||!zScene)return;let dx=e.clientX-zDrag.x;zDrag.x=e.clientX;zScene.manualYaw=(zScene.manualYaw||0)-dx*.15;});
+for(const ev of ['pointerup','pointercancel'])$('game').addEventListener(ev,e=>{if(zDrag&&e.pointerId===zDrag.id)zDrag=null;});
+
+$('zReload').addEventListener('click',zReload);
+$('zQuick').addEventListener('click',()=>{if(zScene){zScene.baseYaw=zMotionRaw;zScene.manualYaw=0;toast(zMotionReceived?'◎ НАПРАВЛЕНИЕ ПЕРЕУСТАНОВЛЕНО':'◎ ОБЗОР ПО ЦЕНТРУ');}});
+$('zRestart').addEventListener('click',()=>{zReset();});
+$('zExit').addEventListener('click',async()=>{await stopCamera();$('zEnding').classList.remove('show');$('intro').hidden=false;});
+
+$('startBtn').addEventListener('click',()=>startCamera('marker'));$('zStartBtn').addEventListener('click',()=>startCamera('zombie'));$('demoBtn').addEventListener('click',()=>beginDemo('marker'));$('zDemoBtn').addEventListener('click',()=>beginDemo('zombie'));$('shoot').addEventListener('click',doShoot);
 $('settingsBtn').addEventListener('click',()=>{$('settings').classList.add('open');});
-$('closeSettings').addEventListener('click',()=>{if(applySettings()){$('settings').classList.remove('open');}});
+$('closeSettings').addEventListener('click',()=>{if(gameMode==='zombie'){zApplySettings();$('settings').classList.remove('open');}else if(applySettings()){$('settings').classList.remove('open');}});
 $('calibrateBtn').addEventListener('click',calibrate);
 $('resetCalibration').addEventListener('click',()=>{fRatio=.78;calibrated=false;resetTracking();save();updateCal();toast('Калибровка сброшена');});
-$('pauseBtn').addEventListener('click',async()=>{demo=false;await stopCamera();$('intro').hidden=false;msg('');});
+$('pauseBtn').addEventListener('click',async()=>{demo=false;await stopCamera();$('zEnding').classList.remove('show');$('intro').hidden=false;msg('');});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&active&&!demo){paused=true;cancelAnimationFrame(raf);}else if(!document.hidden&&active&&paused){paused=false;lastScan=0;raf=requestAnimationFrame(loop);}});
 window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(tr=>tr.stop());});
 setFields();

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#07100c">
-<title>ПОЛИГОН · Камера и маркеры · MVP 01</title>
+<title>ПОЛИГОН · Камера и маркеры · MVP 01.1</title>
 <style>
 :root{color-scheme:dark;--ink:#e6fdf0;--muted:#97b0a4;--green:#64ffa8;--lime:#bcffd5;--bg:#07100c;--glass:rgba(5,20,13,.74)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button,input{font:inherit}button{cursor:pointer}button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
@@ -13,8 +13,8 @@
 #hudCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #top{position:absolute;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 12px) 14px 12px;background:linear-gradient(to bottom,rgba(0,0,0,.68),rgba(0,0,0,0));display:flex;align-items:flex-start;justify-content:space-between;gap:12px;pointer-events:none}
 .title{font-size:16px;font-weight:850;letter-spacing:.19em;color:#e6fff0}.subtitle{font-size:10px;letter-spacing:.13em;color:var(--muted);margin-top:3px}.rightstats{text-align:right;font-variant-numeric:tabular-nums;font-size:11px;line-height:1.65;color:#c2d9cd}.status-on{color:var(--green)}
-#targetPill{position:absolute;top:calc(env(safe-area-inset-top) + 73px);left:50%;transform:translateX(-50%);max-width:calc(100vw - 25px);white-space:nowrap;border:1px solid rgba(112,255,173,.27);background:var(--glass);border-radius:22px;padding:10px 15px;backdrop-filter:blur(12px);font-size:12px;letter-spacing:.04em;font-weight:750;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
-#targetPill.lock{color:#06321a;background:#89ffc0;border-color:transparent;box-shadow:0 0 30px #48ff9f44}
+#targetPill{position:absolute;top:calc(env(safe-area-inset-top) + 73px);left:50%;transform:translateX(-50%);max-width:calc(100vw - 25px);white-space:normal;border:1px solid rgba(112,255,173,.27);background:var(--glass);border-radius:22px;padding:10px 15px;backdrop-filter:blur(12px);font-size:12px;letter-spacing:.04em;font-weight:750;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
+#debugLine{position:absolute;top:calc(env(safe-area-inset-top) + 132px);left:50%;transform:translateX(-50%);width:calc(100% - 28px);font-size:10px;color:#d8fbe3;text-shadow:0 2px 6px #000;letter-spacing:.075em;text-align:center;font-weight:700;pointer-events:none}#targetPill.lock{color:#06321a;background:#89ffc0;border-color:transparent;box-shadow:0 0 30px #48ff9f44}
 #bottom{position:absolute;bottom:0;left:0;right:0;display:flex;align-items:flex-end;gap:12px;justify-content:space-between;padding:0 16px calc(env(safe-area-inset-bottom) + 16px);background:linear-gradient(to top,rgba(0,0,0,.76),transparent 100%);pointer-events:none}
 .bottomside{display:flex;flex-direction:column;gap:7px;min-width:0;flex:1}#bottom button{pointer-events:auto}.metric{font-size:12px;line-height:1.5;color:#d5f0df;white-space:nowrap;font-variant-numeric:tabular-nums}.metric b{font-size:17px;color:var(--lime)}.submetric{color:var(--muted);font-size:11px}.toolbtn{border:1px solid rgba(156,255,186,.3);background:var(--glass);color:#eaffef;border-radius:14px;min-height:44px;padding:0 11px;backdrop-filter:blur(8px);font-weight:700;font-size:12px}.toolbtn:active{background:#224c36}
 #shoot{position:relative;width:88px;height:88px;flex:0 0 88px;border:2px solid #aaffca;border-radius:50%;background:linear-gradient(135deg,#9bffc2,#4cea92);color:#062514;font-weight:850;font-size:14px;box-shadow:0 0 0 7px #4aff9321,0 0 20px #55e99950;touch-action:manipulation;pointer-events:auto}#shoot:active{transform:scale(.94)}#shoot:disabled{filter:grayscale(1);opacity:.5}.actioncol{min-width:110px;flex:1;display:flex;align-items:flex-end;flex-direction:column;gap:8px}
@@ -22,7 +22,21 @@
 #intro,#settings{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:24px 18px calc(25px + env(safe-area-inset-bottom));background:rgba(2,7,4,.90);overflow:auto;overscroll-behavior:contain}
 #settings{display:none;z-index:11;align-items:flex-end;padding:0}#settings.open{display:flex}.sheet{width:min(100%,520px);max-height:min(94dvh,720px);overflow:auto;background:#101e16;border:1px solid #315642;border-radius:24px 24px 0 0;padding:24px 23px calc(21px + env(safe-area-inset-bottom));box-shadow:0 -22px 80px #0008}
 .panel{width:min(100%,520px);padding:27px 24px;border:1px solid #375b45;border-radius:25px;background:linear-gradient(145deg,#122b1e,#08120d 70%);box-shadow:0 18px 70px #000b}.eyebrow{font-size:10px;letter-spacing:.24em;color:var(--green);font-weight:800;margin-bottom:12px}h1{font-size:clamp(34px,10vw,58px);line-height:1.03;margin:0 0 12px;letter-spacing:-.06em;font-weight:850}h2{font-size:23px;margin:0 0 7px;letter-spacing:-.02em}p{color:#bdd4c5;line-height:1.5;font-size:14px;margin:0 0 15px}.tiny{font-size:12px;color:#8eaa99}.primary{width:100%;min-height:54px;background:#7dfbb0;color:#072616;font-size:15px;border:none;border-radius:14px;font-weight:850;margin:7px 0 10px}.secondary{background:none;border:1px solid #526e5d;color:#e0f8e7;border-radius:12px;padding:11px 14px;font-size:13px;font-weight:650}.secondary:active{background:#1c3728}.links{display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin-top:8px}.links a{color:#adffcb;font-size:13px;text-decoration:underline;text-underline-offset:3px}.rule{height:1px;background:#314538;margin:16px 0}.controlgroup{display:grid;grid-template-columns:1fr 1fr;gap:12px}.controlgroup label{font-size:12px;font-weight:750;color:#b1d7bc;display:block}.controlgroup input{margin-top:5px;width:100%;height:45px;background:#06120a;color:#fff;border:1px solid #43614b;border-radius:11px;padding:9px 11px;font-size:16px}.wide{width:100%}#message{color:#ffcfa8;min-height:14px}#intro[hidden]{display:none}#settings button{margin-top:7px}.accent{color:#a2ffc3}#cameraStatus{color:#e4eedd}.minihelp{font-size:12px;color:#9cb6a4;line-height:1.48}.modewarn{color:#ffd49b}
-@media (max-height:650px) and (orientation:landscape){#intro{align-items:flex-start}#top{padding-top:9px}#targetPill{top:46px}#bottom{padding-bottom:8px}#shoot{width:70px;height:70px;flex-basis:70px}#toast{bottom:87px}.panel{padding:18px 24px}h1{font-size:37px}}
+@media (max-height:650px) and (orientation:landscape){#intro{align-items:flex-start}#top{padding-top:9px}#targetPill{top:46px}#debugLine{top:90px}#bottom{padding-bottom:8px}#shoot{width:70px;height:70px;flex-basis:70px}#toast{bottom:87px}.panel{padding:18px 24px}h1{font-size:37px}}
+
+@media (max-width:520px){
+ #bottom{gap:7px;padding-left:10px;padding-right:10px}
+ .bottomside{flex:1;min-width:0;gap:5px}
+ .metric{font-size:10px;white-space:normal;line-height:1.35}
+ .metric b{font-size:15px}
+ .submetric{font-size:10px}
+ #shoot{width:78px;height:78px;flex-basis:78px;font-size:12px}
+ .actioncol{min-width:96px}
+ .toolbtn{font-size:11px;padding:0 8px;min-height:42px}
+ .subtitle{max-width:180px;line-height:1.35}
+ #targetPill{padding:8px 10px;font-size:11px}
+ #debugLine{top:calc(env(safe-area-inset-top) + 125px)}
+}
 </style>
 </head>
 <body>
@@ -30,14 +44,15 @@
   <video id="camera" playsinline webkit-playsinline autoplay muted></video>
   <div id="demoBackdrop"></div>
   <canvas id="hudCanvas"></canvas>
-  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 01</span></div><div class="subtitle">AR MARKER TRACKING · ПРОТОТИП</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
-  <div id="targetPill">Наведите камеру на маркер</div>
+  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 01.1</span></div><div class="subtitle">AR MARKER TRACKING · ПРОТОТИП</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
+  <div id="targetPill">Наведите камеру на маркер или квадрат</div>
+  <div id="debugLine" aria-live="polite">ПОИСК: КОДОВЫЕ МЕТКИ + ПРОСТОЙ КВАДРАТ</div>
   <div id="bottom"><div class="bottomside"><div class="metric" id="distance">ДИСТАНЦИЯ <b>—</b></div><div class="submetric" id="accuracy">Оценка без калибровки</div><div class="metric">ПОПАДАНИЯ <b id="hitCount">0</b> <span style="color:#8fa99b"> / </span> ПРОМАХИ <b id="missCount">0</b></div></div><button id="shoot" disabled aria-label="Тестовый выстрел">ОГОНЬ</button><div class="actioncol"><button class="toolbtn" id="settingsBtn">⚙ НАСТРОЙКИ</button><button class="toolbtn" id="pauseBtn">■ СТОП</button></div></div>
   <div id="toast" aria-live="polite"></div>
   <div id="intro">
-    <div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 01</div><h1>РЕАЛЬНЫЙ МИР.<br><span class="accent">НОВАЯ ИГРА.</span></h1><p>Наведи камеру на напечатанный <b>маркер Полигона</b>. Прототип определит его ID, положение и приблизительное расстояние до него.</p><button id="startBtn" class="primary">▶ ЗАПУСТИТЬ КАМЕРУ</button><div id="message" class="minihelp" role="status"></div><div class="rule"></div><p class="tiny">Для первой проверки: распечатай маркер с чёрным квадратом <b>12 × 12 см</b>, закрепи вертикально и отойди на 1–2 метра.</p><div class="links"><a href="markers.html" target="_blank" rel="noopener">▧ Распечатать маркеры</a><button id="demoBtn" class="secondary" type="button">Посмотреть демо интерфейса</button></div><div class="rule"></div><div class="tiny">Нужен HTTPS (например, GitHub Pages) и доступ к камере. Компьютерное зрение работает на самом телефоне; видео никуда не отправляется. Двухсторонний бой будет на следующем этапе.</div></div>
+    <div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 01.1</div><h1>РЕАЛЬНЫЙ МИР.<br><span class="accent">НОВАЯ ИГРА.</span></h1><p>Наведи камеру на напечатанный <b>маркер Полигона</b>. Прототип определит его ID, положение и приблизительное расстояние до него.</p><button id="startBtn" class="primary">▶ ЗАПУСТИТЬ КАМЕРУ</button><div id="message" class="minihelp" role="status"></div><div class="rule"></div><p class="tiny">Для первой проверки: распечатай кодовый маркер или чёрный квадрат <b>12 × 12 см</b>, закрепи вертикально и отойди на 1–2 метра.</p><div class="links"><a href="markers.html" target="_blank" rel="noopener">▧ Распечатать маркеры</a><button id="demoBtn" class="secondary" type="button">Посмотреть демо интерфейса</button></div><div class="rule"></div><div class="tiny">Нужен HTTPS (например, GitHub Pages) и доступ к камере. Компьютерное зрение работает на самом телефоне; видео никуда не отправляется. Двухсторонний бой будет на следующем этапе.</div></div>
   </div>
-  <div id="settings" role="dialog" aria-modal="true" aria-label="Настройки"><div class="sheet"><h2>Камера и дистанция</h2><p>Размер — ширина <b>чёрного квадрата</b>, без белых полей. Изменяйте, только если печатаете маркер другого размера.</p><div class="controlgroup"><label>Маркер, см<input id="markerCm" type="number" inputmode="decimal" min="3" max="70" step="0.5" value="12"></label><label>Эталонная дистанция, м<input id="knownDistance" type="number" inputmode="decimal" min="0.3" max="15" step="0.1" value="2"></label></div><div class="rule"></div><p class="minihelp">Для точности поставьте маркер <b>фронтально</b>, отмерьте указанное расстояние <b>от камеры до маркера</b>, наведите на него телефон и нажмите калибровку. Сохранённый масштаб может быть неверным после смены объектива.</p><button class="secondary wide" id="calibrateBtn">◎ КАЛИБРОВАТЬ ПО ВИДИМОМУ МАРКЕРУ</button><button class="secondary wide" id="resetCalibration">↺ СБРОСИТЬ КАЛИБРОВКУ</button><div class="rule"></div><p id="calState" class="tiny">Калибровка: нет</p><p class="minihelp modewarn">Расстояние оценочное. При наклоне метки, плохом свете и цифровом зуме возможна существенная погрешность. Попадание в этом MVP означает попадание <b>в область маркера</b>, а не распознавание всего тела.</p><button id="closeSettings" class="primary">ГОТОВО</button></div></div>
+  <div id="settings" role="dialog" aria-modal="true" aria-label="Настройки"><div class="sheet"><h2>Камера и дистанция</h2><p>Размер — ширина <b>чёрного квадрата</b>, без белых полей. Изменяйте, только если печатаете маркер другого размера.</p><div class="controlgroup"><label>Маркер, см<input id="markerCm" type="number" inputmode="decimal" min="3" max="70" step="0.5" value="12"></label><label>Эталонная дистанция, м<input id="knownDistance" type="number" inputmode="decimal" min="0.3" max="15" step="0.1" value="2"></label></div><div class="rule"></div><p class="minihelp">Для точности поставьте маркер <b>фронтально</b>, отмерьте указанное расстояние <b>от камеры до маркера</b>, наведите на него телефон и нажмите калибровку. Сохранённый масштаб может быть неверным после смены объектива.</p><button class="secondary wide" id="calibrateBtn">◎ КАЛИБРОВАТЬ ПО ВИДИМОМУ МАРКЕРУ</button><button class="secondary wide" id="resetCalibration">↺ СБРОСИТЬ КАЛИБРОВКУ</button><div class="rule"></div><p id="calState" class="tiny">Калибровка: нет</p><p class="minihelp"><label><input id="basicToggle" type="checkbox" checked style="width:18px;height:18px;vertical-align:middle;accent-color:#73ffb0"> Искать также простые чёрные квадраты (тест без ID)</label></p><p class="minihelp modewarn">Расстояние оценочное. При наклоне метки, плохом свете и цифровом зуме возможна существенная погрешность. Попадание в этом MVP означает попадание <b>в область маркера</b>, а не распознавание всего тела.</p><button id="closeSettings" class="primary">ГОТОВО</button></div></div>
 </div>
 <script>
 (function(){
@@ -46,7 +61,7 @@ var $ = function(id){return document.getElementById(id);};
 var video=$('camera'), hud=$('hudCanvas'), ctx=hud.getContext('2d');
 var scanCanvas=document.createElement('canvas'), scanCtx=scanCanvas.getContext('2d',{willReadFrequently:true}) || scanCanvas.getContext('2d');
 var detector=null, stream=null, active=false, demo=false, paused=false, tracks=new Map(), current=null, lastScan=0, frames=0, frameTimer=0, fps=0, raf=0, toastTimer=null, flashUntil=0, hits=0, misses=0;
-var markerCm=12, fRatio=0.78, calibrated=false, lastCameraFacing='environment';
+var markerCm=12, fRatio=0.78, calibrated=false, lastCameraFacing='environment', codedCount=0, basicCount=0, lastScanInfo='ОЖИДАНИЕ КАМЕРЫ', basicAllowed=true;
 var previewTarget={id:0, corners:[], meters:2.0, lastSeen:0, edgePixels:100};
 try {var saved=JSON.parse(localStorage.getItem('poligon_mvp01_settings')||'{}'); if(saved.markerCm>0&&saved.markerCm<71)markerCm=saved.markerCm; if(saved.calibrated&&saved.fRatio>0.2&&saved.fRatio<10){fRatio=saved.fRatio; calibrated=true;}}catch(e){}
 $('markerCm').value=String(markerCm); updateCalState();
@@ -55,38 +70,139 @@ function updateCalState(){ $('calState').textContent=calibrated?'Калибро�
 function toast(message){$('toast').textContent=message;$('toast').classList.add('toast-show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){$('toast').classList.remove('toast-show');},1800);}
 function msg(message){$('message').textContent=message;}
 function loadScript(url){return new Promise(function(resolve,reject){var script=document.createElement('script');script.src=url;script.async=true;script.onload=resolve;script.onerror=function(){script.remove();reject(new Error('Не загружен '+url));};document.head.appendChild(script);});}
-async function loadDetector(){if(detector)return;var libs=[['https://cdn.jsdelivr.net/npm/js-aruco2@2.0.0/src/cv.js','https://unpkg.com/js-aruco2@2.0.0/src/cv.js'],['https://cdn.jsdelivr.net/npm/js-aruco2@2.0.0/src/aruco.js','https://unpkg.com/js-aruco2@2.0.0/src/aruco.js']];for(var i=0;i<libs.length;i++){var ok=false;for(var j=0;j<libs[i].length;j++){try{await loadScript(libs[i][j]);ok=true;break;}catch(e){}}if(!ok)throw new Error('Не удалось загрузить модуль распознавания. Проверьте интернет-соединение.');}if(typeof AR==='undefined'||typeof CV==='undefined')throw new Error('Модуль распознавания недоступен.');AR.DICTIONARIES.POLIGON={nBits:25,tau:6,codeList:[0x10839ce,0x10ba5ce,0x104c210,0x104ddce]};detector=new AR.Detector({dictionaryName:'POLIGON',maxHammingDistance:3});}
+async function loadDetector(){if(detector)return;var libs=[['https://cdn.jsdelivr.net/npm/js-aruco2@2.0.0/src/cv.js','https://unpkg.com/js-aruco2@2.0.0/src/cv.js'],['https://cdn.jsdelivr.net/npm/js-aruco2@2.0.0/src/aruco.js','https://unpkg.com/js-aruco2@2.0.0/src/aruco.js']];for(var i=0;i<libs.length;i++){var ok=false;for(var j=0;j<libs[i].length;j++){try{await loadScript(libs[i][j]);ok=true;break;}catch(e){}}if(!ok)throw new Error('Не удалось загрузить модуль распознавания. Проверьте интернет-соединение.');}if(typeof AR==='undefined'||typeof CV==='undefined')throw new Error('Модуль распознавания недоступен.');AR.DICTIONARIES.POLIGON={nBits:25,tau:5,codeList:[0x10839ce,0x10ba5ce,0x104c210,0x104ddce,0xc81afd,0xdc236c,0xb214c7,0xbafd40]};detector=new AR.Detector({dictionaryName:'POLIGON',maxHammingDistance:3});}
 async function stopCamera(){active=false;paused=false;tracks.clear();current=null;cancelAnimationFrame(raf);if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}video.pause();video.srcObject=null;$('cameraStatus').textContent='КАМЕРА ВЫКЛ.';$('pauseBtn').textContent='▶ ЗАПУСК';$('shoot').disabled=true;}
 async function startCamera(){msg('Загружаем распознавание…');$('startBtn').disabled=true;try{if(!window.isSecureContext){throw new Error('Для доступа к камере откройте игру по HTTPS (например, на GitHub Pages).');}await loadDetector();msg('Запрашиваем разрешение камеры…');var constraints={audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}}};try{stream=await navigator.mediaDevices.getUserMedia(constraints);}catch(e){if(e.name==='OverconstrainedError'||e.name==='NotFoundError')stream=await navigator.mediaDevices.getUserMedia({audio:false,video:true});else throw e;}video.srcObject=stream;video.muted=true;video.setAttribute('playsinline','');await video.play();if(!video.videoWidth){await new Promise(function(resolve,reject){var t=setTimeout(function(){reject(new Error('Камера не выдаёт кадры.'));},5000);video.addEventListener('loadedmetadata',function(){clearTimeout(t);resolve();},{once:true});});}
 lastCameraFacing=(stream.getVideoTracks()[0].getSettings()||{}).facingMode||'environment';demo=false;paused=false;active=true;tracks.clear();current=null;resetDisplay();$('intro').hidden=true;$('demoBackdrop').style.display='none';$('camera').style.display='block';$('cameraStatus').textContent='● LIVE · КАМЕРА';$('cameraStatus').classList.add('status-on');$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=false;lastScan=0;frameTimer=performance.now();frames=0;raf=requestAnimationFrame(loop);
 }catch(e){console.error(e);var reason=e.name==='NotAllowedError'?'Доступ к камере запрещён. Разрешите его в настройках Safari или Chrome.':(e.name==='NotReadableError'?'Камера занята другим приложением.':e.message||String(e));msg(reason);await stopCamera();}finally{$('startBtn').disabled=false;}}
 function resetDisplay(){hits=0;misses=0;$('hitCount').textContent='0';$('missCount').textContent='0';}
-function beginDemo(){demo=true;active=true;paused=false;tracks.clear();current=null;resetDisplay();$('intro').hidden=true;$('camera').style.display='none';$('demoBackdrop').style.display='block';$('cameraStatus').textContent='ДЕМО · БЕЗ КАМЕРЫ';$('cameraStatus').classList.remove('status-on');$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=false;raf=requestAnimationFrame(loop);toast('Демо: цель нарисована, камера не сканируется');}
+function beginDemo(){$('debugLine').textContent='ДЕМО: ВИРТУАЛЬНАЯ ЦЕЛЬ';demo=true;active=true;paused=false;tracks.clear();current=null;resetDisplay();$('intro').hidden=true;$('camera').style.display='none';$('demoBackdrop').style.display='block';$('cameraStatus').textContent='ДЕМО · БЕЗ КАМЕРЫ';$('cameraStatus').classList.remove('status-on');$('pauseBtn').textContent='■ СТОП';$('shoot').disabled=false;raf=requestAnimationFrame(loop);toast('Демо: цель нарисована, камера не сканируется');}
 function resizeCanvas(){var r=hud.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);var w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(hud.width!==w||hud.height!==h){hud.width=w;hud.height=h;}ctx.setTransform(dpr,0,0,dpr,0,0);return {w:r.width,h:r.height};}
 function mapPoint(x,y,vw,vh,w,h){var scale=Math.max(w/vw,h/vh),offsetX=(w-vw*scale)*.5,offsetY=(h-vh*scale)*.5;return {x:x*scale+offsetX,y:y*scale+offsetY};}
 function distance(p,q){return Math.hypot(p.x-q.x,p.y-q.y);}
 function polygonHit(point,corners){var inside=false;for(var i=0,j=corners.length-1;i<corners.length;j=i++){var a=corners[i],b=corners[j];if((a.y>point.y)!=(b.y>point.y)&&point.x<(b.x-a.x)*(point.y-a.y)/(b.y-a.y+1e-10)+a.x)inside=!inside;}return inside;}
 function expandedPolygon(corners,scale){var cx=0,cy=0;corners.forEach(function(p){cx+=p.x;cy+=p.y;});cx/=corners.length;cy/=corners.length;return corners.map(function(p){return{x:cx+(p.x-cx)*scale,y:cy+(p.y-cy)*scale};});}
-function scan(t){if(video.readyState<2||!video.videoWidth||!video.videoHeight)return;var vw=video.videoWidth,vh=video.videoHeight,scale=Math.min(1,720/Math.max(vw,vh)),sw=Math.round(vw*scale),sh=Math.round(vh*scale);if(!sw||!sh)return;if(scanCanvas.width!==sw||scanCanvas.height!==sh){scanCanvas.width=sw;scanCanvas.height=sh;}scanCtx.drawImage(video,0,0,sw,sh);
-var marks=[];try{marks=detector.detect(scanCtx.getImageData(0,0,sw,sh));}catch(e){$('cameraStatus').textContent='ОШИБКА СКАНИРОВАНИЯ';console.error(e);return;}var seen=new Set();marks.forEach(function(m){if(!m||!m.corners||m.corners.length!==4)return;var pts=m.corners.map(function(c){return {x:c.x/scale,y:c.y/scale};});var edges=[];for(var i=0;i<4;i++)edges.push(distance(pts[i],pts[(i+1)%4]));var px=(edges[0]+edges[1]+edges[2]+edges[3])/4;if(px<5)return;var meters=(markerCm/100)*(fRatio*vw)/px;if(!Number.isFinite(meters)||meters<.08||meters>70)return;var existing=tracks.get(m.id+1);if(existing){meters=existing.meters*.62+meters*.38;}tracks.set(m.id+1,{id:m.id+1,corners:pts,meters:meters,edgePixels:px,lastSeen:t});seen.add(m.id+1);});
-tracks.forEach(function(v,k){if(t-v.lastSeen>650)tracks.delete(k);});frames++;if(t-frameTimer>1000){fps=Math.round(frames*1000/(t-frameTimer));frames=0;frameTimer=t;}}
-function getTargets(t,w,h){if(demo){var size=Math.min(w,h)*.18,cx=w*.5+Math.sin(t/1150)*w*.23,cy=h*.45+Math.cos(t/1780)*h*.12;return[{id:0,corners:[{x:cx-size/2,y:cy-size/2},{x:cx+size/2,y:cy-size/2},{x:cx+size/2,y:cy+size/2},{x:cx-size/2,y:cy+size/2}],meters:2.0,lastSeen:t,edgePixels:size}];}var vw=video.videoWidth,vh=video.videoHeight;if(!vw||!vh)return[];return Array.from(tracks.values()).map(function(tr){return {id:tr.id,corners:tr.corners.map(function(pt){return mapPoint(pt.x,pt.y,vw,vh,w,h);}),meters:tr.meters,lastSeen:tr.lastSeen,edgePixels:tr.edgePixels};}).filter(function(tr){return t-tr.lastSeen<600;});}
+
+// TEST-FALLBACK: распознавание почти заполненного тёмного квадрата на более светлом фоне.
+// Квадрат НЕ содержит ID, поэтому используется только для проверки прицела и расстояния.
+var basicCanvas=document.createElement('canvas');
+var basicCtx=basicCanvas.getContext('2d',{willReadFrequently:true}) || basicCanvas.getContext('2d');
+function findBasicSquare(imageData, W, H){
+  var im=imageData.data, N=W*H, gray=new Uint8Array(N), i, j, k;
+  var histogram=new Uint32Array(256);
+  for(i=0,j=0;i<N;i++,j+=4){gray[i]=(im[j]*77+im[j+1]*150+im[j+2]*29)>>8;histogram[gray[i]]++;}
+  function percentile(frac){var goal=N*frac,count=0;for(var v=0;v<256;v++){count+=histogram[v];if(count>=goal)return v;}return 128;}
+  var p12=percentile(.12),p65=percentile(.65);
+  var thresh=Math.max(37,Math.min(113,Math.round((p12+p65)*.48)));
+  var visited=new Uint8Array(N), stack=new Int32Array(N), best=null;
+  function lum(x,y){return gray[y*W+x];}
+  for(var index=0; index<N; index++){
+    if(visited[index]||gray[index]>=thresh)continue;
+    var top=0,head=0,x0=index%W,y0=(index/W)|0;
+    visited[index]=1;stack[top++]=index;
+    var minx=x0,maxx=x0,miny=y0,maxy=y0,count=0,lumSum=0;
+    while(head<top){
+      var pos=stack[head++],x=pos%W,y=(pos/W)|0;count++;lumSum+=gray[pos];
+      if(x<minx)minx=x;if(x>maxx)maxx=x;if(y<miny)miny=y;if(y>maxy)maxy=y;
+      var np;
+      if(x>0){np=pos-1;if(!visited[np]&&gray[np]<thresh){visited[np]=1;stack[top++]=np;}}
+      if(x<W-1){np=pos+1;if(!visited[np]&&gray[np]<thresh){visited[np]=1;stack[top++]=np;}}
+      if(y>0){np=pos-W;if(!visited[np]&&gray[np]<thresh){visited[np]=1;stack[top++]=np;}}
+      if(y<H-1){np=pos+W;if(!visited[np]&&gray[np]<thresh){visited[np]=1;stack[top++]=np;}}
+    }
+    var bw=maxx-minx+1,bh=maxy-miny+1;
+    if(bw<12||bh<12||bw>W*.65||bh>H*.70)continue;
+    if(minx<3||miny<3||maxx>W-4||maxy>H-4)continue;
+    var aspect=bw/bh,density=count/(bw*bh);
+    if(aspect<.73||aspect>1.31||density<.63)continue;
+    // Проверяем светлый фон сразу за 4 гранями найденного квадрата.
+    var gap=Math.max(2,Math.round(Math.min(bw,bh)*.08));
+    if(minx-gap<0||maxx+gap>=W||miny-gap<0||maxy+gap>=H)continue;
+    var inner=lumSum/count,out=0,bright=0,samples=0;
+    for(k=1;k<=9;k++){
+      var px=minx+Math.floor(bw*k/10),py=miny+Math.floor(bh*k/10);
+      var vals=[lum(px,miny-gap),lum(px,maxy+gap),lum(minx-gap,py),lum(maxx+gap,py)];
+      for(var vi=0;vi<4;vi++){out+=vals[vi];samples++;if(vals[vi]>inner+28)bright++;}
+    }
+    out/=samples;
+    if(out-inner<31||bright/samples<.67)continue;
+    var score=Math.min(bw,bh)*Math.sqrt(density)*(Math.min(90,out-inner)/90);
+    if(!best||score>best.score)best={x:minx,y:miny,w:bw,h:bh,score:score,threshold:thresh,contrast:out-inner};
+  }
+  return best;
+}
+function detectBasicCandidate(vw,vh){
+  if(!basicAllowed)return null;
+  var w=Math.min(340,Math.round(vw*340/Math.max(vw,vh))),h=Math.min(340,Math.round(vh*340/Math.max(vw,vh)));
+  w=Math.max(1,w);h=Math.max(1,h);
+  if(basicCanvas.width!==w||basicCanvas.height!==h){basicCanvas.width=w;basicCanvas.height=h;}
+  basicCtx.drawImage(video,0,0,w,h);
+  var sq=findBasicSquare(basicCtx.getImageData(0,0,w,h),w,h);
+  if(!sq)return null;
+  var sx=vw/w,sy=vh/h;
+  var x=sq.x*sx,y=sq.y*sy,ww=sq.w*sx,hh=sq.h*sy;
+  return {id:0,basic:true,corners:[{x:x,y:y},{x:x+ww,y:y},{x:x+ww,y:y+hh},{x:x,y:y+hh}],edgePixels:(ww+hh)/2,contrast:sq.contrast};
+}
+function labelTarget(tr){return tr.basic?'КВАДРАТ · ТЕСТ':'ЦЕЛЬ #'+tr.id;}
+
+function scan(t){
+if(video.readyState<2||!video.videoWidth||!video.videoHeight)return;
+var vw=video.videoWidth,vh=video.videoHeight,scale=Math.min(1,720/Math.max(vw,vh)),sw=Math.round(vw*scale),sh=Math.round(vh*scale);
+if(!sw||!sh)return;
+if(scanCanvas.width!==sw||scanCanvas.height!==sh){scanCanvas.width=sw;scanCanvas.height=sh;}
+scanCtx.drawImage(video,0,0,sw,sh);
+var marks=[];
+try{marks=detector.detect(scanCtx.getImageData(0,0,sw,sh));}
+catch(e){$('cameraStatus').textContent='ОШИБКА СКАНИРОВАНИЯ';$('debugLine').textContent='ОШИБКА: '+(e.message||String(e));console.error(e);return;}
+var foundCoded=0;
+marks.forEach(function(m){
+  if(!m||!m.corners||m.corners.length!==4)return;
+  var pts=m.corners.map(function(c){return{x:c.x/scale,y:c.y/scale};});
+  var edges=[];for(var i=0;i<4;i++)edges.push(distance(pts[i],pts[(i+1)%4]));
+  var px=(edges[0]+edges[1]+edges[2]+edges[3])/4;
+  if(px<5)return;
+  var meters=(markerCm/100)*(fRatio*vw)/px;
+  if(!Number.isFinite(meters)||meters<.08||meters>70)return;
+  var key='id-'+(m.id%4+1),existing=tracks.get(key);
+  if(existing)meters=existing.meters*.6+meters*.4;
+  tracks.set(key,{id:m.id%4+1,basic:false,corners:pts,meters:meters,edgePixels:px,lastSeen:t});foundCoded++;
+});
+// Квадратный режим активен независимо от кода — но не дублирует совпадающий ArUco.
+var square=detectBasicCandidate(vw,vh);
+var foundBasic=0;
+if(square){
+  var cx=(square.corners[0].x+square.corners[2].x)/2,cy=(square.corners[0].y+square.corners[2].y)/2;
+  var duplicates=Array.from(tracks.values()).some(function(tr){if(tr.basic||t-tr.lastSeen>450)return false;return polygonHit({x:cx,y:cy},expandedPolygon(tr.corners,1.20));});
+  if(!duplicates){
+    var m=(markerCm/100)*(fRatio*vw)/square.edgePixels;
+    if(m>=.08&&m<=70){
+      var old=tracks.get('basic');if(old)m=old.meters*.55+m*.45;
+      tracks.set('basic',{id:0,basic:true,corners:square.corners,meters:m,edgePixels:square.edgePixels,lastSeen:t});foundBasic=1;
+    }
+  }else tracks.delete('basic');
+}
+tracks.forEach(function(v,k){if(t-v.lastSeen>460)tracks.delete(k);});
+codedCount=foundCoded;basicCount=foundBasic;
+frames++;if(t-frameTimer>1000){fps=Math.round(frames*1000/(t-frameTimer));frames=0;frameTimer=t;}
+$('debugLine').textContent=foundCoded?'✓ КОДОВАЯ МЕТКА: ID ОПРЕДЕЛЁН':(foundBasic?'✓ ПРОСТОЙ КВАДРАТ: ID НЕТ, ТЕСТ':'ПОИСК: КОДОВЫЕ МЕТКИ · ЧЁРНЫЙ КВАДРАТ');
+}
+function getTargets(t,w,h){if(demo){var size=Math.min(w,h)*.18,cx=w*.5+Math.sin(t/1150)*w*.23,cy=h*.45+Math.cos(t/1780)*h*.12;return[{id:0,corners:[{x:cx-size/2,y:cy-size/2},{x:cx+size/2,y:cy-size/2},{x:cx+size/2,y:cy+size/2},{x:cx-size/2,y:cy+size/2}],meters:2.0,lastSeen:t,edgePixels:size}];}var vw=video.videoWidth,vh=video.videoHeight;if(!vw||!vh)return[];return Array.from(tracks.values()).map(function(tr){return {id:tr.id,basic:!!tr.basic,corners:tr.corners.map(function(pt){return mapPoint(pt.x,pt.y,vw,vh,w,h);}),meters:tr.meters,lastSeen:tr.lastSeen,edgePixels:tr.edgePixels};}).filter(function(tr){return t-tr.lastSeen<600;});}
 function render(t){var wh=resizeCanvas(),w=wh.w,h=wh.h;if(w<1||h<1)return;ctx.clearRect(0,0,w,h);var centre={x:w/2,y:h/2},targets=getTargets(t,w,h),locked=null,chosen=null,best=Infinity;
 for(var i=0;i<targets.length;i++){var target=targets[i],poly=expandedPolygon(target.corners,1.25),cx=0,cy=0;target.corners.forEach(function(p){cx+=p.x;cy+=p.y;});cx/=4;cy/=4;var score=Math.hypot(cx-centre.x,cy-centre.y);var isInside=polygonHit(centre,poly);if(isInside&&score<best){best=score;locked=target;}if(score<(chosen?chosen.score:Infinity))chosen={target:target,score:score};}
 current=locked||(chosen?chosen.target:null);$('rate').textContent='СКАН: '+(demo?'ДЕМО':fps+' FPS')+' · ЦЕЛИ: '+targets.length;
-if(locked){$('targetPill').textContent='✓ ЗАХВАТ ЦЕЛИ #'+locked.id+' · '+formatMeters(locked.meters);$('targetPill').classList.add('lock');}else if(current){$('targetPill').textContent='ЦЕЛЬ #'+current.id+' · '+formatMeters(current.meters)+' · СОВМЕСТИТЕ ПРИЦЕЛ';$('targetPill').classList.remove('lock');}else{$('targetPill').textContent=demo?'Демо-цель движется на экране':'Наведите камеру на маркер';$('targetPill').classList.remove('lock');}$('distance').innerHTML='ДИСТАНЦИЯ <b>'+(current?formatMeters(current.meters):'—')+'</b>';
-var a=ctx;targets.forEach(function(tr){var fresh=1-Math.max(0,Math.min(1,(t-tr.lastSeen)/650)),isLocked=!!(locked&&tr.id===locked.id),pts=expandedPolygon(tr.corners,1.13);a.strokeStyle=isLocked?'rgba(115,255,164,'+fresh+')':'rgba(115,218,166,'+(.75*fresh)+')';a.lineWidth=isLocked?3:2;a.setLineDash(isLocked?[]:[9,5]);a.beginPath();a.moveTo(pts[0].x,pts[0].y);for(var i=1;i<pts.length;i++)a.lineTo(pts[i].x,pts[i].y);a.closePath();a.stroke();a.setLineDash([]);var lx=Math.min(Math.max(pts[0].x,6),w-130),ly=Math.max(22,Math.min.apply(null,pts.map(function(p){return p.y;}))-11);a.fillStyle='rgba(2,20,10,.88)';a.fillRect(lx,ly-19,126,21);a.fillStyle=isLocked?'#a0ffbf':'#d4ffdf';a.font='bold 12px -apple-system, sans-serif';a.fillText('#'+tr.id+'  '+formatMeters(tr.meters),lx+6,ly-5);});
+if(locked){$('targetPill').textContent='✓ ЗАХВАТ · '+labelTarget(locked)+' · '+formatMeters(locked.meters);$('targetPill').classList.add('lock');}else if(current){$('targetPill').textContent=labelTarget(current)+' · '+formatMeters(current.meters)+' · НАВЕДИТЕ ПРИЦЕЛ';$('targetPill').classList.remove('lock');}else{$('targetPill').textContent=demo?'Демо-цель движется на экране':'Наведите камеру на маркер или квадрат';$('targetPill').classList.remove('lock');}$('distance').innerHTML='ДИСТАНЦИЯ <b>'+(current?formatMeters(current.meters):'—')+'</b>';
+var a=ctx;targets.forEach(function(tr){var fresh=1-Math.max(0,Math.min(1,(t-tr.lastSeen)/650)),isLocked=!!(locked&&tr.id===locked.id),pts=expandedPolygon(tr.corners,1.13);a.strokeStyle=isLocked?'rgba(115,255,164,'+fresh+')':'rgba(115,218,166,'+(.75*fresh)+')';a.lineWidth=isLocked?3:2;a.setLineDash(isLocked?[]:[9,5]);a.beginPath();a.moveTo(pts[0].x,pts[0].y);for(var i=1;i<pts.length;i++)a.lineTo(pts[i].x,pts[i].y);a.closePath();a.stroke();a.setLineDash([]);var lx=Math.min(Math.max(pts[0].x,6),w-130),ly=Math.max(22,Math.min.apply(null,pts.map(function(p){return p.y;}))-11);a.fillStyle='rgba(2,20,10,.88)';a.fillRect(lx,ly-19,126,21);a.fillStyle=isLocked?'#a0ffbf':'#d4ffdf';a.font='bold 12px -apple-system, sans-serif';a.fillText((tr.basic?'□ ТЕСТ':'#'+tr.id)+'  '+formatMeters(tr.meters),lx+6,ly-5);});
 // Centre reticle. A shot is counted only when its centre falls within an enlarged marker polygon.
 var color=locked?'#a4ffbf':'rgba(225,255,239,.85)';a.strokeStyle=color;a.lineWidth=2;a.beginPath();a.arc(centre.x,centre.y,16,0,Math.PI*2);a.stroke();a.beginPath();a.moveTo(centre.x-33,centre.y);a.lineTo(centre.x-21,centre.y);a.moveTo(centre.x+21,centre.y);a.lineTo(centre.x+33,centre.y);a.moveTo(centre.x,centre.y-33);a.lineTo(centre.x,centre.y-21);a.moveTo(centre.x,centre.y+21);a.lineTo(centre.x,centre.y+33);a.stroke();a.fillStyle=color;a.beginPath();a.arc(centre.x,centre.y,2,0,2*Math.PI);a.fill();if(t<flashUntil){a.fillStyle='rgba(184,255,197,'+((flashUntil-t)/135*.18)+')';a.fillRect(0,0,w,h);}}
 function formatMeters(v){return v>=10?v.toFixed(1)+' м':v.toFixed(2)+' м';}
 function loop(t){if(!active||paused)return;if(!demo&&t-lastScan>130){lastScan=t;scan(t);}render(t);raf=requestAnimationFrame(loop);}
 function doShoot(){if(!active||paused)return;var t=performance.now(),r=hud.getBoundingClientRect(),centre={x:r.width/2,y:r.height/2};var targets=getTargets(t,r.width,r.height);var target=targets.filter(function(tr){return polygonHit(centre,expandedPolygon(tr.corners,1.25));}).sort(function(a,b){return a.meters-b.meters;})[0];flashUntil=t+135;
-if(target){hits++;$('hitCount').textContent=String(hits);toast('✓ ТЕСТ: ПОПАДАНИЕ В МАРКЕР #'+target.id+' · '+formatMeters(target.meters));if(navigator.vibrate)navigator.vibrate(65);}else{misses++;$('missCount').textContent=String(misses);toast('× ПРОМАХ — МАРКЕР ВНЕ ПРИЦЕЛА');} }
+if(target){hits++;$('hitCount').textContent=String(hits);toast('✓ ПОПАДАНИЕ: '+labelTarget(target)+' · '+formatMeters(target.meters));if(navigator.vibrate)navigator.vibrate(65);}else{misses++;$('missCount').textContent=String(misses);toast(targets.length?'× ПРОМАХ — ЦЕЛЬ ВНЕ ПРИЦЕЛА':'× ЦЕЛЬ НЕ НАЙДЕНА — ПРОВЕРЬТЕ МАРКЕР');} }
 function setSettings(open){$('settings').classList.toggle('open',open);}function applySize(){var v=parseFloat($('markerCm').value.replace(',','.'));if(!(v>=3&&v<=70)){toast('Размер маркера: от 3 до 70 см');return false;}markerCm=v;saveSettings();return true;}
 function calibrate(){if(!applySize())return;var dist=parseFloat($('knownDistance').value.replace(',','.'));if(!(dist>=.3&&dist<=15)){toast('Введите дистанцию от 0,3 до 15 м');return;}if(demo){toast('Калибровка требует реальной камеры');return;}var t=performance.now(),valid=Array.from(tracks.values()).filter(function(tr){return t-tr.lastSeen<500;}).sort(function(a,b){return b.edgePixels-a.edgePixels;});if(!valid.length){toast('Сначала наведите камеру на маркер');return;}if(!video.videoWidth){toast('Камера ещё не готова');return;}
 // Calibration: f_px = side_px * known_distance_m / real_side_m.
 var newRatio=valid[0].edgePixels*dist/(markerCm/100)/video.videoWidth;if(!(newRatio>.2&&newRatio<10)){toast('Проверьте размер и расстояние');return;}fRatio=newRatio;calibrated=true;tracks.clear();saveSettings();updateCalState();toast('✓ Калибровка выполнена для этого объектива');}
-$('startBtn').addEventListener('click',startCamera);$('demoBtn').addEventListener('click',beginDemo);$('shoot').addEventListener('click',doShoot);$('settingsBtn').addEventListener('click',function(){setSettings(true);});$('closeSettings').addEventListener('click',function(){applySize();setSettings(false);});$('calibrateBtn').addEventListener('click',calibrate);$('resetCalibration').addEventListener('click',function(){fRatio=0.78;calibrated=false;tracks.clear();saveSettings();updateCalState();toast('Калибровка сброшена');});$('pauseBtn').addEventListener('click',async function(){if(active){demo=false;await stopCamera();$('intro').hidden=false;msg('');}else{$('intro').hidden=false;}});
+$('basicToggle').addEventListener('change',function(){basicAllowed=this.checked;tracks.delete('basic');});$('startBtn').addEventListener('click',startCamera);$('demoBtn').addEventListener('click',beginDemo);$('shoot').addEventListener('click',doShoot);$('settingsBtn').addEventListener('click',function(){setSettings(true);});$('closeSettings').addEventListener('click',function(){applySize();setSettings(false);});$('calibrateBtn').addEventListener('click',calibrate);$('resetCalibration').addEventListener('click',function(){fRatio=0.78;calibrated=false;tracks.clear();saveSettings();updateCalState();toast('Калибровка сброшена');});$('pauseBtn').addEventListener('click',async function(){if(active){demo=false;await stopCamera();$('intro').hidden=false;msg('');}else{$('intro').hidden=false;}});
 document.addEventListener('visibilitychange',function(){if(document.hidden&&active&&!demo){paused=true;cancelAnimationFrame(raf);}else if(!document.hidden&&active&&paused){paused=false;lastScan=0;raf=requestAnimationFrame(loop);}});
 window.addEventListener('pagehide',function(){if(stream)stream.getTracks().forEach(function(t){t.stop();});});
 })();

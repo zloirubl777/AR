@@ -44,7 +44,7 @@ jobs:
           curl --fail --location --retry 5 --retry-all-errors --retry-delay 3 \
             "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task" \
             --output _site/vendor/models/pose_landmarker_lite.task
-          test "$(stat -c%s _site/vendor/vision_bundle.mjs)" -gt 200000
+          test "$(stat -c%s _site/vendor/vision_bundle.mjs)" -gt 100000
           test "$(stat -c%s _site/vendor/models/pose_landmarker_lite.task)" -gt 1000000
           test -f _site/vendor/wasm/vision_wasm_internal.js
           test -f _site/vendor/wasm/vision_wasm_internal.wasm

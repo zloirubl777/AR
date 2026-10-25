@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#07100c"><title>ПОЛИГОН 02.4 — Загрузка ИИ и мобильный HUD</title><style>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#07100c"><title>ПОЛИГОН 02.5 — ИИ с собственного GitHub Pages</title><style>
 :root{color-scheme:dark;--ink:#e6fdf0;--muted:#97b0a4;--green:#64ffa8;--lime:#bcffd5;--bg:#07100c;--glass:rgba(5,20,13,.74)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button,input{font:inherit}button{cursor:pointer}button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 #game{position:fixed;inset:0;overflow:hidden;background:radial-gradient(ellipse at 52% 32%,#163426,#030806 75%)}
@@ -103,7 +103,7 @@
 #duelLobby .duelDiagnostic{border:1px dashed #3f6a50;color:#b1d5be;background:#0b1b11;border-radius:10px;font-size:11px;line-height:1.4;padding:10px 12px;white-space:pre-line;overflow-wrap:anywhere;margin:8px 0}
 #duelLobby button:disabled{opacity:.5;filter:grayscale(.7);cursor:wait}
 
-/* 02.4: consolidated HUD layout. No overlapping independent absolute coordinates. */
+/* 02.5: consolidated HUD layout. No overlapping independent absolute coordinates. */
 #gameOverlays{position:absolute;z-index:3;top:calc(env(safe-area-inset-top) + 85px);left:10px;right:10px;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-height:42dvh;overflow:hidden}
 #gameOverlays #duelTop{position:static;inset:auto;width:100%;align-items:flex-start;gap:8px;display:none;justify-content:space-between;flex:none}
 #game.duel #gameOverlays #duelTop{display:flex}
@@ -126,7 +126,7 @@
 <div id="game">
   <video id="camera" playsinline webkit-playsinline autoplay muted></video>
   <div id="demoBackdrop"></div><canvas id="hudCanvas"></canvas>
-  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 02.4</span></div><div class="subtitle" id="gameSubtitle">СЕТЕВАЯ ДУЭЛЬ · AR-КАМЕРА</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
+  <header id="top"><div><div class="title">ПОЛИГОН <span style="color:#74f6a4">/ 02.5</span></div><div class="subtitle" id="gameSubtitle">СЕТЕВАЯ ДУЭЛЬ · AR-КАМЕРА</div></div><div class="rightstats"><div id="cameraStatus">КАМЕРА ВЫКЛ.</div><div id="rate">СКАН: — · ЦЕЛИ: 0</div></div></header>
   <div id="gameOverlays">
     <div id="duelTop"><span id="duelLink">⚪ НЕТ СОЕДИНЕНИЯ</span><span id="duelResult">ЖДЁМ СОПЕРНИКА</span></div>
     <div id="targetPill">Наведите камеру на чёрный квадрат</div>
@@ -145,16 +145,16 @@
   <button class="toolbtn" id="zQuick" type="button">◎ ЦЕНТР</button>
   <div id="zRound" aria-live="polite"></div>
   <div id="toast" aria-live="polite"></div>
-  <div id="intro"><div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 02.4</div><h1>ПОЛИГОН.<br><span class="accent">ВЫБЕРИ РЕЖИМ.</span></h1><p>Создай дуэль с кодом комнаты или присоединись с другого смартфона. В дуэли можно выбрать распознавание человека без маркера или прежний чёрный квадрат. Режимы маркера и зомби сохранены.</p>
+  <div id="intro"><div class="panel"><div class="eyebrow">ЛАБОРАТОРИЯ · MVP 02.5</div><h1>ПОЛИГОН.<br><span class="accent">ВЫБЕРИ РЕЖИМ.</span></h1><p>Создай дуэль с кодом комнаты или присоединись с другого смартфона. В дуэли можно выбрать распознавание человека без маркера или прежний чёрный квадрат. Режимы маркера и зомби сохранены.</p>
     <button id="duelOpenBtn" class="primary" type="button">⚔ ДУЭЛЬ · ДВА СМАРТФОНА</button>
     <div class="modeGrid"><button id="startBtn" class="modeCard"><span>⌖ МАРКЕР</span><small>Захват чёрного квадрата, зона корпуса, расстояние</small></button><button id="zStartBtn" class="modeCard zombieBtn"><span>☣ ЗОМБИ</span><small>Одиночная игра: волны, здоровье, стрельба</small></button></div>
     <div id="message" class="minihelp" role="status"></div><div class="rule"></div>
     <p class="tiny"><b>Для зомби маркер не нужен.</b> Противники появляются поверх изображения камеры. В этой версии реальные стены и мебель пока не распознаются. Для поворота камеры используем датчик ориентации, если браузер разрешит доступ.</p>
     <div class="links"><button id="demoBtn" class="secondary" type="button">Демо маркера</button><button id="zDemoBtn" class="secondary" type="button">Демо зомби без камеры</button></div><div class="rule"></div>
     <div class="tiny">Дуэль: интернет на обоих телефонах · тестовый сервер MQTT для связи · камера обрабатывается на телефоне. Не играй рядом с дорогами, лестницами и опасными предметами.</div></div></div>
-  <div id="duelLobby" role="dialog" aria-modal="true" aria-label="Комната дуэли"><div class="panel"><div class="eyebrow">ПОЛИГОН · ДУЭЛЬ 02.4</div><h2>Два телефона — один бой</h2><p class="tiny">Новый режим распознаёт человека без маркера. Выберите режим на каждом телефоне до выхода в бой. Если модели не загрузятся, используйте старый квадрат.</p><label class="tiny" for="duelVisionMode">СПОСОБ ПОИСКА ЦЕЛИ</label><select id="duelVisionMode" class="wide" style="padding:12px;border:1px solid #58886c;border-radius:12px;background:#10251a;color:#eaffec;margin:8px 0 13px;width:100%;font-size:15px"><option value="human" selected>👤 Человек · Без маркера (эксперимент)</option><option value="marker">■ Чёрный квадрат · Проверенный режим</option></select><div class="tiny" id="visionInfo">При выборе человека потребуется загрузка модели ИИ через интернет. Никаких кадров на сервер дуэли не отправляем.</div>
+  <div id="duelLobby" role="dialog" aria-modal="true" aria-label="Комната дуэли"><div class="panel"><div class="eyebrow">ПОЛИГОН · ДУЭЛЬ 02.5</div><h2>Два телефона — один бой</h2><p class="tiny">Новый режим распознаёт человека без маркера. Для загрузки модели выбери GitHub Actions в настройках Pages и дождись публикации файлов ИИ. Проверенный режим квадрата сохранён.</p><label class="tiny" for="duelVisionMode">СПОСОБ ПОИСКА ЦЕЛИ</label><select id="duelVisionMode" class="wide" style="padding:12px;border:1px solid #58886c;border-radius:12px;background:#10251a;color:#eaffec;margin:8px 0 13px;width:100%;font-size:15px"><option value="human" selected>👤 Человек · Без маркера (эксперимент)</option><option value="marker">■ Чёрный квадрат · Проверенный режим</option></select><div class="tiny" id="visionInfo">ИИ загружается с этого GitHub Pages после публикации GitHub Actions. Видеокадры обрабатываются на телефоне.</div>
     <div id="modelLobbyPanel" class="model-check">
-      <button id="modelCheck" class="secondary wide" type="button">◎ ПРОВЕРИТЬ / ПОВТОРИТЬ ЗАГРУЗКУ ИИ</button>
+      <button id="modelCheck" class="secondary wide" type="button">◎ ПРОВЕРИТЬ ЛОКАЛЬНЫЙ ИИ</button>
       <div id="modelLobbyStatus" role="status" aria-live="polite">Модель ещё не проверялась. Для режима с человеком можно проверить её до начала дуэли.</div>
     </div>
     <div class="twocol"><button class="primary" id="duelCreate">СОЗДАТЬ КОМНАТУ</button><button class="secondary" id="duelJoin">ВОЙТИ ПО КОДУ</button></div>
@@ -554,7 +554,7 @@ function duelFrame(t){if(!duel)return;
  if(t-duel.lastPing>2400&&duel.conn?.open){duel.lastPing=t;duelSend({t:'ping',n:t});}
  if(t-duelLastUi>400){duelLastUi=t;duelUpdateHud();}
 }
-$('duelOpenBtn').addEventListener('click',duelStartLobby);$('duelVisionMode').addEventListener('change',()=>{duelVisionMode=$('duelVisionMode').value; $('modelLobbyPanel').style.display=duelVisionMode==='human'?'block':'none';$('visionInfo').textContent=duelVisionMode==='human'?'Нужен интернет для однократной загрузки MediaPipe. Дистанция приблизительная не выводится; если людей несколько, попадание запрещено.':'Для прежнего детектора нужен один чёрный квадрат на цели.';});
+$('duelOpenBtn').addEventListener('click',duelStartLobby);$('duelVisionMode').addEventListener('change',()=>{duelVisionMode=$('duelVisionMode').value; $('modelLobbyPanel').style.display=duelVisionMode==='human'?'block':'none';$('visionInfo').textContent=duelVisionMode==='human'?'ИИ загружается с нашего сайта (vendor). Дистанцию не измеряем; при нескольких людях попадание заблокировано.':'Для прежнего детектора нужен один чёрный квадрат на цели.';});
 $('duelTest').addEventListener('click',duelTestNetwork);
 $('duelCreate').addEventListener('click',duelStartHosting);
 $('duelJoin').addEventListener('click',()=>{$('duelCode').focus();duelSetStatus('На втором телефоне введи шестизначный код первого игрока.');});
@@ -572,14 +572,20 @@ try{let s=JSON.parse(localStorage.getItem('poligon_015_zombie')||'{}');if(typeof
 let zScene=null,zFrame=0,zMotionRaw=null,zMotionReceived=false,zGyroAllowed=true,zAudio=null,zLastShot=0,zHitFlash=0,zShotFlash=0,zRoundUntil=0,zCountdown=0,zMotionOn=false,zEndShown=false;
 function zApplySettings(){zSettings={gyro:$('zGyroToggle').checked,sound:$('zSoundToggle').checked,difficulty:$('zDifficulty').value};if(zSettings.gyro&&!zGyroAllowed)zRequestMotion();try{localStorage.setItem('poligon_015_zombie',JSON.stringify(zSettings));}catch(e){} if(zScene)zScene.baseYaw=zMotionRaw;toast('Настройки зомби сохранены');}
 // --------- EXPERIMENTAL HUMAN TARGET / MEDIAPIPE ---------
-const POSE_VERSION='0.10.22';
-const POSE_MODEL_URL='https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task';
-const POSE_SOURCES=[
- {name:'UNPKG',module:`https://unpkg.com/@mediapipe/tasks-vision@${POSE_VERSION}/vision_bundle.mjs`,wasm:`https://unpkg.com/@mediapipe/tasks-vision@${POSE_VERSION}/wasm`},
- {name:'jsDelivr',module:`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${POSE_VERSION}/vision_bundle.mjs`,wasm:`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${POSE_VERSION}/wasm`},
- {name:'esm.sh',module:`https://esm.sh/@mediapipe/tasks-vision@${POSE_VERSION}`,wasm:`https://unpkg.com/@mediapipe/tasks-vision@${POSE_VERSION}/wasm`},
- {name:'jsDelivr root',module:`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${POSE_VERSION}`,wasm:`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${POSE_VERSION}/wasm`}
-];
+// 02.5: MediaPipe runtime and pose model are deployed at the SAME GitHub Pages origin.
+// The CI workflow obtains the official package + model, rather than requiring the mobile browser to reach external CDNs.
+const POSE_MODEL_URL=new URL('./vendor/models/pose_landmarker_lite.task', document.baseURI).href;
+const POSE_SOURCES=[{name:'GITHUB PAGES',module:new URL('./vendor/vision_bundle.mjs',document.baseURI).href,wasm:new URL('./vendor/wasm',document.baseURI).href}];
+async function checkLocalAiFiles(){
+ const url=new URL('./vendor/ready.json',document.baseURI).href;
+ let response;
+ try{response=await withTimeout(fetch(url,{cache:'no-store'}),9000,'READY');}
+ catch(e){throw new Error('AI-ASSETS-NET: не удалось проверить '+url+' ('+(e?.message||String(e))+')');}
+ if(!response.ok)throw new Error('AI-ASSETS-'+response.status+': файлы модели ещё не опубликованы на GitHub Pages. В Settings → Pages выбери GitHub Actions и запусти Publish POLIGON.');
+ let meta;try{meta=await response.json();}catch(e){throw new Error('AI-ASSETS-FORMAT: неправильный готовый пакет');}
+ if(meta?.engine!=='mediapipe-pose-0.10.21')throw new Error('AI-ASSETS-VERSION: опубликован другой пакет модели');
+ return meta;
+}
 function poseProgress(stage,detail=''){
  poseState.stage=stage;
  if(detail)poseState.detail=detail;
@@ -595,6 +601,8 @@ async function loadPoseModel(force=false){
  poseState.loading=true;poseState.error='';
  poseLoadPromise=(async()=>{
   const errors=[];
+  try {poseProgress('Проверяем файлы ИИ на GitHub Pages');await checkLocalAiFiles();}
+  catch(e){poseState.error='ФАЙЛЫ ИИ НЕ НАЙДЕНЫ';poseState.detail=(e?.message||String(e));return null;}
   for(const s of POSE_SOURCES){
    try{
     poseProgress('Загружаем библиотеку · '+s.name);
@@ -603,13 +611,13 @@ async function loadPoseModel(force=false){
     if(!api)throw new Error('Нет экспорта PoseLandmarker / FilesetResolver');
     poseProgress('Подключаем WebAssembly · '+s.name);
     const vision=await withTimeout(api.FilesetResolver.forVisionTasks(s.wasm),10000,'WASM '+s.name);
-    poseProgress('Загружаем модель позы · '+s.name,'Модель Google, первый запуск может быть дольше последующих.');
+    poseProgress('Загружаем модель позы · '+s.name,'ИИ получает файлы из этого репозитория; первый запуск может занять время.');
     let detector=await withTimeout(api.PoseLandmarker.createFromOptions(vision,{baseOptions:{modelAssetPath:POSE_MODEL_URL,delegate:'CPU'},runningMode:'VIDEO',numPoses:3,minPoseDetectionConfidence:0.5,minPosePresenceConfidence:0.5,minTrackingConfidence:0.5}),28000,'MODEL '+s.name);
     poseLandmarker=detector;poseState.source=s.name;poseState.error='';poseState.detail='';poseProgress('Готово');
     return poseLandmarker;
    }catch(e){let detail=s.name+': '+(e?.message||String(e));errors.push(detail);console.warn('MediaPipe fallback',detail);poseProgress('Источник '+s.name+' недоступен, пробуем другой',detail);}
   }
-  poseState.error='ИИ не загрузился · проверь интернет';
+  poseState.error='ИИ НЕ ЗАПУСТИЛСЯ (LOCAL)';
   poseState.detail=errors.join('\n');
   return null;
  })();
@@ -672,7 +680,7 @@ function renderHuman(t){let {w,h}=resizeCanvas();ctx.clearRect(0,0,w,h);
  $('distance').innerHTML='ДИСТАНЦИЯ <b>—</b>';
  $('accuracy').textContent='Без маркера · дистанция не измеряется';
  $('debugLine').style.display=debug?'block':'none';
- $('debugLine').textContent=poseState.error?'ИИ: библиотека/модель не загрузилась. Открой НАСТРОЙКИ → повторить.':'MEDIAPIPE · '+fps+' FPS · '+poseState.cost+' МС · ЦЕЛЕЙ '+(fresh?persons.length:0);
+ $('debugLine').textContent=poseState.error?'ИИ: ошибка локальных файлов; см. НАСТРОЙКИ.':'MEDIAPIPE · '+fps+' FPS · '+poseState.cost+' МС · ЦЕЛЕЙ '+(fresh?persons.length:0);
  if(poseDebug)persons.forEach(person=>person.zones.forEach(z=>{ctx.lineWidth=2;ctx.strokeStyle=z.type==='head'?'#ffce73':z.type==='body'?'#8fffaf':'#84d5ff';ctx.fillStyle='rgba(69,255,133,.07)';if(z.kind==='circle'){ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,Math.PI*2);ctx.fill();ctx.stroke();}else if(z.kind==='segment'){ctx.lineWidth=z.r*2;ctx.globalAlpha=.27;ctx.beginPath();ctx.moveTo(z.a.x,z.a.y);ctx.lineTo(z.b.x,z.b.y);ctx.stroke();ctx.globalAlpha=1;}else{ctx.save();ctx.translate(z.centerX,z.centerY);ctx.rotate(z.angle);ctx.fillRect(-z.width/2,-z.height/2,z.width,z.height);ctx.strokeRect(-z.width/2,-z.height/2,z.width,z.height);ctx.restore();}}));
  ctx.strokeStyle=hit?'#6fff9a':'#daffee';ctx.lineWidth=2;ctx.beginPath();ctx.arc(w/2,h/2,16,0,Math.PI*2);ctx.moveTo(w/2-32,h/2);ctx.lineTo(w/2-21,h/2);ctx.moveTo(w/2+21,h/2);ctx.lineTo(w/2+32,h/2);ctx.moveTo(w/2,h/2-32);ctx.lineTo(w/2,h/2-21);ctx.moveTo(w/2,h/2+21);ctx.lineTo(w/2,h/2+32);ctx.stroke();
  if(t<flashUntil){ctx.fillStyle='rgba(151,255,169,'+((flashUntil-t)/150*.18)+')';ctx.fillRect(0,0,w,h);}
@@ -789,7 +797,7 @@ $('zRestart').addEventListener('click',()=>{zReset();});
 $('zExit').addEventListener('click',async()=>{await stopCamera();$('zEnding').classList.remove('show');$('intro').hidden=false;});
 
 $('startBtn').addEventListener('click',()=>startCamera('marker'));$('zStartBtn').addEventListener('click',()=>startCamera('zombie'));$('demoBtn').addEventListener('click',()=>beginDemo('marker'));$('zDemoBtn').addEventListener('click',()=>beginDemo('zombie'));$('shoot').addEventListener('click',doShoot);
-$('settingsBtn').addEventListener('click',()=>{let h=gameMode==='duel'&&duelVisionMode==='human';$('humanOptions').style.display=h?'block':'none';poseProgress(poseLandmarker?'Готово':poseState.stage||'Проверка не запускалась');$('squareOptions').style.display=h?'none':'block';$('poseDebug').checked=poseDebug;$('settings').classList.add('open');});
+$('settingsBtn').addEventListener('click',()=>{let h=gameMode==='duel'&&duelVisionMode==='human';$('humanOptions').style.display=h?'block':'none';poseProgress(poseLandmarker?'Готово':poseState.error?'Ошибка':poseState.stage||'Проверка не запускалась');$('squareOptions').style.display=h?'none':'block';$('poseDebug').checked=poseDebug;$('settings').classList.add('open');});
 $('closeSettings').addEventListener('click',()=>{if(gameMode==='zombie'){zApplySettings();$('settings').classList.remove('open');}else if(gameMode==='duel'&&duelVisionMode==='human'){poseDebug=$('poseDebug').checked;$('settings').classList.remove('open');}else if(applySettings()){$('settings').classList.remove('open');}});
 $('calibrateBtn').addEventListener('click',calibrate);
 $('resetCalibration').addEventListener('click',()=>{fRatio=.78;calibrated=false;resetTracking();save();updateCal();toast('Калибровка сброшена');});
